@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.CoinsDetection"
+    tools:context=".MainActivity">
+    
+    <TextView
+        android:id="@+id/stage_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stage_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recents"
+        android:layout_margin="20dp"
+        android:textSize="50sp"
+        android:textColor="@color/custom_blue">
+    </TextView>
+
+    <TextView
+        android:id="@+id/recents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/recents_text"
+        android:textSize="15sp"
+        android:textColor="@color/custom_blue"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stage_home"
+        app:layout_constraintBottom_toTopOf="@id/history_images_rv"
+        android:layout_marginLeft="20dp">
+    </TextView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/history_images_rv"
+        android:layout_width="match_parent"
+        android:layout_height="542dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/nav_buttons"
+        app:layout_constraintTop_toBottomOf="@id/recents">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/nav_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/history_images_rv"
+        app:layout_constraintVertical_bias="0.991"
+        android:weightSum="1">
+
+        <ImageButton
+            android:id="@+id/homeBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:src="@drawable/home"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:tint="@color/selected_nav"
+            android:onClick="selectedPage"
+            android:contentDescription="Home">
+        </ImageButton>
+        <ImageButton
+            android:id="@+id/galleryBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/image_gallery"
+            android:layout_weight="0.25"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:tint="@color/custom_blue"
+            android:onClick="selectedPage"
+            android:contentDescription="Gallery"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/cameraBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:scaleType="fitCenter"
+            android:src="@drawable/camera"
+            android:background="@null"
+            android:tint="@color/custom_blue"
+            android:onClick="selectedPage"
+            android:contentDescription="Camera"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/settingsBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:scaleType="fitCenter"
+            android:src="@drawable/settings"
+            android:background="@null"
+            android:tint="@color/custom_blue"
+            android:onClick="selectedPage"
+            android:contentDescription="Settings"></ImageButton>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

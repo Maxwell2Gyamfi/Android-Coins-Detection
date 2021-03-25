@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardviewID"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+    android:layout_margin="2dp">
+
+    <ImageView
+        android:id="@+id/historyImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="1dp"
+        android:scaleType="centerCrop"></ImageView>
+
+
+</androidx.cardview.widget.CardView>
