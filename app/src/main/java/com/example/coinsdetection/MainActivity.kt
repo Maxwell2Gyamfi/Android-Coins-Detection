@@ -44,10 +44,18 @@ class MainActivity : AppCompatActivity() {
        when(view.id){
            R.id.homeBtn -> Toast.makeText(this, "home clicked", Toast.LENGTH_SHORT).show()
            R.id.cameraBtn-> {
-               val intent = Intent(this, DetectionResults::class.java)
+               val intent = Intent(applicationContext, DetectionResults::class.java).apply {
+                   putExtra("selected","camera").toString()
+                   putExtra("name", 1)
+               }
                startActivity(intent)
            }
-           R.id.galleryBtn -> Toast.makeText(this, "gallery clicked", Toast.LENGTH_SHORT).show()
+           R.id.galleryBtn -> {
+               val intent = Intent(applicationContext, DetectionResults::class.java).apply {
+                   putExtra("selected", "gallery").toString()
+               }
+               startActivity(intent)
+           }
            R.id.settingsBtn -> Toast.makeText(this, "settings clicked", Toast.LENGTH_SHORT).show()
        }
     }
