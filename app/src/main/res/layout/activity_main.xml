@@ -74,7 +74,7 @@
             android:id="@+id/galleryBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/image_gallery"
+            android:src="@drawable/gallery"
             android:layout_weight="0.25"
             android:scaleType="fitCenter"
             android:background="@null"

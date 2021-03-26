@@ -3,4 +3,14 @@
     <string name="stage_name"><u>Home</u></string>
     <string name="recents_text">Recents</string>
     <string name="summary_text"><u>Summary</u></string>
+    <string name="results_text"><u>Results</u></string>
+    <string name="all">All</string>
+    <string name="__1p">1p</string>
+    <string name="__2p">2p</string>
+    <string name="_5p">5p</string>
+    <string name="_20p">20p</string>
+    <string name="_10p">10p</string>
+    <string name="_50p">50p</string>
+    <string name="_1P">1P</string>
+    <string name="_2P">2P</string>
 </resources>
