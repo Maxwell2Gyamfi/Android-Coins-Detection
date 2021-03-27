@@ -49,6 +49,9 @@ class Inference:
         frame = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
         return frame
 
+    def setConfidence(self, val):
+        self.CONFIDENCE_THRESHOLD = val
+
     def runInferenceAll(self, data):
         items = self.getItems()
         total = 0
@@ -93,6 +96,13 @@ class Inference:
         return str(total)+"-"+str(count)
 
 
+inferenceObj = Inference()
+
+
+def changeConfidence(val):
+    inferenceObj.setConfidence(val)
+
+
 def main(data, item):
 
     # array = cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
@@ -101,7 +111,7 @@ def main(data, item):
     # pil_image.save(buff, format="PNG")
     # img_str = base64.b64encode(buff.getvalue())
     # return ""+str(img_str, 'utf-8')
-    inferenceObj = Inference()
+
     print(item)
 
     if item == "All":

@@ -57,7 +57,7 @@
             android:contentDescription="Confidence"/>
 
         <ImageButton
-            android:onClick="openResultsOverlay"
+            android:onClick="openConfidenceOverlay"
             android:id="@+id/confidenceBtn"
             android:layout_width="0dp"
             android:layout_height="25dp"

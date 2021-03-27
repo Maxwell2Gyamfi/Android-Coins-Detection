@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -21,6 +22,7 @@ import com.chaquo.python.Python
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_detection_results.*
+import kotlinx.android.synthetic.main.dialog_with_confidence.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,7 +41,7 @@ private const val pickImage = 100
 private var imageUri: Uri? = null
 
 
-class DetectionResults : AppCompatActivity() {
+class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogListener {
     private lateinit var selectedOption: String
     private lateinit var inferenceBitmap: Bitmap
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +67,16 @@ class DetectionResults : AppCompatActivity() {
         returnHome()
     }
 
-    fun openResultsOverlay(view: View) {}
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun openConfidenceOverlay(view: View) {
+        val confidenceDialog: ConfidenceDialog = ConfidenceDialog()
+        confidenceDialog.show(supportFragmentManager, "confidence")
+
+    }
+
+    override fun applyTexts(confidence: String) {
+        Toast.makeText(this,confidence,Toast.LENGTH_SHORT).show()
+    }
 
     fun performDetection(view: View) {
         val button = view as AppCompatButton
@@ -75,7 +86,7 @@ class DetectionResults : AppCompatActivity() {
         initInference(inferenceBitmap, selected)
     }
 
-    private fun initInference(image:Bitmap, selectedItem: String){
+    private fun initInference(image: Bitmap, selectedItem: String){
         CoroutineScope(Dispatchers.Main).launch {
             progressBarDetection.visibility = View.VISIBLE
             val total = runInference(image, selectedItem)
@@ -87,7 +98,7 @@ class DetectionResults : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun runInference(image:Bitmap, selectedItem:String): String {
+    private suspend fun runInference(image: Bitmap, selectedItem: String): String {
         return withContext(Dispatchers.Default) {
             val stream = ByteArrayOutputStream()
             val nh = (image.height * (1200.0 / image.width)).toInt()
@@ -97,7 +108,7 @@ class DetectionResults : AppCompatActivity() {
             val imageString = Base64.getEncoder().encodeToString(byteImage)
             val py = Python.getInstance()
             val pyobj = py.getModule("detection")
-            val obj = pyobj.callAttr("main", imageString,selectedItem)
+            val obj = pyobj.callAttr("main", imageString, selectedItem)
 
             return@withContext obj.toString()
         }
@@ -107,9 +118,9 @@ class DetectionResults : AppCompatActivity() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         photofile = getPhotoFile(FILE_NAME)
         val fileProvider = FileProvider.getUriForFile(
-                this,
-                "com.example.coinsdetection.fileprovider",
-                photofile
+            this,
+            "com.example.coinsdetection.fileprovider",
+            photofile
         )
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
         try {
@@ -156,7 +167,7 @@ class DetectionResults : AppCompatActivity() {
         return File.createTempFile(fileName, ".jpg", storageDirectory)
     }
 
-    private fun launchCropping(uri:Uri) =
+    private fun launchCropping(uri: Uri) =
             CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON).start(this)
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -175,11 +186,11 @@ class DetectionResults : AppCompatActivity() {
             data?.data.also { imageUri = it }
             try {
                 imageUri.let(
-                        fun(_: Uri?) = if (Build.VERSION.SDK_INT < 28) {
-                            imageUri?.let { launchCropping(it) }
-                        } else {
-                            imageUri?.let { launchCropping(it) }
-                        },
+                    fun(_: Uri?) = if (Build.VERSION.SDK_INT < 28) {
+                        imageUri?.let { launchCropping(it) }
+                    } else {
+                        imageUri?.let { launchCropping(it) }
+                    },
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -189,7 +200,10 @@ class DetectionResults : AppCompatActivity() {
             val result = CropImage.getActivityResult(data)
             if (resultCode === RESULT_OK) {
                 val resultUri = result.uri
-                val source = resultUri?.let { it1 -> ImageDecoder.createSource(this.contentResolver, it1) }
+                val source = resultUri?.let { it1 -> ImageDecoder.createSource(
+                    this.contentResolver,
+                    it1
+                ) }
                 val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
                 resultsImage.setImageBitmap(bitmap)
                 inferenceBitmap = bitmap!!
@@ -201,4 +215,5 @@ class DetectionResults : AppCompatActivity() {
 
         else returnHome()
     }
+
 }
