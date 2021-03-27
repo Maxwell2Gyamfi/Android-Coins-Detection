@@ -15,7 +15,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/recents"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:textSize="50sp"
         android:textColor="@color/custom_blue">
     </TextView>
@@ -30,13 +30,15 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/stage_home"
         app:layout_constraintBottom_toTopOf="@id/history_images_rv"
-        android:layout_marginLeft="20dp">
+        android:layout_marginLeft="10dp">
     </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/history_images_rv"
         android:layout_width="match_parent"
         android:layout_height="542dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/nav_buttons"
@@ -47,7 +49,7 @@
     <LinearLayout
         android:id="@+id/nav_buttons"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="25dp"
         android:orientation="horizontal"
         android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

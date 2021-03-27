@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.chaquo.python'
 }
 
 android {
@@ -9,12 +10,32 @@ android {
 
     defaultConfig {
         applicationId "com.example.coinsdetection"
+        sourceSets {
+            main {
+                python.srcDirs = ["src/main/python"]
+            }
+        }
+
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+        defaultConfig {
+            python {
+                buildPython "C:/Python38/python.exe"
+                pip{
+                    install "opencv-python"
+                    install "opencv-contrib-python"
+                    install "pybase64"
+                    install "pillow"
+                }
+            }
+        }
     }
 
     buildTypes {
@@ -46,4 +67,7 @@ dependencies {
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-android-extensions'
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    implementation 'com.jsibbold:zoomage:1.3.1'
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
 }

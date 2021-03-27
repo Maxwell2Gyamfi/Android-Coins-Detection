@@ -2,6 +2,7 @@ package com.example.coinsdetection
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.ImageDecoder
@@ -16,10 +17,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.chaquo.python.Python
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_detection_results.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 const val REQUEST_IMAGE_CAPTURE = 1
@@ -62,6 +71,36 @@ class DetectionResults : AppCompatActivity() {
         val selected = button.text
         setDefault()
         applyFocus(view)
+    }
+
+    private fun initInference(image:Bitmap){
+        CoroutineScope(Dispatchers.Main).launch {
+            progressBarDetection.visibility = View.VISIBLE
+            val total = runInference(image)
+            progressBarDetection.visibility = View.INVISIBLE
+            val file = File(filesDir, "detection.jpg")
+            val detectedImage = BitmapFactory.decodeFile(file.absolutePath)
+            resultsImage.setImageBitmap(detectedImage)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun runInference(image:Bitmap): String {
+        return withContext(Dispatchers.Default) {
+            val stream = ByteArrayOutputStream()
+            val nh = (image.height * (1200.0 / image.width)).toInt()
+            var scaled = Bitmap.createScaledBitmap(image, 1200, nh, true)
+            scaled.compress(Bitmap.CompressFormat.PNG, 100, stream)
+
+            var byteImage = stream.toByteArray()
+            val imageString = Base64.getEncoder().encodeToString(byteImage)
+
+            val py = Python.getInstance()
+            val pyobj = py.getModule("detection")
+            val obj = pyobj.callAttr("main", imageString)
+
+            return@withContext obj.toString()
+        }
     }
 
     private fun takePicture() {
@@ -153,6 +192,7 @@ class DetectionResults : AppCompatActivity() {
                 val source = resultUri?.let { it1 -> ImageDecoder.createSource(this.contentResolver, it1) }
                 val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
                 resultsImage.setImageBitmap(bitmap)
+                bitmap?.let { initInference(it) }
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
             }
