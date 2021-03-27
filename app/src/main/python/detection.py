@@ -8,59 +8,105 @@ import io
 from decimal import Decimal
 
 
-def main(data):
-    CONFIDENCE_THRESHOLD = 0.2
-    NMS_THRESHOLD = 0.4
-    COLORS = [(0, 255, 255), (255, 255, 0), (0, 255, 0), (255, 0, 0)]
+class Inference:
+    def __init__(self):
+        self.CONFIDENCE_THRESHOLD = 0.2
+        self.NMS_THRESHOLD = 0.4
+        self.COLORS = [(0, 255, 255), (255, 255, 0), (0, 255, 0), (255, 0, 0)]
+        self.classes = ['1p', '2p', '5p', '10p', '20p', '50p', '1P', '2P']
+        self.yoloWeights = self.readWeights()
+        self.yoloCfg = self.readCfg()
+        self.yoloNet = self.readNet()
+        self.yoloModel = self.setModel()
+        self.files_dir = str(
+            Python.getPlatform().getApplication().getFilesDir())
 
-    class_names = ['1p', '2p', '5p', '10p', '20p', '50p', '1P', '2P']
-    weights = join(dirname(__file__), "yolo.weights")
-    cfg = join(dirname(__file__), "yolo.cfg")
+    def readWeights(self):
+        weights = join(dirname(__file__), "yolo.weights")
+        return weights
 
-    decoded_data = base64.b64decode(data)
-    np_data = np.fromstring(decoded_data, np.uint8)
-    frame = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+    def readCfg(self):
+        cfg = join(dirname(__file__), "yolo.cfg")
+        return cfg
 
-    net = cv2.dnn.readNet(weights, cfg)
+    def readNet(self):
+        net = cv2.dnn.readNet(self.yoloWeights, self.yoloCfg)
+        return net
 
-    files_dir = str(Python.getPlatform().getApplication().getFilesDir())
+    def setModel(self):
+        model = cv2.dnn_DetectionModel(self.yoloNet)
+        model.setInputParams(size=(608, 608), scale=1/255)
+        return model
 
-    model = cv2.dnn_DetectionModel(net)
-    model.setInputParams(size=(608, 608), scale=1/255)
+    def getItems(self):
+        items = {"1p": 0.01, "2p": 0.02, "5p": 0.05, "10p": 0.10,
+                 "20p": 0.20, "50p": 0.50, "1P": 1.0, "2P": 2.0}
+        return items
 
-    total = 0
-    items = {"1p": 0.01, "2p": 0.02, "5p": 0.05, "10p": 0.10,
-             "20p": 0.20, "50p": 0.50, "1P": 1.0, "2P": 2.0}
+    def decodeData(self, data):
+        decoded_data = base64.b64decode(data)
+        np_data = np.fromstring(decoded_data, np.uint8)
+        frame = cv2.imdecode(np_data, cv2.IMREAD_UNCHANGED)
+        return frame
 
-    classes, scores, boxes = model.detect(
-        frame, CONFIDENCE_THRESHOLD, NMS_THRESHOLD)
-    for (classid, score, box) in zip(classes, scores, boxes):
-        color = COLORS[int(classid) % len(COLORS)]
-        label = "%s" % (class_names[classid[0]])
-        name = class_names[classid[0]]
-        total = Decimal(total)+Decimal(items.get(name))
-        cv2.rectangle(frame, box, color, 2)
-        cv2.putText(frame, label, (box[0], box[1] - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
+    def runInferenceAll(self, data):
+        items = self.getItems()
+        total = 0
+        count = 0
+        frame = self.decodeData(data)
 
-    print(files_dir)
-    cv2.imwrite(files_dir+'/detection.jpg', frame)
+        classes, scores, boxes = self.yoloModel.detect(
+            frame, self.CONFIDENCE_THRESHOLD, self.NMS_THRESHOLD)
+        for (classid, score, box) in zip(classes, scores, boxes):
+            color = self.COLORS[int(classid) % len(self.COLORS)]
+            label = "%s %.2f" % (self.classes[classid[0]], score)
+            name = self.classes[classid[0]]
+            total = Decimal(total)+Decimal(items.get(name))
+            count += 1
+            cv2.rectangle(frame, box, color, 2)
+            cv2.putText(frame, label, (box[0], box[1] - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 2, color, 3)
+
+        cv2.imwrite(self.files_dir+'/detection.jpg', frame)
+        return str(total)+"-"+str(count)
+
+    def runInferenceSpecific(self, data, classID):
+        items = self.getItems()
+        total = 0
+        count = 0
+        frame = self.decodeData(data)
+
+        classes, scores, boxes = self.yoloModel.detect(
+            frame, self.CONFIDENCE_THRESHOLD, self.NMS_THRESHOLD)
+        for (classid, score, box) in zip(classes, scores, boxes):
+            color = self.COLORS[int(classid) % len(self.COLORS)]
+            label = "%s %.2f" % (self.classes[classid[0]], score)
+            name = self.classes[classid[0]]
+            if name == classID:
+                total = Decimal(total)+Decimal(items.get(name))
+                count += 1
+                cv2.rectangle(frame, box, color, 2)
+                cv2.putText(frame, label, (box[0], box[1] - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 2, color, 3)
+
+        cv2.imwrite(self.files_dir+'/detection.jpg', frame)
+        return str(total)+"-"+str(count)
+
+
+def main(data, item):
 
     # array = cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
-
     # pil_image = Image.fromarray(array)
     # buff = io.BytesIO()
     # pil_image.save(buff, format="PNG")
     # img_str = base64.b64encode(buff.getvalue())
     # return ""+str(img_str, 'utf-8')
-    result = "%.2f" % (total)
+    inferenceObj = Inference()
+    print(item)
+
+    if item == "All":
+        result = inferenceObj.runInferenceAll(data)
+    else:
+        result = inferenceObj.runInferenceSpecific(data, item)
+
     return result
-
-
-# main()
-
-
-def main2():
-    frame = cv2.imread(
-        "C:/Users/max_x/MyApplication2/app/src/main/python/h1.jpg")
-    return "haha"

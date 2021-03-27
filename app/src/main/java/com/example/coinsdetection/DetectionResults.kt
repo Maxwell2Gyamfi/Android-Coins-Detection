@@ -41,6 +41,7 @@ private var imageUri: Uri? = null
 
 class DetectionResults : AppCompatActivity() {
     private lateinit var selectedOption: String
+    private lateinit var inferenceBitmap: Bitmap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detection_results)
@@ -68,15 +69,16 @@ class DetectionResults : AppCompatActivity() {
 
     fun performDetection(view: View) {
         val button = view as AppCompatButton
-        val selected = button.text
+        val selected = button.text.toString()
         setDefault()
         applyFocus(view)
+        initInference(inferenceBitmap, selected)
     }
 
-    private fun initInference(image:Bitmap){
+    private fun initInference(image:Bitmap, selectedItem: String){
         CoroutineScope(Dispatchers.Main).launch {
             progressBarDetection.visibility = View.VISIBLE
-            val total = runInference(image)
+            val total = runInference(image, selectedItem)
             progressBarDetection.visibility = View.INVISIBLE
             val file = File(filesDir, "detection.jpg")
             val detectedImage = BitmapFactory.decodeFile(file.absolutePath)
@@ -85,19 +87,17 @@ class DetectionResults : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun runInference(image:Bitmap): String {
+    private suspend fun runInference(image:Bitmap, selectedItem:String): String {
         return withContext(Dispatchers.Default) {
             val stream = ByteArrayOutputStream()
             val nh = (image.height * (1200.0 / image.width)).toInt()
             var scaled = Bitmap.createScaledBitmap(image, 1200, nh, true)
             scaled.compress(Bitmap.CompressFormat.PNG, 100, stream)
-
             var byteImage = stream.toByteArray()
             val imageString = Base64.getEncoder().encodeToString(byteImage)
-
             val py = Python.getInstance()
             val pyobj = py.getModule("detection")
-            val obj = pyobj.callAttr("main", imageString)
+            val obj = pyobj.callAttr("main", imageString,selectedItem)
 
             return@withContext obj.toString()
         }
@@ -192,7 +192,8 @@ class DetectionResults : AppCompatActivity() {
                 val source = resultUri?.let { it1 -> ImageDecoder.createSource(this.contentResolver, it1) }
                 val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
                 resultsImage.setImageBitmap(bitmap)
-                bitmap?.let { initInference(it) }
+                inferenceBitmap = bitmap!!
+                bitmap?.let { initInference(it, "All") }
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
             }
