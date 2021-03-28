@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun readImages(): MutableList<History> {
 
+
+
         var historyImages: MutableList<History> = ArrayList()
         historyImages.add(History(R.drawable._0p, 2, 1.24))
         historyImages.add(History(R.drawable.detection__1_, 3, 1.24))

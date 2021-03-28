@@ -1,6 +1,7 @@
 package com.example.coinsdetection
 
 import android.content.ActivityNotFoundException
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,6 +13,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -21,13 +23,13 @@ import com.chaquo.python.Python
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_detection_results.*
-import kotlinx.android.synthetic.main.dialog_with_confidence.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.OutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -40,17 +42,26 @@ private const val pickImage = 100
 private var imageUri: Uri? = null
 
 
+data class SavedImages(val id: Int, val imageName: String, val totalItems: Int, val totalCost: Double, val imageToSave: Bitmap)
+
 class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogListener {
     private lateinit var selectedOption: String
     private lateinit var inferenceBitmap: Bitmap
     private var py = Python.getInstance()
+    private var db = DataBaseHandler(this)
     private var pyobj = py.getModule("detection")
     private lateinit var selectedMny:String
+    private var totalItems: Int = 0
+    private var totalCost:Double =0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detection_results)
 
         selectedOption = intent.getStringExtra("selected").toString()
+//        var imagesDB: MutableList<SavedImages> = db.readData()
+
+//        Toast.makeText(this, imagesDB.size.toString(), Toast.LENGTH_SHORT).show()
 
         when (selectedOption) {
             "camera" -> takePicture()
@@ -77,8 +88,50 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
     override fun applyTexts(confidence: String) {
-        setConfidence(confidence)
+        if(this::inferenceBitmap.isInitialized) {
+            setConfidence(confidence)
+        }
+        else{
+            Toast.makeText(this,"Please select an image",Toast.LENGTH_SHORT).show()
+        }
     }
+
+    fun saveImage(view: View){
+        if (this::inferenceBitmap.isInitialized) {
+            var name: String = "Detection" + UUID.randomUUID().toString()
+            val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
+            createDirectoryAndSaveFile(inferenceBitmap, name)
+//        db.insertData(imageToSave)
+        }
+        else{
+            Toast.makeText(this,"No image to Save",Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun createDirectoryAndSaveFile(imageToSave: Bitmap, fileName: String) {
+        val stream: OutputStream
+       try{
+           if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.Q){
+
+               val resolver = contentResolver
+               val contentValues = ContentValues()
+               contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$fileName.jpg")
+               contentValues.put(MediaStore.MediaColumns.MIME_TYPE,"image/jpg")
+               contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH,Environment.DIRECTORY_PICTURES+File.separator+"ObjectDetection")
+               val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues)
+               stream = Objects.requireNonNull((imageUri))?.let { resolver.openOutputStream(it) }!!
+               imageToSave.compress(Bitmap.CompressFormat.JPEG,100,stream)
+               Objects.requireNonNull<OutputStream?>(stream)
+               Toast.makeText(this,"image inserted",Toast.LENGTH_SHORT).show()
+           }
+       }
+       catch (e:java.lang.Exception){
+         print(e.stackTrace)
+           Toast.makeText(this,"image not inserted",Toast.LENGTH_SHORT).show()
+       }
+
+    }
+
 
     fun performDetection(view: View) {
         val button = view as AppCompatButton
@@ -89,7 +142,13 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         initInference(inferenceBitmap, selected)
     }
 
-    private fun setConfidence(confidence:String){
+    private fun pyResults(pyString: String){
+        var str = pyString.split("-").toTypedArray()
+        totalCost = str[0].toDouble()
+        totalItems = str[1].toInt()
+    }
+
+    private fun setConfidence(confidence: String){
         pyobj.callAttr("changeConfidence", confidence)
         initInference(inferenceBitmap, selectedMny)
     }
@@ -105,12 +164,13 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             progressBarDetection.visibility = View.INVISIBLE
             val file = File(filesDir, "detection.jpg")
             val detectedImage = BitmapFactory.decodeFile(file.absolutePath)
+            inferenceBitmap = detectedImage
             resultsImage.setImageBitmap(detectedImage)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun runInference(image: Bitmap, selectedItem: String): String {
+    private suspend fun runInference(image: Bitmap, selectedItem: String){
         return withContext(Dispatchers.Default) {
             val stream = ByteArrayOutputStream()
             val nh = (image.height * (1200.0 / image.width)).toInt()
@@ -121,8 +181,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             py = Python.getInstance()
             pyobj = py.getModule("detection")
             val obj = pyobj.callAttr("main", imageString, selectedItem)
-
-            return@withContext obj.toString()
+            pyResults(obj.toString())
         }
     }
 
@@ -130,9 +189,9 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         photofile = getPhotoFile(FILE_NAME)
         val fileProvider = FileProvider.getUriForFile(
-            this,
-            "com.example.coinsdetection.fileprovider",
-            photofile
+                this,
+                "com.example.coinsdetection.fileprovider",
+                photofile
         )
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
         try {
@@ -199,11 +258,11 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             data?.data.also { imageUri = it }
             try {
                 imageUri.let(
-                    fun(_: Uri?) = if (Build.VERSION.SDK_INT < 28) {
-                        imageUri?.let { launchCropping(it) }
-                    } else {
-                        imageUri?.let { launchCropping(it) }
-                    },
+                        fun(_: Uri?) = if (Build.VERSION.SDK_INT < 28) {
+                            imageUri?.let { launchCropping(it) }
+                        } else {
+                            imageUri?.let { launchCropping(it) }
+                        },
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -214,8 +273,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             if (resultCode === RESULT_OK) {
                 val resultUri = result.uri
                 val source = resultUri?.let { it1 -> ImageDecoder.createSource(
-                    this.contentResolver,
-                    it1
+                        this.contentResolver,
+                        it1
                 ) }
                 val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
                 resultsImage.setImageBitmap(bitmap)
