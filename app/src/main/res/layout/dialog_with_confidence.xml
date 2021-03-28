@@ -9,8 +9,8 @@
 
     <SeekBar
         android:id="@+id/seekConfidence"
-        android:layout_width="180dp"
-        android:layout_height="259dp"
+        android:layout_width="280dp"
+        android:layout_height="80dp"
         android:max="100"
         android:progress="20"
         android:splitTrack="false"
@@ -18,13 +18,10 @@
 
     <TextView
         android:id="@+id/seekValue"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:text="20"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/seekConfidence"></TextView>
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:text="20"></TextView>
 
 </LinearLayout>

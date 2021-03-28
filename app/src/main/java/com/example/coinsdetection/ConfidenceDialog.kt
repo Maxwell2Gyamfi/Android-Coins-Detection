@@ -8,24 +8,21 @@ import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
 
-open class ConfidenceDialog: AppCompatDialogFragment(){
+open class ConfidenceDialog(val pyConfidence:String): AppCompatDialogFragment(){
     private lateinit var listener: ConfidenceDialogListener
     private lateinit var confidence:EditText
     private lateinit var seekBar:SeekBar
     private lateinit var seekVal:TextView
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val dialogBuilder = AlertDialog.Builder(context)
+        val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialogCustom)
         val inflater: LayoutInflater = activity!!.layoutInflater
         val dialogView = inflater.inflate(R.layout.dialog_with_confidence, null)
         dialogBuilder.setView(dialogView)
-
         dialogBuilder.setTitle("Edit Confidence")
         dialogBuilder.setPositiveButton("Save") { _, _ ->
-            Toast.makeText(context, seekVal.text.toString(), Toast.LENGTH_SHORT).show()
             listener.applyTexts(seekVal.text.toString())
         }
         dialogBuilder.setNegativeButton("Cancel") { _, _ ->
@@ -34,10 +31,12 @@ open class ConfidenceDialog: AppCompatDialogFragment(){
         seekBar = dialogView.findViewById(R.id.seekConfidence)
         seekVal = dialogView.findViewById(R.id.seekValue)
 
+        seekBar.progress = pyConfidence.toInt()
+        seekVal.text = pyConfidence
+
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            var progressChangedValue = 0
+
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                progressChangedValue = progress
                 seekVal.text = progress.toString()
             }
 
@@ -46,10 +45,10 @@ open class ConfidenceDialog: AppCompatDialogFragment(){
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                Toast.makeText(activity, "Seek bar progress is :$progressChangedValue",
-                    Toast.LENGTH_SHORT).show();
+                // TODO Auto-generated method stub
             }
         })
+
         return dialogBuilder.create()
     }
 

@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -44,6 +43,9 @@ private var imageUri: Uri? = null
 class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogListener {
     private lateinit var selectedOption: String
     private lateinit var inferenceBitmap: Bitmap
+    private var py = Python.getInstance()
+    private var pyobj = py.getModule("detection")
+    private lateinit var selectedMny:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detection_results)
@@ -69,23 +71,33 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun openConfidenceOverlay(view: View) {
-        val confidenceDialog: ConfidenceDialog = ConfidenceDialog()
+        val conf = getConfidence()
+        val confidenceDialog: ConfidenceDialog = ConfidenceDialog(conf)
         confidenceDialog.show(supportFragmentManager, "confidence")
-
     }
 
     override fun applyTexts(confidence: String) {
-        Toast.makeText(this,confidence,Toast.LENGTH_SHORT).show()
+        setConfidence(confidence)
     }
 
     fun performDetection(view: View) {
         val button = view as AppCompatButton
         val selected = button.text.toString()
+        selectedMny = selected
         setDefault()
         applyFocus(view)
         initInference(inferenceBitmap, selected)
     }
 
+    private fun setConfidence(confidence:String){
+        pyobj.callAttr("changeConfidence", confidence)
+        initInference(inferenceBitmap, selectedMny)
+    }
+
+    private fun getConfidence(): String {
+        val conf = pyobj.callAttr("getConfidence")
+        return conf.toString()
+    }
     private fun initInference(image: Bitmap, selectedItem: String){
         CoroutineScope(Dispatchers.Main).launch {
             progressBarDetection.visibility = View.VISIBLE
@@ -106,8 +118,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             scaled.compress(Bitmap.CompressFormat.PNG, 100, stream)
             var byteImage = stream.toByteArray()
             val imageString = Base64.getEncoder().encodeToString(byteImage)
-            val py = Python.getInstance()
-            val pyobj = py.getModule("detection")
+            py = Python.getInstance()
+            pyobj = py.getModule("detection")
             val obj = pyobj.callAttr("main", imageString, selectedItem)
 
             return@withContext obj.toString()
@@ -176,6 +188,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             try {
                 val takenImage = BitmapFactory.decodeFile(photofile.absolutePath)
+                inferenceBitmap = takenImage
                 resultsImage.setImageBitmap(takenImage)
                 setDefault()
                 applyFocus(all)
@@ -207,6 +220,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                 val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
                 resultsImage.setImageBitmap(bitmap)
                 inferenceBitmap = bitmap!!
+                selectedMny = "All"
                 bitmap?.let { initInference(it, "All") }
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error

@@ -99,8 +99,14 @@ class Inference:
 inferenceObj = Inference()
 
 
-def changeConfidence(val):
+def changeConfidence(conf):
+    val = (int(conf))/100
     inferenceObj.setConfidence(val)
+
+
+def getConfidence():
+    conf = int(inferenceObj.CONFIDENCE_THRESHOLD * 100)
+    return str(conf)
 
 
 def main(data, item):
