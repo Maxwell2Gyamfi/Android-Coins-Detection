@@ -13,4 +13,5 @@
     <string name="_50p">50p</string>
     <string name="_1P">1P</string>
     <string name="_2P">2P</string>
+    <string name="draw_box"><u>Draw Box</u></string>
 </resources>

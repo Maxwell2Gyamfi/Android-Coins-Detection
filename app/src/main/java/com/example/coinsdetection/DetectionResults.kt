@@ -238,6 +238,11 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
+    fun drawBoundingBox(view:View){
+        val intent = Intent(this,DrawBox::class.java)
+        startActivity(intent)
+    }
+
     private fun returnHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity((intent))
