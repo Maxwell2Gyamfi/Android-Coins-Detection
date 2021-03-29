@@ -6,11 +6,10 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import android.widget.Toast
 import java.io.ByteArrayOutputStream
 
-val DATABASENAME = "MY DATABASE"
+const val DATABASENAME = "MY DATABASE"
 const val TABLENAME = "savedImages"
 const val COL_NAME = "imageName"
 const val COL_OBJECTS = "totalObjects"
@@ -48,13 +47,12 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
 
         contentValues.put(COL_IMAGE, byteImage)
 
-        Log.i("inserting", contentValues.toString())
 
         val result = database.insert(TABLENAME, null, contentValues)
         if (result == (0).toLong()) {
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Added image to recents", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -89,5 +87,16 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         var image: ByteArray = result.getBlob(result.getColumnIndex(COL_IMAGE))
 
         return BitmapFactory.decodeByteArray(image, 0, image.size)
+    }
+    fun deleteData(imageID: Int){
+        val db = this.readableDatabase
+
+        val query = "Delete from $TABLENAME WHERE $COL_ID = $imageID"
+        val result = db.rawQuery(query, null)
+
+        result.moveToFirst()
+
+        Toast.makeText(context, "Successfully deleted image", Toast.LENGTH_SHORT).show()
+
     }
 }

@@ -20,8 +20,14 @@ class SelectedHistoryImage : AppCompatActivity() {
         val totalCount = intent.getDoubleExtra("Total", 0.0)
         val thumbnail = retrieveImage(imageID)
         selectedHistoryImage.setImageBitmap(thumbnail)
+
+        deleteBtn.tag = imageID
         totalCountTv.text = "Total: £ $totalCount"
         totalObjectsTv.text = "Objects: $objectCount"
+
+        deleteBtn.setOnClickListener{
+            deleteImage(deleteBtn.tag as Int)
+        }
     }
 
     fun returnHome(view:View){
@@ -32,4 +38,10 @@ class SelectedHistoryImage : AppCompatActivity() {
     private fun retrieveImage(ID:Int):Bitmap{
         return db.getImage(ID)
     }
+    private fun deleteImage(ID:Int){
+        db.deleteData(ID)
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
 }

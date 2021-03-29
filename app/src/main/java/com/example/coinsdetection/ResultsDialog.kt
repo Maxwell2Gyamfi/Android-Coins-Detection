@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialogFragment
 
@@ -12,6 +13,7 @@ class ResultsDialog(private val resultsDetection: ResultsDetection): AppCompatDi
     private lateinit var numItems:TextView
     private lateinit var cost:TextView
     private lateinit var itemName:TextView
+
     @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -25,6 +27,7 @@ class ResultsDialog(private val resultsDetection: ResultsDetection): AppCompatDi
         numItems = dialogView.findViewById(R.id.objectsDialogTv)
         cost = dialogView.findViewById(R.id.totalDialogTv)
         itemName = dialogView.findViewById(R.id.itemDialogTv)
+
 
         numItems.text = "Objects: ${resultsDetection.totalObjects}"
         cost.text = "Total: £ ${resultsDetection.totalCost}"

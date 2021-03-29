@@ -41,6 +41,19 @@
             android:layout_marginTop="20dp"
             android:contentDescription="Home"/>
 
+        <ImageButton
+            android:id="@+id/deleteBtn"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.25"
+            android:src="@drawable/delete"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:onClick="returnHome"
+            android:tint="@color/custom_blue"
+            android:layout_marginTop="20dp"
+            android:contentDescription="Home"/>
+
     </LinearLayout>
 
     <com.jsibbold.zoomage.ZoomageView
