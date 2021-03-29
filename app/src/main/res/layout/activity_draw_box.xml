@@ -56,7 +56,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:src="@drawable/detection__1_"
             />
 
         <com.example.coinsdetection.Drawing
@@ -67,9 +66,6 @@
             />
 
     </FrameLayout>
-
-
-
 
     <LinearLayout
         android:id="@+id/drawActionsBtn"
@@ -84,7 +80,7 @@
         app:layout_constraintTop_toBottomOf="@id/drawingPad_fl">
 
         <androidx.appcompat.widget.AppCompatButton
-
+            android:id="@+id/updateButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
@@ -94,6 +90,7 @@
             android:text="Update" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addedLenght"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.33"

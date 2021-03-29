@@ -83,7 +83,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     @RequiresApi(Build.VERSION_CODES.N)
     fun openConfidenceOverlay(view: View) {
         val conf = getConfidence()
-        val confidenceDialog: ConfidenceDialog = ConfidenceDialog(conf)
+        val confidenceDialog = ConfidenceDialog(conf)
         confidenceDialog.show(supportFragmentManager, "confidence")
     }
 
@@ -96,7 +96,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    fun saveImage(view: View){
+    fun saveImage() {
         if (this::inferenceBitmap.isInitialized) {
             var name: String = "Detection-" + UUID.randomUUID().toString()
             createDirectoryAndSaveFile(inferenceBitmap, name)
@@ -169,7 +169,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private fun initInference(image: Bitmap, selectedItem: String){
         CoroutineScope(Dispatchers.Main).launch {
             progressBarDetection.visibility = View.VISIBLE
-            val total = runInference(image, selectedItem)
+            runInference(image, selectedItem)
             progressBarDetection.visibility = View.INVISIBLE
             val file = File(filesDir, "detection.jpg")
             val detectedImage = BitmapFactory.decodeFile(file.absolutePath)
@@ -266,6 +266,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                 resultsImage.setImageBitmap(takenImage)
                 setDefault()
                 applyFocus(all)
+                selectedMny = "All"
+                initInference(selectedBitmap,"All")
             } catch (e: Exception) {
                 e.printStackTrace()
             }

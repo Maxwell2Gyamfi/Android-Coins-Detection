@@ -14,12 +14,12 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
     private val paintColor: Int = Color.BLACK
     private var drawPaint: Paint? = null
+    var boxes:Int =0
     var pointX = 0f
     var pointY = 0f
     var startX = 0f
     var startY = 0f
-    private val mPaths = ArrayList<Coordinates>() // ArrayList for Paths
-    private val undoPaths =  ArrayList<Coordinates>()
+    val mPaths = ArrayList<Coordinates>() // ArrayList for Paths
     private fun setupPaint() {
 // Setup paint with color and stroke styles
         Paint().also { this.drawPaint = it }
@@ -31,7 +31,6 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         drawPaint!!.strokeCap = Paint.Cap.ROUND
     }
 
-
     override fun onTouchEvent(event: MotionEvent): Boolean {
         pointX = event.x
         pointY = event.y
@@ -39,11 +38,11 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
             MotionEvent.ACTION_DOWN -> {
                 startX = pointX
                 startY = pointY
-
             }
             MotionEvent.ACTION_UP -> {
                 val saveCoordinates =  Coordinates(startX,startY,pointX,pointY)
                 mPaths.add(saveCoordinates)
+                boxes+=1
                 startX = 0F
                 startY = 0F
                 pointX = 0F
@@ -67,13 +66,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         }
     }
 
-
-    fun setupDrawing(){
-
-    }
-
     override fun onDraw(canvas: Canvas) {
-
         for(p in mPaths){
             drawPaint?.let { canvas.drawRect(p.startX, p.startY, p.pointX, p.pointY, it) }
         }
@@ -81,6 +74,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
            drawPaint?.let { canvas.drawRect(startX, startY, pointX, pointY, it) }
         }
     }
+
 
     init {
         isFocusable = true
