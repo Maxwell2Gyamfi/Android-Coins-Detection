@@ -23,7 +23,7 @@
             android:id="@+id/stage_summary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/summary_text"
+            android:text="@string/recents_text"
             android:layout_weight="0.75"
             android:textColor="@color/custom_blue"
             android:textSize="40sp"></TextView>

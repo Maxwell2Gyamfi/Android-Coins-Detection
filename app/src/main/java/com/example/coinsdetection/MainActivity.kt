@@ -10,36 +10,22 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private var db = DataBaseHandler(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-         var historyImages = readImages()
-         var mainAdapter: RecycleViewAdapter = RecycleViewAdapter(this, historyImages)
+         var recentImages = readImages()
+         var mainAdapter = RecycleViewAdapter(this, recentImages)
          history_images_rv.layoutManager = GridLayoutManager(this,4)
          history_images_rv.adapter = mainAdapter
     }
 
-    private fun readImages(): MutableList<History> {
+    private fun readImages(): MutableList<SavedImages> {
 
-
-
-        var historyImages: MutableList<History> = ArrayList()
-        historyImages.add(History(R.drawable._0p, 2, 1.24))
-        historyImages.add(History(R.drawable.detection__1_, 3, 1.24))
-        historyImages.add(History(R.drawable._pa, 4, 1.44))
-        historyImages.add(History(R.drawable._0p, 2, 1.24))
-        historyImages.add(History(R.drawable.detection__1_, 3, 1.64))
-        historyImages.add(History(R.drawable._0p, 2, 1.24))
-        historyImages.add(History(R.drawable.detection__1_, 3, 1.24))
-        historyImages.add(History(R.drawable._pa, 4, 1.44))
-        historyImages.add(History(R.drawable._0p, 2, 1.24))
-        historyImages.add(History(R.drawable.detection__1_, 3, 1.64))
-        historyImages.add(History(R.drawable.detection__1_, 3, 1.24))
-        historyImages.add(History(R.drawable._pa, 4, 1.44))
-        historyImages.add(History(R.drawable._0p, 2, 1.24))
-        historyImages.add(History(R.drawable.detection__1_, 3, 1.64))
-        return historyImages
+        var imagesDB: MutableList<SavedImages> = db.readData()
+        db.close()
+        return  imagesDB
     }
 
     fun selectedPage(view:View){

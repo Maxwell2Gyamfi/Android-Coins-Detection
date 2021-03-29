@@ -23,6 +23,7 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         val createTable = "CREATE TABLE $TABLENAME ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COL_NAME VARCHAR(256), $COL_OBJECTS INTEGER, $COL_COST REAL, $COL_IMAGE BLOB)"
         db?.execSQL(createTable)
     }
+
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         if (oldVersion != newVersion) {
             // Simplest implementation is to drop all old tables and recreate them
@@ -31,6 +32,7 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
             onCreate(db);
         }
     }
+
     fun insertData(image: SavedImages) {
 
         val database = this.writableDatabase
@@ -39,28 +41,28 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         contentValues.put(COL_OBJECTS, image.totalItems)
         contentValues.put(COL_COST, image.totalCost)
 
-        val bitmapImage:Bitmap = image.imageToSave
+        val bitmapImage: Bitmap = image.imageToSave
         val stream = ByteArrayOutputStream()
-        bitmapImage.compress(Bitmap.CompressFormat.JPEG,100,stream)
+        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, stream)
         var byteImage = stream.toByteArray()
 
-        contentValues.put(COL_IMAGE,byteImage)
+        contentValues.put(COL_IMAGE, byteImage)
 
         Log.i("inserting", contentValues.toString())
 
         val result = database.insert(TABLENAME, null, contentValues)
         if (result == (0).toLong()) {
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
-        }
-        else {
+        } else {
             Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
         }
 
     }
+
     fun readData(): MutableList<SavedImages> {
         val list: MutableList<SavedImages> = ArrayList()
         val db = this.readableDatabase
-        val query = "Select * from $TABLENAME"
+        val query = "Select * from $TABLENAME ORDER BY $COL_ID DESC"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {
@@ -69,12 +71,23 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
                 val totalObjects = result.getInt(result.getColumnIndex(COL_OBJECTS))
                 val totalCost = result.getDouble(result.getColumnIndex(COL_COST))
                 var image: ByteArray = result.getBlob(result.getColumnIndex(COL_IMAGE))
-                val bitmap = BitmapFactory.decodeByteArray(image,0, image.size)
-                val retrievedImage = SavedImages(id,imagename,totalObjects,totalCost,bitmap)
+                val bitmap = BitmapFactory.decodeByteArray(image, 0, image.size)
+                val retrievedImage = SavedImages(id, imagename, totalObjects, totalCost, bitmap)
                 list.add(retrievedImage)
-            }
-            while (result.moveToNext())
+            } while (result.moveToNext())
         }
         return list
+    }
+
+    fun getImage(imageID: Int): Bitmap {
+        val db = this.readableDatabase
+
+        val query = "Select $COL_IMAGE from $TABLENAME WHERE $COL_ID = $imageID"
+        val result = db.rawQuery(query, null)
+
+        result.moveToFirst()
+        var image: ByteArray = result.getBlob(result.getColumnIndex(COL_IMAGE))
+
+        return BitmapFactory.decodeByteArray(image, 0, image.size)
     }
 }

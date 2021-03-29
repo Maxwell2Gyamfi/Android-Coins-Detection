@@ -54,14 +54,12 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private var totalItems: Int = 0
     private var totalCost:Double =0.0
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detection_results)
 
         selectedOption = intent.getStringExtra("selected").toString()
-//        var imagesDB: MutableList<SavedImages> = db.readData()
-
-//        Toast.makeText(this, imagesDB.size.toString(), Toast.LENGTH_SHORT).show()
 
         when (selectedOption) {
             "camera" -> takePicture()
@@ -98,14 +96,18 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
     fun saveImage(view: View){
         if (this::inferenceBitmap.isInitialized) {
-            var name: String = "Detection" + UUID.randomUUID().toString()
-            val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
+            var name: String = "Detection-" + UUID.randomUUID().toString()
             createDirectoryAndSaveFile(inferenceBitmap, name)
-//        db.insertData(imageToSave)
         }
         else{
             Toast.makeText(this,"No image to Save",Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun saveImageDB(){
+        var name: String = "Detection" + UUID.randomUUID().toString()
+        val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
+        db.insertData(imageToSave)
     }
 
     private fun createDirectoryAndSaveFile(imageToSave: Bitmap, fileName: String) {
@@ -117,21 +119,20 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                val contentValues = ContentValues()
                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$fileName.jpg")
                contentValues.put(MediaStore.MediaColumns.MIME_TYPE,"image/jpg")
-               contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH,Environment.DIRECTORY_PICTURES+File.separator+"ObjectDetection")
+               contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH,Environment.DIRECTORY_PICTURES+File.separator+"Object-Detection")
                val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues)
                stream = Objects.requireNonNull((imageUri))?.let { resolver.openOutputStream(it) }!!
                imageToSave.compress(Bitmap.CompressFormat.JPEG,100,stream)
                Objects.requireNonNull<OutputStream?>(stream)
-               Toast.makeText(this,"image inserted",Toast.LENGTH_SHORT).show()
+               Toast.makeText(this,"Image Saved to Gallery",Toast.LENGTH_SHORT).show()
            }
        }
        catch (e:java.lang.Exception){
          print(e.stackTrace)
-           Toast.makeText(this,"image not inserted",Toast.LENGTH_SHORT).show()
+           Toast.makeText(this,"Error Saving Image",Toast.LENGTH_SHORT).show()
        }
 
     }
-
 
     fun performDetection(view: View) {
         val button = view as AppCompatButton
@@ -166,6 +167,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             val detectedImage = BitmapFactory.decodeFile(file.absolutePath)
             inferenceBitmap = detectedImage
             resultsImage.setImageBitmap(detectedImage)
+            saveImageDB()
         }
     }
 

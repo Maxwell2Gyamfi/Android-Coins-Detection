@@ -9,7 +9,7 @@ import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
-class RecycleViewAdapter(private val mContext: Context, private val mData:List<History>) :
+class RecycleViewAdapter(private val mContext: Context, private val mData: MutableList<SavedImages>) :
     RecyclerView.Adapter<RecycleViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -20,16 +20,16 @@ class RecycleViewAdapter(private val mContext: Context, private val mData:List<H
     }
 
     override fun onBindViewHolder(viewHolder:ViewHolder, position: Int) {
-        viewHolder.imageViewThumbnail.setImageResource(mData[position].thumbnail)
+        viewHolder.imageViewThumbnail.setImageBitmap(mData[position].imageToSave)
         viewHolder.selectedCardView.setOnClickListener {
 
             val intent = Intent(mContext, SelectedHistoryImage::class.java).apply {
-                putExtra("Image", mData[position].thumbnail)
-                putExtra("Count", mData[position].numItems)
-                putExtra("Total",mData[position].totalAmount)
+//                putExtra("Image", mData[position].imageToSave)
+                putExtra("ID", mData[position].id)
+                putExtra("Count", mData[position].totalItems)
+                putExtra("Total",mData[position].totalCost)
             }
             mContext.startActivity(intent)
-
         }
     }
     override fun getItemCount() = mData.size
