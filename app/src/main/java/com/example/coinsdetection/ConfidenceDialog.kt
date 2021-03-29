@@ -5,14 +5,12 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialogFragment
 
-open class ConfidenceDialog(val pyConfidence:String): AppCompatDialogFragment(){
+open class ConfidenceDialog(private val pyConfidence:String): AppCompatDialogFragment(){
     private lateinit var listener: ConfidenceDialogListener
-    private lateinit var confidence:EditText
     private lateinit var seekBar:SeekBar
     private lateinit var seekVal:TextView
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

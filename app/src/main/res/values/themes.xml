@@ -28,4 +28,13 @@
         <item name="android:background">@color/custom_blue</item>
     </style>
 
+    <style name="AlertDialogResults" parent="Theme.AppCompat.Dialog">
+        <!-- Used for the buttons -->
+<!--        <item name="colorAccent">@color/custom_blue</item>-->
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/custom_blue</item>
+    </style>
+
 </resources>

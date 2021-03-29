@@ -43,10 +43,12 @@ private var imageUri: Uri? = null
 
 
 data class SavedImages(val id: Int, val imageName: String, val totalItems: Int, val totalCost: Double, val imageToSave: Bitmap)
+data class ResultsDetection(val itemName:String, val totalObjects:Int, val totalCost: Double)
 
 class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogListener {
     private lateinit var selectedOption: String
     private lateinit var inferenceBitmap: Bitmap
+    private lateinit var selectedBitmap: Bitmap
     private var py = Python.getInstance()
     private var db = DataBaseHandler(this)
     private var pyobj = py.getModule("detection")
@@ -134,13 +136,19 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
     }
 
+    fun showResults(view:View){
+        var resultsDetection = ResultsDetection(selectedMny,totalItems,totalCost)
+        val resultsDialog:ResultsDialog = ResultsDialog(resultsDetection)
+        resultsDialog.show(supportFragmentManager,"results")
+    }
+
     fun performDetection(view: View) {
         val button = view as AppCompatButton
         val selected = button.text.toString()
         selectedMny = selected
         setDefault()
         applyFocus(view)
-        initInference(inferenceBitmap, selected)
+        initInference(selectedBitmap, selected)
     }
 
     private fun pyResults(pyString: String){
@@ -151,7 +159,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
     private fun setConfidence(confidence: String){
         pyobj.callAttr("changeConfidence", confidence)
-        initInference(inferenceBitmap, selectedMny)
+        initInference(selectedBitmap, selectedMny)
     }
 
     private fun getConfidence(): String {
@@ -249,7 +257,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             try {
                 val takenImage = BitmapFactory.decodeFile(photofile.absolutePath)
-                inferenceBitmap = takenImage
+                selectedBitmap = takenImage
                 resultsImage.setImageBitmap(takenImage)
                 setDefault()
                 applyFocus(all)
@@ -280,7 +288,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                 ) }
                 val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
                 resultsImage.setImageBitmap(bitmap)
-                inferenceBitmap = bitmap!!
+                selectedBitmap = bitmap!!
                 selectedMny = "All"
                 bitmap?.let { initInference(it, "All") }
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
