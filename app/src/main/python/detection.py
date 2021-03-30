@@ -97,6 +97,29 @@ class Inference:
         cv2.imwrite(self.files_dir+'/detection.jpg', frame)
         return str(total)+"-"+str(count)
 
+    def drawBox(self):
+        pass
+
+    def scaleBoxes(self, coordinates, imageData, classID):
+        new_coords = []
+        frame = self.decodeData(imageData)
+        y_ = frame.shape[0]
+        x_ = frame.shape[1]
+
+        targetSize = 608
+        x_scale = targetSize / x_
+        y_scale = targetSize / y_
+
+        for i in coordinates:
+            x = int(np.round(i[0] * x_scale))
+            y = int(np.round(i[1] * y_scale))
+            xmax = int(np.round(i[2] * x_scale))
+            ymax = int(np.round(i[2] * y_scale))
+            temp = [x, y, xmax, ymax]
+            new_coords.append(temp)
+
+        print(new_coords)
+
 
 inferenceObj = Inference()
 
@@ -109,6 +132,27 @@ def changeConfidence(conf):
 def getConfidence():
     conf = int(inferenceObj.CONFIDENCE_THRESHOLD * 100)
     return str(conf)
+
+
+def drawBoxes(data, imageData, classID):
+    frame = cv2.imread(inferenceObj.files_dir+'/detection.jpg')
+    print(frame.shape[0])
+    print(frame.shape[1])
+    y = data
+    a = str(y)
+
+    print(y)
+    print(y.get(0))
+
+    x = y.get(0)
+    b = x.split(",")
+
+    print(b)
+    print(b[0])
+    print("i am string")
+    print(a)
+
+    # inferenceObj.scaleBoxes(data, imageData, classID)
 
 
 def main(data, item):

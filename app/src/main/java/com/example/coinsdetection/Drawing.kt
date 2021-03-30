@@ -7,8 +7,12 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.chaquo.python.PyObject
 
-data class Coordinates(val startX:Float,val startY:Float, val pointX:Float,val pointY:Float)
+
+
+
+data class Coordinates(val startX: Float, val startY: Float, val pointX: Float, val pointY: Float)
 
 class Drawing(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
@@ -20,6 +24,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     var startX = 0f
     var startY = 0f
     val mPaths = ArrayList<Coordinates>() // ArrayList for Paths
+    var params: MutableList<PyObject> = ArrayList()
     private fun setupPaint() {
 // Setup paint with color and stroke styles
         Paint().also { this.drawPaint = it }
@@ -40,9 +45,12 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
                 startY = pointY
             }
             MotionEvent.ACTION_UP -> {
-                val saveCoordinates =  Coordinates(startX,startY,pointX,pointY)
+                val saveCoordinates = Coordinates(startX, startY, pointX, pointY)
+                val str = "$startX,$startY,$pointX,$pointY"
+
+                params.add(PyObject.fromJava(str))
                 mPaths.add(saveCoordinates)
-                boxes+=1
+                boxes += 1
                 startX = 0F
                 startY = 0F
                 pointX = 0F
@@ -75,7 +83,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         }
     }
 
-    fun setColor(newColor:String){
+    fun setColor(newColor: String){
         paintColor = Color.parseColor(newColor)
         drawPaint!!.color = paintColor
     }

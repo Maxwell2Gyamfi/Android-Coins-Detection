@@ -138,7 +138,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
     fun showResults(view:View){
         var resultsDetection = ResultsDetection(selectedMny,totalItems,totalCost)
-        val resultsDialog:ResultsDialog = ResultsDialog(resultsDetection)
+        val resultsDialog = ResultsDialog(resultsDetection)
         resultsDialog.show(supportFragmentManager,"results")
     }
 
