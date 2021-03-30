@@ -12,7 +12,7 @@ data class Coordinates(val startX:Float,val startY:Float, val pointX:Float,val p
 
 class Drawing(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
-    private val paintColor: Int = Color.BLACK
+    private var paintColor: Int = Color.BLACK
     private var drawPaint: Paint? = null
     var boxes:Int =0
     var pointX = 0f
@@ -73,6 +73,11 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         if(startX >0.0 && startY>0.0) {
            drawPaint?.let { canvas.drawRect(startX, startY, pointX, pointY, it) }
         }
+    }
+
+    fun setColor(newColor:String){
+        paintColor = Color.parseColor(newColor)
+        drawPaint!!.color = paintColor
     }
 
 

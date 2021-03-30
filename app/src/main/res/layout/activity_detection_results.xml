@@ -16,14 +16,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="5dp">
+        app:layout_constraintBottom_toTopOf="@id/buttonsHv"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="20dp">
 
         <TextView
             android:id="@+id/stage_summary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/results_text"
-            android:layout_weight="0.5"
+            android:layout_weight="0.4"
             android:layout_marginEnd="10dp"
             android:textColor="@color/custom_blue"
             android:textSize="40sp"></TextView>
@@ -79,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@id/resultsHeader"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="5dp"
+        android:layout_marginHorizontal="5dp"
         android:layout_marginTop="10dp"
         android:scrollbars="none"
         >

@@ -96,7 +96,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    fun saveImage() {
+    fun saveImage(view:View) {
         if (this::inferenceBitmap.isInitialized) {
             var name: String = "Detection-" + UUID.randomUUID().toString()
             createDirectoryAndSaveFile(inferenceBitmap, name)
@@ -148,7 +148,10 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         selectedMny = selected
         setDefault()
         applyFocus(view)
-        initInference(selectedBitmap, selected)
+        when (resultsImage.drawable) {
+            null -> Toast.makeText(this,"No image to perform inference", Toast.LENGTH_SHORT).show()
+            else -> initInference(selectedBitmap, selected)
+        }
     }
 
     private fun pyResults(pyString: String){
@@ -297,7 +300,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                 resultsImage.setImageBitmap(bitmap)
                 selectedBitmap = bitmap!!
                 selectedMny = "All"
-                bitmap?.let { initInference(it, "All") }
+                bitmap.let { initInference(it, "All") }
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
             }

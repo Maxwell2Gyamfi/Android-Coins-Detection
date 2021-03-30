@@ -24,10 +24,10 @@ class RecycleViewAdapter(private val mContext: Context, private val mData: Mutab
         viewHolder.selectedCardView.setOnClickListener {
 
             val intent = Intent(mContext, SelectedHistoryImage::class.java).apply {
-//                putExtra("Image", mData[position].imageToSave)
                 putExtra("ID", mData[position].id)
                 putExtra("Count", mData[position].totalItems)
                 putExtra("Total",mData[position].totalCost)
+                putExtra("Name",mData[position].imageName)
             }
             mContext.startActivity(intent)
         }

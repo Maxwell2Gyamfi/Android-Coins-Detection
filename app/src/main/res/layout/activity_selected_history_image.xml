@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recents_text"
-            android:layout_weight="0.75"
+            android:layout_weight="0.40"
             android:textColor="@color/custom_blue"
             android:textSize="40sp"></TextView>
 
@@ -53,6 +53,18 @@
             android:tint="@color/custom_blue"
             android:layout_marginTop="20dp"
             android:contentDescription="Home"/>
+
+        <ImageButton
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.25"
+            android:src="@drawable/floppy_disk"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:tint="@color/custom_blue"
+            android:layout_marginTop="20dp"
+            android:contentDescription="Save"/>
 
     </LinearLayout>
 
