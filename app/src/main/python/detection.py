@@ -100,26 +100,6 @@ class Inference:
     def drawBox(self):
         pass
 
-    def scaleBoxes(self, coordinates, imageData, classID):
-        new_coords = []
-        frame = self.decodeData(imageData)
-        y_ = frame.shape[0]
-        x_ = frame.shape[1]
-
-        targetSize = 608
-        x_scale = targetSize / x_
-        y_scale = targetSize / y_
-
-        for i in coordinates:
-            x = int(np.round(i[0] * x_scale))
-            y = int(np.round(i[1] * y_scale))
-            xmax = int(np.round(i[2] * x_scale))
-            ymax = int(np.round(i[2] * y_scale))
-            temp = [x, y, xmax, ymax]
-            new_coords.append(temp)
-
-        print(new_coords)
-
 
 inferenceObj = Inference()
 
@@ -134,24 +114,34 @@ def getConfidence():
     return str(conf)
 
 
-def drawBoxes(data, imageData, classID):
+def drawBoxes(data, imageData, classID, width, height):
+    coords = data
     frame = cv2.imread(inferenceObj.files_dir+'/detection.jpg')
-    print(frame.shape[0])
-    print(frame.shape[1])
-    y = data
-    a = str(y)
 
-    print(y)
-    print(y.get(0))
+    targetSize_x = frame.shape[1]
+    targetSize_y = frame.shape[0]
 
-    x = y.get(0)
-    b = x.split(",")
+    y_ = int(height)
+    x_ = int(width)
 
-    print(b)
-    print(b[0])
-    print("i am string")
-    print(a)
+    scale_x = targetSize_x / x_
+    scale_y = targetSize_y / y_
 
+    for i in range(0, coords.size()):
+        temp = coords.get(i)
+        arr = temp.split(',')
+
+        x = int(np.round(float(arr[0]) * scale_x))
+        y = int(np.round(float(arr[1]) * scale_y))
+        w = int(np.round(float(arr[2]) * scale_x))
+        h = int(np.round(float(arr[3]) * scale_y))
+
+        point1 = (x, y)
+        point2 = (w, h)
+
+        cv2.rectangle(frame, point1, point2, (255, 0, 0), 4)
+
+    cv2.imwrite(inferenceObj.files_dir+'/detection.jpg', frame)
     # inferenceObj.scaleBoxes(data, imageData, classID)
 
 

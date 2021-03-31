@@ -42,8 +42,14 @@ private const val pickImage = 100
 private var imageUri: Uri? = null
 
 
-data class SavedImages(val id: Int, val imageName: String, val totalItems: Int, val totalCost: Double, val imageToSave: Bitmap)
-data class ResultsDetection(val itemName:String, val totalObjects:Int, val totalCost: Double)
+data class SavedImages(
+    val id: Int,
+    val imageName: String,
+    val totalItems: Int,
+    val totalCost: Double,
+    val imageToSave: Bitmap
+)
+data class ResultsDetection(val itemName: String, val totalObjects: Int, val totalCost: Double)
 
 class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogListener {
     private lateinit var selectedOption: String
@@ -69,6 +75,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
+
+
     fun redo(view: View) {
         when(selectedOption){
             "camera" -> takePicture()
@@ -92,17 +100,17 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             setConfidence(confidence)
         }
         else{
-            Toast.makeText(this,"Please select an image",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun saveImage(view:View) {
+    fun saveImage(view: View) {
         if (this::inferenceBitmap.isInitialized) {
             var name: String = "Detection-" + UUID.randomUUID().toString()
             createDirectoryAndSaveFile(inferenceBitmap, name)
         }
         else{
-            Toast.makeText(this,"No image to Save",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No image to Save", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -120,26 +128,32 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                val resolver = contentResolver
                val contentValues = ContentValues()
                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$fileName.jpg")
-               contentValues.put(MediaStore.MediaColumns.MIME_TYPE,"image/jpg")
-               contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH,Environment.DIRECTORY_PICTURES+File.separator+"Object-Detection")
-               val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues)
+               contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+               contentValues.put(
+                   MediaStore.MediaColumns.RELATIVE_PATH,
+                   Environment.DIRECTORY_PICTURES + File.separator + "Object-Detection"
+               )
+               val imageUri = resolver.insert(
+                   MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                   contentValues
+               )
                stream = Objects.requireNonNull((imageUri))?.let { resolver.openOutputStream(it) }!!
-               imageToSave.compress(Bitmap.CompressFormat.JPEG,100,stream)
+               imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                Objects.requireNonNull<OutputStream?>(stream)
-               Toast.makeText(this,"Image Saved to Gallery",Toast.LENGTH_SHORT).show()
+               Toast.makeText(this, "Image Saved to Gallery", Toast.LENGTH_SHORT).show()
            }
        }
-       catch (e:java.lang.Exception){
+       catch (e: java.lang.Exception){
          print(e.stackTrace)
-           Toast.makeText(this,"Error Saving Image",Toast.LENGTH_SHORT).show()
+           Toast.makeText(this, "Error Saving Image", Toast.LENGTH_SHORT).show()
        }
 
     }
 
-    fun showResults(view:View){
-        var resultsDetection = ResultsDetection(selectedMny,totalItems,totalCost)
+    fun showResults(view: View){
+        var resultsDetection = ResultsDetection(selectedMny, totalItems, totalCost)
         val resultsDialog = ResultsDialog(resultsDetection)
-        resultsDialog.show(supportFragmentManager,"results")
+        resultsDialog.show(supportFragmentManager, "results")
     }
 
     fun performDetection(view: View) {
@@ -149,7 +163,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         setDefault()
         applyFocus(view)
         when (resultsImage.drawable) {
-            null -> Toast.makeText(this,"No image to perform inference", Toast.LENGTH_SHORT).show()
+            null -> Toast.makeText(this, "No image to perform inference", Toast.LENGTH_SHORT).show()
             else -> initInference(selectedBitmap, selected)
         }
     }
@@ -202,9 +216,9 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         photofile = getPhotoFile(FILE_NAME)
         val fileProvider = FileProvider.getUriForFile(
-                this,
-                "com.example.coinsdetection.fileprovider",
-                photofile
+            this,
+            "com.example.coinsdetection.fileprovider",
+            photofile
         )
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
         try {
@@ -241,9 +255,17 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    fun drawBoundingBox(view:View){
-        val intent = Intent(this,DrawBox::class.java)
-        startActivity(intent)
+    fun drawBoundingBox(view: View){
+        if(selectedMny !== "All") {
+            val intent = Intent(this, DrawBox::class.java)
+            intent.putExtra("Selected", "$selectedMny")
+            intent.putExtra("Cost", totalCost)
+            intent.putExtra("Objects", totalItems)
+            startActivity(intent)
+        }
+        else{
+            Toast.makeText(this, "Single a single item", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun returnHome() {
@@ -270,7 +292,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                 setDefault()
                 applyFocus(all)
                 selectedMny = "All"
-                initInference(selectedBitmap,"All")
+                initInference(selectedBitmap, "All")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -278,11 +300,11 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             data?.data.also { imageUri = it }
             try {
                 imageUri.let(
-                        fun(_: Uri?) = if (Build.VERSION.SDK_INT < 28) {
-                            imageUri?.let { launchCropping(it) }
-                        } else {
-                            imageUri?.let { launchCropping(it) }
-                        },
+                    fun(_: Uri?) = if (Build.VERSION.SDK_INT < 28) {
+                        imageUri?.let { launchCropping(it) }
+                    } else {
+                        imageUri?.let { launchCropping(it) }
+                    },
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -293,8 +315,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             if (resultCode === RESULT_OK) {
                 val resultUri = result.uri
                 val source = resultUri?.let { it1 -> ImageDecoder.createSource(
-                        this.contentResolver,
-                        it1
+                    this.contentResolver,
+                    it1
                 ) }
                 val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
                 resultsImage.setImageBitmap(bitmap)

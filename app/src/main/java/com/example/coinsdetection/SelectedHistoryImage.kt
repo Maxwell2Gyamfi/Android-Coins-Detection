@@ -44,6 +44,7 @@ class SelectedHistoryImage : AppCompatActivity() {
         }
     }
 
+
     fun returnHome(view:View){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

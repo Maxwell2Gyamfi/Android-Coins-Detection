@@ -4,12 +4,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.chaquo.python.PyObject
-
-
 
 
 data class Coordinates(val startX: Float, val startY: Float, val pointX: Float, val pointY: Float)
@@ -17,6 +16,7 @@ data class Coordinates(val startX: Float, val startY: Float, val pointX: Float, 
 class Drawing(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
     private var paintColor: Int = Color.BLACK
+    lateinit var selected:String
     private var drawPaint: Paint? = null
     var boxes:Int =0
     var pointX = 0f
@@ -34,7 +34,12 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         drawPaint!!.style = Paint.Style.STROKE
         drawPaint!!.strokeJoin = Paint.Join.ROUND
         drawPaint!!.strokeCap = Paint.Cap.ROUND
+        drawPaint!!.textSize = resources.getDimension(R.dimen.myFontSize)
+        drawPaint!!.textAlign
+        drawPaint!!.typeface = Typeface.create("Arial",Typeface.BOLD);
     }
+
+
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         pointX = event.x
@@ -67,7 +72,6 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     }
 
     fun undoCoordinate(){
-
         if(mPaths.size >0){
             mPaths.removeLast()
             invalidate()
@@ -77,8 +81,10 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     override fun onDraw(canvas: Canvas) {
         for(p in mPaths){
             drawPaint?.let { canvas.drawRect(p.startX, p.startY, p.pointX, p.pointY, it) }
+            drawPaint?.let { canvas.drawText(selected, p.startX, p.startY - 2, it) }
         }
         if(startX >0.0 && startY>0.0) {
+
            drawPaint?.let { canvas.drawRect(startX, startY, pointX, pointY, it) }
         }
     }
@@ -88,10 +94,10 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         drawPaint!!.color = paintColor
     }
 
-
     init {
         isFocusable = true
         isFocusableInTouchMode = true
         setupPaint()
     }
+
 }

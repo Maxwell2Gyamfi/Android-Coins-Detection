@@ -55,12 +55,12 @@
             android:id="@+id/drawBoxImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_margin="0dp"
             />
 
         <com.example.coinsdetection.Drawing
             android:id="@+id/drawingPad"
-            android:layout_margin="5dp"
+            android:layout_margin="0dp"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             />
@@ -171,27 +171,18 @@
             android:id="@+id/updateButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.33"
+            android:layout_weight="0.5"
             android:layout_margin="5dp"
             android:background="@drawable/selected_option_border"
             android:textColor="@color/white"
-            android:text="Update" />
+            android:text="Finish" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/addedLenght"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.33"
-            android:layout_margin="5dp"
-            android:background="@drawable/selected_option_border"
-            android:text="Added: "
-            android:textColor="@color/white" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/undoBox"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.33"
+            android:layout_weight="0.5"
             android:layout_margin="5dp"
             android:background="@drawable/delete_box_border"
             android:text="Undo"
