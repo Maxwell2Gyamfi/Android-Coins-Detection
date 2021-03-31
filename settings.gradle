@@ -1,4 +1,2 @@
-include ':sdk'
-include ':opencv'
 include ':app'
 rootProject.name = "Coins Detection"
