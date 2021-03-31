@@ -36,7 +36,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         drawPaint!!.strokeCap = Paint.Cap.ROUND
         drawPaint!!.textSize = resources.getDimension(R.dimen.myFontSize)
         drawPaint!!.textAlign
-        drawPaint!!.typeface = Typeface.create("Arial",Typeface.BOLD);
+        drawPaint!!.typeface = Typeface.create("Arial",Typeface.NORMAL);
     }
 
 

@@ -75,7 +75,11 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        this.startActivity(intent)
+    }
 
     fun redo(view: View) {
         when(selectedOption){

@@ -19,13 +19,6 @@ class MainActivity : AppCompatActivity() {
          history_images_rv.layoutManager = GridLayoutManager(this, 4)
          history_images_rv.adapter = mainAdapter
     }
-    override fun onRestart() {
-        super.onRestart()
-        finish()
-        overridePendingTransition(0, 0)
-        startActivity(intent)
-        overridePendingTransition(0, 0)
-    }
 
     private fun readImages(): MutableList<SavedImages> {
 
@@ -42,13 +35,17 @@ class MainActivity : AppCompatActivity() {
                    putExtra("selected", "camera").toString()
                    putExtra("name", 1)
                }
+
                startActivity(intent)
+
            }
            R.id.galleryBtn -> {
                val intent = Intent(applicationContext, DetectionResults::class.java).apply {
                    putExtra("selected", "gallery").toString()
                }
+
                startActivity(intent)
+
            }
            R.id.settingsBtn -> Toast.makeText(this, "settings clicked", Toast.LENGTH_SHORT).show()
        }

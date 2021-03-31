@@ -20,6 +20,8 @@ import com.chaquo.python.Python
 import kotlinx.android.synthetic.main.activity_draw_box.*
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -158,6 +160,11 @@ class DrawBox : AppCompatActivity() {
                 )
                 currentCost += cost!!
                 currentObjects += boxes
+
+                val df = DecimalFormat("#.##")
+                df.roundingMode = RoundingMode.CEILING
+                df.format(currentCost)
+
                 db.insertData(SavedImages(0, name, currentObjects, currentCost, mBitmap!!))
             } else {
                 Toast.makeText(
