@@ -6,19 +6,19 @@
     android:layout_height="match_parent"
     android:theme="@style/Theme.CoinsDetection"
     tools:context=".MainActivity">
-    
+
     <TextView
         android:id="@+id/stage_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/stage_name"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recents"
         android:layout_margin="10dp"
+        android:layout_marginLeft="8dp"
+        android:text="@string/stage_name"
+        android:textColor="@color/custom_blue"
         android:textSize="50sp"
-        android:textColor="@color/custom_blue">
-    </TextView>
+        app:layout_constraintBottom_toTopOf="@id/recents"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></TextView>
 
     <TextView
         android:id="@+id/recents"
@@ -36,12 +36,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/history_images_rv"
         android:layout_width="match_parent"
-        android:layout_height="542dp"
-        android:layout_marginRight="5dp"
+        android:layout_height="0dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintBottom_toTopOf="@id/nav_buttons"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/nav_buttons"
         app:layout_constraintTop_toBottomOf="@id/recents">
 
     </androidx.recyclerview.widget.RecyclerView>

@@ -1,11 +1,9 @@
 package com.example.coinsdetection
 
-import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -18,6 +16,10 @@ import androidx.core.view.get
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import kotlinx.android.synthetic.main.activity_draw_box.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.math.RoundingMode
@@ -50,18 +52,41 @@ class DrawBox : AppCompatActivity() {
 
         addBoxImage = BitmapFactory.decodeFile(file.absolutePath)
         drawBoxImage.setImageBitmap(addBoxImage)
-        mCurrentPaint = colorPalette[1] as ImageButton
+        mCurrentPaint = colorPalette[4] as ImageButton
         mCurrentPaint!!.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.palette_selected))
 
-        drawingPad.selected = selected.toString()
+        drawingPad.selected = selected
 
         undoBox.setOnClickListener {
             drawingPad.undoCoordinate()
         }
-        updateButton.setOnClickListener {
 
-            BitmapAsyncTask(getBitmapFromView(drawingPad_fl)).execute()
-        }
+        updateButton.setOnClickListener(
+                fun(_: View) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val mBitmap = getBitmapFromFrameLayout(drawingPad_fl)
+                        var name: String = "Custom" + UUID.randomUUID().toString()
+                        val boxes = drawingPad.mPaths.size
+                        val cost = getMoneyValue(
+                                boxes,
+                                selected,
+                        )
+                        currentCost += cost!!
+                        currentObjects += boxes
+
+                        val df = DecimalFormat("#.##")
+                        RoundingMode.CEILING.also { df.roundingMode = it }
+                        df.format(currentCost)
+                        when {
+                            boxes > 0 -> {
+                                db.insertData(SavedImages(0, name, currentObjects, currentCost, mBitmap!!))
+                                returnHome()
+                            }
+                            else -> discardChanges()
+                        }
+                    }
+                },
+        )
 
     }
 
@@ -76,8 +101,19 @@ class DrawBox : AppCompatActivity() {
         }
     }
 
+    private suspend fun getBitmapFromFrameLayout(view:View): Bitmap? {
+        return withContext(Dispatchers.Default) {
+            val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(returnedBitmap)
+            val bgDrawable = BitmapDrawable(resources, addBoxImage)
+            if (bgDrawable != null) {
+                bgDrawable.draw(canvas)
+            }
 
-
+            view.draw(canvas)
+            return@withContext returnedBitmap
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addBoxInference(mPaths: MutableList<PyObject>) {
@@ -93,87 +129,26 @@ class DrawBox : AppCompatActivity() {
         pyobj.callAttr("drawBoxes", mPaths, imageString, "All", width, height)
     }
 
-
-    private fun getMoneyValue(count: Int, moneyStr: String): Double? = when (moneyStr) {
-        "1p" -> count * 0.01
-        "2p" -> count * 0.02
-        "5p" -> count * 0.05
-        "10p" -> count * 0.1
-        "20p" -> count * 0.2
-        "50p" -> count * 0.5
-        "1P" -> count * 1.0
-        "2p" -> count * 2.0
-        else -> null
+    private fun getMoneyValue(count: Int, moneyStr: String): Double? {
+        return when (moneyStr) {
+            "1p" -> count * 0.01
+            "2p" -> count * 0.02
+            "5p" -> count * 0.05
+            "10p" -> count * 0.1
+            "20p" -> count * 0.2
+            "50p" -> count * 0.5
+            "1P" -> count * 1.0
+            "2P" -> count * 2.0
+            else -> null
+        }
+    }
+    private fun returnHome() {
+        onBackPressed()
     }
 
-    private fun getBitmapFromView(view: View): Bitmap {
-
-        //Define a bitmap with the same size as the view.
-        // CreateBitmap : Returns a mutable bitmap with the specified width and height
-        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        //Bind a canvas to it
-        val canvas = Canvas(returnedBitmap)
-
-        //Get the view's background
-        val bgDrawable = BitmapDrawable(resources, addBoxImage)
-
-            //has background drawable, then draw it on the canvas
-        if(bgDrawable!=null){
-            bgDrawable.draw(canvas)
-        }
-        // draw the view on the canvas
-        view.draw(canvas)
-        //return the bitmap
-        return returnedBitmap
-    }
-
-
-    private inner class BitmapAsyncTask(val mBitmap: Bitmap?) :
-            AsyncTask<Any, Void, String>() {
-
-        private lateinit var mProgressDialog: Dialog
-        // END
-
-
-        override fun doInBackground(vararg params: Any): String? {
-
-            var result = ""
-
-            if (mBitmap != null) {
-                result = "success"
-            }
-            return result
-        }
-        override fun onPostExecute(result: String) {
-            super.onPostExecute(result)
-            if (!result.isEmpty()) {
-                Toast.makeText(
-                    this@DrawBox,
-                    "File saved successfully :$result",
-                    Toast.LENGTH_SHORT
-                ).show()
-                var name: String = "Custom" + UUID.randomUUID().toString()
-                val boxes = drawingPad.mPaths.size
-                val cost = getMoneyValue(
-                    boxes,
-                    selected.toString()
-                )
-                currentCost += cost!!
-                currentObjects += boxes
-
-                val df = DecimalFormat("#.##")
-                df.roundingMode = RoundingMode.CEILING
-                df.format(currentCost)
-
-                db.insertData(SavedImages(0, name, currentObjects, currentCost, mBitmap!!))
-            } else {
-                Toast.makeText(
-                    this@DrawBox,
-                    "Something went wrong while saving the file.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
+    private fun discardChanges(){
+        Toast.makeText(this,"Discarded changes", Toast.LENGTH_SHORT).show()
+        onBackPressed()
     }
 }
 

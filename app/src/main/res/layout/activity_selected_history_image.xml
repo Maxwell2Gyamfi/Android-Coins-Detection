@@ -24,42 +24,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recents_text"
-            android:layout_weight="0.40"
+            android:layout_weight="0.50"
             android:textColor="@color/custom_blue"
             android:textSize="40sp"></TextView>
-
-        <ImageButton
-            android:id="@+id/homeBtn"
-            android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_weight="0.25"
-            android:src="@drawable/home"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:onClick="returnHome"
-            android:tint="@color/custom_blue"
-            android:layout_marginTop="20dp"
-            android:contentDescription="Home"/>
 
         <ImageButton
             android:id="@+id/deleteBtn"
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="0.25"
-            android:src="@drawable/delete"
+            android:src="@drawable/delete__1_"
             android:scaleType="fitCenter"
             android:background="@null"
-            android:onClick="returnHome"
             android:tint="@color/custom_blue"
             android:layout_marginTop="20dp"
-            android:contentDescription="Home"/>
+            android:contentDescription="Delete"/>
 
         <ImageButton
             android:id="@+id/saveButton"
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="0.25"
-            android:src="@drawable/floppy_disk"
+            android:src="@drawable/download__3_"
             android:scaleType="fitCenter"
             android:background="@null"
             android:tint="@color/custom_blue"

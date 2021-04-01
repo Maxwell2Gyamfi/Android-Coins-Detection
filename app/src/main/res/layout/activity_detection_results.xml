@@ -30,19 +30,6 @@
             android:textColor="@color/custom_blue"
             android:textSize="40sp"></TextView>
 
-        <ImageButton
-            android:onClick="goHome"
-            android:id="@+id/homeBtn"
-            android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_weight="0.20"
-            android:src="@drawable/home"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:tint="@color/custom_blue"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="5dp"
-            android:contentDescription="Home"/>
 
         <ImageButton
             android:onClick="redo"
@@ -210,7 +197,7 @@
             android:onClick="showResults"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.25"
+            android:layout_weight="0.5"
             android:layout_margin="5dp"
             android:background="@drawable/selected_option_border"
             android:textColor="@color/white"
@@ -220,30 +207,11 @@
             android:onClick="drawBoundingBox"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.25"
+            android:layout_weight="0.5"
             android:layout_margin="5dp"
             android:background="@drawable/selected_option_border"
             android:text="Add Box"
             android:textColor="@color/white" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"
-            android:layout_margin="5dp"
-            android:background="@drawable/delete_box_border"
-            android:text="Remove Box"
-            android:textColor="@color/white" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:onClick="saveImage"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"
-            android:layout_margin="5dp"
-            android:background="@drawable/selected_option_border"
-            android:textColor="@color/white"
-            android:text="Save Image" />
 
     </LinearLayout>
 

@@ -23,21 +23,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/draw_box"
-            android:layout_weight="0.75"
+            android:layout_weight="1"
             android:textColor="@color/custom_blue"
             android:textSize="40sp"></TextView>
 
-        <ImageButton
-            android:id="@+id/homeBtn"
-            android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_weight="0.25"
-            android:src="@drawable/left"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:tint="#B23B16"
-            android:layout_marginTop="18dp"
-            android:contentDescription="Home"/>
     </LinearLayout>
 
 

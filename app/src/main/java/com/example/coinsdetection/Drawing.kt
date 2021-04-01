@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Paint.Style.FILL
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -18,6 +19,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     private var paintColor: Int = Color.BLACK
     lateinit var selected:String
     private var drawPaint: Paint? = null
+    private var drawtext:Paint?=null
     var boxes:Int =0
     var pointX = 0f
     var pointY = 0f
@@ -27,19 +29,24 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     var params: MutableList<PyObject> = ArrayList()
     private fun setupPaint() {
 // Setup paint with color and stroke styles
-        Paint().also { this.drawPaint = it }
-        this.drawPaint!!.color = paintColor
+        drawPaint = Paint()
+        drawtext = Paint()
+        drawPaint!!.color = paintColor
         drawPaint!!.isAntiAlias = true
         drawPaint!!.strokeWidth = 5F
         drawPaint!!.style = Paint.Style.STROKE
         drawPaint!!.strokeJoin = Paint.Join.ROUND
         drawPaint!!.strokeCap = Paint.Cap.ROUND
-        drawPaint!!.textSize = resources.getDimension(R.dimen.myFontSize)
-        drawPaint!!.textAlign
-        drawPaint!!.typeface = Typeface.create("Arial",Typeface.NORMAL);
+        drawtext!!.color = paintColor
+        drawtext!!.strokeWidth = 5F
+        drawtext!!.style = FILL
+        drawtext!!.strokeJoin = Paint.Join.ROUND
+        drawtext!!.strokeCap = Paint.Cap.ROUND
+        drawtext!!.textSize = resources.getDimension(R.dimen.myFontSize)
+        drawtext!!.textAlign
+        drawtext!!.typeface = Typeface.create("Arial",Typeface.NORMAL);
+
     }
-
-
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         pointX = event.x
@@ -79,9 +86,11 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     }
 
     override fun onDraw(canvas: Canvas) {
+        val drawPaintCopy = drawPaint!!.apply {  }
+
         for(p in mPaths){
             drawPaint?.let { canvas.drawRect(p.startX, p.startY, p.pointX, p.pointY, it) }
-            drawPaint?.let { canvas.drawText(selected, p.startX, p.startY - 2, it) }
+            drawtext?.let { canvas.drawText("$selected 1.00", p.startX, p.startY - 2, it) }
         }
         if(startX >0.0 && startY>0.0) {
 
@@ -92,6 +101,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     fun setColor(newColor: String){
         paintColor = Color.parseColor(newColor)
         drawPaint!!.color = paintColor
+        drawtext!!.color = paintColor
     }
 
     init {

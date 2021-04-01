@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_selected_history_image.*
@@ -44,12 +43,6 @@ class SelectedHistoryImage : AppCompatActivity() {
         }
     }
 
-
-    fun returnHome(view:View){
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
-
     private fun retrieveImage(ID:Int):Bitmap{
         return db.getImage(ID)
     }
@@ -57,6 +50,7 @@ class SelectedHistoryImage : AppCompatActivity() {
         db.deleteData(ID)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+
     }
     private fun saveImage(fileName:String){
         val stream: OutputStream

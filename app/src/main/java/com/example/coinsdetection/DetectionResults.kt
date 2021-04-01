@@ -1,7 +1,6 @@
 package com.example.coinsdetection
 
 import android.content.ActivityNotFoundException
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -29,7 +28,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.OutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -75,21 +73,11 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        this.startActivity(intent)
-    }
-
     fun redo(view: View) {
         when(selectedOption){
             "camera" -> takePicture()
             "gallery" -> openGallery()
         }
-    }
-
-    fun goHome(view: View) {
-        returnHome()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -108,50 +96,10 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    fun saveImage(view: View) {
-        if (this::inferenceBitmap.isInitialized) {
-            var name: String = "Detection-" + UUID.randomUUID().toString()
-            createDirectoryAndSaveFile(inferenceBitmap, name)
-        }
-        else{
-            Toast.makeText(this, "No image to Save", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun saveImageDB(){
         var name: String = "Detection" + UUID.randomUUID().toString()
         val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
         db.insertData(imageToSave)
-    }
-
-    private fun createDirectoryAndSaveFile(imageToSave: Bitmap, fileName: String) {
-        val stream: OutputStream
-       try{
-           if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.Q){
-
-               val resolver = contentResolver
-               val contentValues = ContentValues()
-               contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$fileName.jpg")
-               contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
-               contentValues.put(
-                   MediaStore.MediaColumns.RELATIVE_PATH,
-                   Environment.DIRECTORY_PICTURES + File.separator + "Object-Detection"
-               )
-               val imageUri = resolver.insert(
-                   MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                   contentValues
-               )
-               stream = Objects.requireNonNull((imageUri))?.let { resolver.openOutputStream(it) }!!
-               imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-               Objects.requireNonNull<OutputStream?>(stream)
-               Toast.makeText(this, "Image Saved to Gallery", Toast.LENGTH_SHORT).show()
-           }
-       }
-       catch (e: java.lang.Exception){
-         print(e.stackTrace)
-           Toast.makeText(this, "Error Saving Image", Toast.LENGTH_SHORT).show()
-       }
-
     }
 
     fun showResults(view: View){
@@ -272,6 +220,11 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        returnHome()
+    }
+
     private fun returnHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity((intent))
@@ -316,23 +269,25 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
         else if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
-            if (resultCode === RESULT_OK) {
-                val resultUri = result.uri
-                val source = resultUri?.let { it1 -> ImageDecoder.createSource(
-                    this.contentResolver,
-                    it1
-                ) }
-                val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
-                resultsImage.setImageBitmap(bitmap)
-                selectedBitmap = bitmap!!
-                selectedMny = "All"
-                bitmap.let { initInference(it, "All") }
-            } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result.error
+            when {
+                resultCode === RESULT_OK -> {
+                    val resultUri = result.uri
+                    val source = resultUri?.let { it1 -> ImageDecoder.createSource(
+                            this.contentResolver,
+                            it1
+                    ) }
+                    val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
+                    resultsImage.setImageBitmap(bitmap)
+                    selectedBitmap = bitmap!!
+                    selectedMny = "All"
+                    initInference(bitmap, "All")
+                }
+                else -> {
+                    finish()
+                }
             }
         }
-
-        else returnHome()
+        else finish()
     }
 
 }

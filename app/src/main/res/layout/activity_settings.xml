@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Settings">
+
+
+    <LinearLayout
+        android:id="@+id/settingsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        app:layout_constraintBottom_toTopOf="@id/darkMode_ll"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="0.75"
+            android:text="@string/settings_text"
+            android:textColor="@color/custom_blue"
+            android:textSize="50sp"></TextView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/darkMode_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintBottom_toTopOf="@id/autoSaveDetection"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settingsTitle">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:text="Dark Mode"
+            android:textColor="@color/custom_blue"
+            android:textSize="20sp"></TextView>
+
+        <Switch
+            android:id="@+id/darkModeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:layout_weight="0.2"
+            android:enabled="true"
+            app:thumbTint="@color/custom_blue"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/autoSaveDetection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintBottom_toTopOf="@id/confidenceText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/darkMode_ll">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:text="Save Detections"
+            android:textColor="@color/custom_blue"
+            android:textSize="20sp"></TextView>
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:layout_weight="0.2"
+            android:enabled="true"
+            app:thumbTint="@color/custom_blue"/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/confidenceText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Confidence"
+        android:textColor="@color/custom_blue"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/confidenceSeek"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/autoSaveDetection">
+
+
+    </TextView>
+
+    <LinearLayout
+        android:id="@+id/confidenceSeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confidenceText">
+
+        <SeekBar
+            android:id="@+id/settingsConfidence"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.8"
+            android:max="100"
+            android:progress="20"
+            android:splitTrack="false"
+            android:thumb="@drawable/custom_thumb_settings"></SeekBar>
+
+        <TextView
+            android:id="@+id/seekSettingsValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:padding="5dp"
+            android:text="20"
+            android:textAlignment="center"
+            android:textColor="@color/custom_blue"
+            android:textSize="25sp"></TextView>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayoutAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="180dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confidenceSeek">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="About"
+            android:textColor="@color/custom_blue"
+            android:textSize="20sp">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Money Detection v1"
+            android:textColor="@color/custom_blue"
+            android:textSize="20sp"></TextView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/nav_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutAbout"
+        app:layout_constraintVertical_bias="0.991"
+        android:weightSum="1">
+
+    <ImageButton
+        android:id="@+id/homeBtn"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.25"
+        android:src="@drawable/home"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:tint="@color/custom_blue"
+        android:onClick="selectedPage"
+        android:contentDescription="Home">
+    </ImageButton>
+    <ImageButton
+        android:id="@+id/galleryBtn"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/gallery"
+        android:layout_weight="0.25"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:tint="@color/custom_blue"
+        android:onClick="selectedPage"
+        android:contentDescription="Gallery"></ImageButton>
+
+    <ImageButton
+        android:id="@+id/cameraBtn"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.25"
+        android:scaleType="fitCenter"
+        android:src="@drawable/camera"
+        android:background="@null"
+        android:tint="@color/custom_blue"
+        android:onClick="selectedPage"
+        android:contentDescription="Camera"></ImageButton>
+
+    <ImageButton
+        android:id="@+id/settingsBtn"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.25"
+        android:scaleType="fitCenter"
+        android:src="@drawable/settings"
+        android:background="@null"
+        android:tint="@color/selected_nav"
+        android:onClick="selectedPage"
+        android:contentDescription="Settings"></ImageButton>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
