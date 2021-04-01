@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CoinsDetection">
-        <activity android:name=".Settings"></activity>
+        <activity android:name=".Settings"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".DrawBox"
             android:screenOrientation="portrait" />

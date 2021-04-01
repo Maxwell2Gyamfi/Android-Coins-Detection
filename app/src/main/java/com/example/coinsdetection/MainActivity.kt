@@ -1,5 +1,6 @@
 package com.example.coinsdetection
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
          mainAdapter = RecycleViewAdapter(this, recentImages)
          history_images_rv.layoutManager = GridLayoutManager(this, 4)
          history_images_rv.adapter = mainAdapter
+
     }
 
     private fun readImages(): MutableList<SavedImages> {
@@ -58,11 +60,27 @@ class MainActivity : AppCompatActivity() {
                    putExtra("selected", "gallery").toString()
                }
                startActivity(intent)
+
            }
            R.id.settingsBtn -> {
                val intent = Intent(applicationContext, Settings::class.java)
                startActivity(intent)
            }
        }
+    }
+
+    fun deleteAll(view:View){
+        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
+
+        dialogBuilder.setTitle("Delete Everything")
+        dialogBuilder.setPositiveButton("Confirm") { _, _ ->
+            db.deleteAllData()
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        dialogBuilder.setNegativeButton("Close"){_,_ ->}
+        dialogBuilder.setMessage("Are you sure you want to delete all images?")
+        dialogBuilder.show()
     }
 }

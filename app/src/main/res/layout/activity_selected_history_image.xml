@@ -36,7 +36,7 @@
             android:src="@drawable/delete__1_"
             android:scaleType="fitCenter"
             android:background="@null"
-            android:tint="@color/custom_blue"
+            android:tint="@color/red"
             android:layout_marginTop="20dp"
             android:contentDescription="Delete"/>
 

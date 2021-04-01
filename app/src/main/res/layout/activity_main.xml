@@ -7,6 +7,17 @@
     android:theme="@style/Theme.CoinsDetection"
     tools:context=".MainActivity">
 
+
+    <LinearLayout
+        android:id="@+id/test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintBottom_toTopOf="@id/recents"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <TextView
         android:id="@+id/stage_home"
         android:layout_width="wrap_content"
@@ -14,11 +25,27 @@
         android:layout_margin="10dp"
         android:layout_marginLeft="8dp"
         android:text="@string/stage_name"
+        android:layout_weight="0.8"
         android:textColor="@color/custom_blue"
         android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@id/recents"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></TextView>
+        ></TextView>
+
+
+        <ImageButton
+            android:id="@+id/deleteAll"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.2"
+            android:src="@drawable/delete__1_"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:tint="@color/red"
+            android:onClick="deleteAll"
+            android:layout_gravity="center"
+            android:contentDescription="Delete">
+        </ImageButton>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/recents"
@@ -28,7 +55,7 @@
         android:textSize="15sp"
         android:textColor="@color/custom_blue"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stage_home"
+        app:layout_constraintTop_toBottomOf="@id/test"
         app:layout_constraintBottom_toTopOf="@id/history_images_rv"
         android:layout_marginLeft="10dp">
     </TextView>

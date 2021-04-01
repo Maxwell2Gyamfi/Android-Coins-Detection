@@ -97,6 +97,14 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         result.moveToFirst()
 
         Toast.makeText(context, "Successfully deleted image", Toast.LENGTH_SHORT).show()
+    }
+    fun deleteAllData(){
+        val db = this.readableDatabase
 
+        val query = "Delete from $TABLENAME"
+        val result = db.rawQuery(query, null)
+
+        result.moveToFirst()
+        db.close()
     }
 }
