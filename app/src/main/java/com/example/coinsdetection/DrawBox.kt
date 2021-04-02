@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import spencerstudios.com.bungeelib.Bungee
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.math.RoundingMode
@@ -144,11 +145,20 @@ class DrawBox : AppCompatActivity() {
     }
     private fun returnHome() {
         onBackPressed()
+        Bungee.zoom(this)
+
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Bungee.spin(this)
+
     }
 
     private fun discardChanges(){
         Toast.makeText(this,"Discarded changes", Toast.LENGTH_SHORT).show()
         onBackPressed()
+        Bungee.spin(this)
     }
 }
 

@@ -173,7 +173,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:layout_margin="5dp"
-            android:background="@drawable/delete_box_border"
+            android:background="@drawable/addsave_option_border"
             android:text="Undo"
             android:textColor="@color/white" />
 

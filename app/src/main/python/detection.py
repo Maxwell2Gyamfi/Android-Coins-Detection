@@ -68,7 +68,7 @@ class Inference:
             count += 1
             cv2.rectangle(frame, box, color, 2)
             cv2.putText(frame, label, (box[0], box[1] - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 2, color, 3)
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
 
         total = "%.2f" % total
         cv2.imwrite(self.files_dir+'/detection.jpg', frame)
@@ -91,7 +91,7 @@ class Inference:
                 count += 1
                 cv2.rectangle(frame, box, color, 2)
                 cv2.putText(frame, label, (box[0], box[1] - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 2, color, 3)
+                            cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
 
         total = "%.2f" % total
         cv2.imwrite(self.files_dir+'/detection.jpg', frame)

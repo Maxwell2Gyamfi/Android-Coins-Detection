@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_selected_history_image.*
+import spencerstudios.com.bungeelib.Bungee
 import java.io.File
 import java.io.OutputStream
 import java.util.*
@@ -50,6 +51,7 @@ class SelectedHistoryImage : AppCompatActivity() {
         db.deleteData(ID)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        Bungee.zoom(this)
 
     }
     private fun saveImage(fileName:String){
@@ -74,4 +76,9 @@ class SelectedHistoryImage : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+        Bungee.swipeLeft(this)
+    }
 }

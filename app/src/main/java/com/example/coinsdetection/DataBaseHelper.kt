@@ -16,6 +16,7 @@ const val COL_OBJECTS = "totalObjects"
 const val COL_COST = "totalCost"
 const val COL_IMAGE = "imageToSave"
 const val COL_ID = "id"
+
 class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, null,
         1) {
     override fun onCreate(db: SQLiteDatabase?) {

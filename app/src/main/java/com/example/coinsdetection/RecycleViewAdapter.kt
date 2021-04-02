@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import spencerstudios.com.bungeelib.Bungee
 
 class RecycleViewAdapter(private val mContext: Context, private val mData: MutableList<SavedImages>) :
     RecyclerView.Adapter<RecycleViewAdapter.ViewHolder>() {
@@ -30,6 +31,7 @@ class RecycleViewAdapter(private val mContext: Context, private val mData: Mutab
                 putExtra("Name",mData[position].imageName)
             }
             mContext.startActivity(intent)
+            Bungee.swipeRight(mContext)
 
         }
     }

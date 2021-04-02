@@ -9,6 +9,7 @@ import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_settings.*
+import spencerstudios.com.bungeelib.Bungee
 
 class Settings : AppCompatActivity() {
     private val sharedPrefFile = "settingsPref"
@@ -102,6 +103,7 @@ class Settings : AppCompatActivity() {
         when(view.id){
             R.id.homeBtn ->{
                 finish()
+                Bungee.swipeLeft(this)
             }
             R.id.cameraBtn -> {
                 val intent = Intent(applicationContext, DetectionResults::class.java).apply {
@@ -109,15 +111,22 @@ class Settings : AppCompatActivity() {
                     putExtra("name", 1)
                 }
                 startActivity(intent)
+                Bungee.swipeLeft(this)
             }
             R.id.galleryBtn -> {
                 val intent = Intent(applicationContext, DetectionResults::class.java).apply {
                     putExtra("selected", "gallery").toString()
                 }
                 startActivity(intent)
+                Bungee.swipeLeft(this)
             }
             R.id.settingsBtn -> {
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Bungee.swipeLeft(this)
     }
 }

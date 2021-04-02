@@ -28,6 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import spencerstudios.com.bungeelib.Bungee
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.*
@@ -101,11 +102,20 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
         val sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         val autosave = sharedPreferences.getBoolean("autosave", true)
+        var name: String = "Detection" + UUID.randomUUID().toString()
+        val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
 
         if (autosave) {
-            var name: String = "Detection" + UUID.randomUUID().toString()
-            val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
+            saveToRecents.isEnabled = false
             db.insertData(imageToSave)
+        }
+        else{
+            saveToRecents.isEnabled = true
+            saveToRecents.setOnClickListener {
+                var name: String = "Detection" + UUID.randomUUID().toString()
+                val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
+                db.insertData(imageToSave)
+            }
         }
     }
 
@@ -192,6 +202,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            Bungee.swipeRight(this)
         } catch (e: ActivityNotFoundException) {
         }
     }
@@ -199,6 +210,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private fun openGallery(){
        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
        startActivityForResult(gallery, pickImage)
+        Bungee.swipeRight(this)
     }
 
     private fun applyFocus(view: AppCompatButton) {
@@ -231,6 +243,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             intent.putExtra("Cost", totalCost)
             intent.putExtra("Objects", totalItems)
             startActivity(intent)
+            Bungee.zoom(this)
         }
         else{
             Toast.makeText(this, "Single a single item", Toast.LENGTH_SHORT).show()
@@ -240,11 +253,13 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     override fun onBackPressed() {
         super.onBackPressed()
         returnHome()
+        Bungee.swipeLeft(this)
     }
 
     private fun returnHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity((intent))
+        Bungee.swipeLeft(this)
     }
 
     private fun getPhotoFile(fileName: String): File {
@@ -260,6 +275,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             try {
+                Bungee.zoom(this)
                 val takenImage = BitmapFactory.decodeFile(photofile.absolutePath)
                 selectedBitmap = takenImage
                 resultsImage.setImageBitmap(takenImage)
@@ -285,6 +301,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             }
         }
         else if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Bungee.zoom(this)
             val result = CropImage.getActivityResult(data)
             when {
                 resultCode === RESULT_OK -> {
@@ -301,10 +318,14 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                 }
                 else -> {
                     finish()
+                    Bungee.spin(this)
                 }
             }
         }
-        else finish()
+        else {
+            finish()
+            Bungee.spin(this)
+        }
     }
 
 }

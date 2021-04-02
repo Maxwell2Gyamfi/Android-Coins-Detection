@@ -90,7 +90,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
 
         for(p in mPaths){
             drawPaint?.let { canvas.drawRect(p.startX, p.startY, p.pointX, p.pointY, it) }
-            drawtext?.let { canvas.drawText("$selected 1.00", p.startX, p.startY - 2, it) }
+            drawtext?.let { canvas.drawText("$selected 1.00", p.startX, p.startY -20, it) }
         }
         if(startX >0.0 && startY>0.0) {
 

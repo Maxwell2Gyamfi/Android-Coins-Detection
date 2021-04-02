@@ -197,7 +197,7 @@
             android:onClick="showResults"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.33"
             android:layout_margin="5dp"
             android:background="@drawable/selected_option_border"
             android:textColor="@color/white"
@@ -207,11 +207,23 @@
             android:onClick="drawBoundingBox"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.33"
             android:layout_margin="5dp"
-            android:background="@drawable/selected_option_border"
+            android:background="@drawable/addsave_option_border"
             android:text="Add Box"
             android:textColor="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:onClick="showResults"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:layout_margin="5dp"
+            android:enabled="false"
+            android:id="@+id/saveToRecents"
+            android:background="@drawable/addsave_option_border"
+            android:textColor="@color/white"
+            android:text="Save" />
 
     </LinearLayout>
 
