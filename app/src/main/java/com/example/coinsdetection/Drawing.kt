@@ -1,5 +1,6 @@
 package com.example.coinsdetection
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -9,6 +10,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import com.chaquo.python.PyObject
 
 
@@ -57,16 +59,16 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
                 startY = pointY
             }
             MotionEvent.ACTION_UP -> {
-                val saveCoordinates = Coordinates(startX, startY, pointX, pointY)
-                val str = "$startX,$startY,$pointX,$pointY"
 
-                params.add(PyObject.fromJava(str))
+                val saveCoordinates = Coordinates(startX, startY, pointX, pointY)
                 mPaths.add(saveCoordinates)
                 boxes += 1
                 startX = 0F
                 startY = 0F
                 pointX = 0F
                 pointY = 0F
+
+                createDialog()
             }
 
             MotionEvent.ACTION_MOVE -> {
@@ -86,7 +88,6 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     }
 
     override fun onDraw(canvas: Canvas) {
-        val drawPaintCopy = drawPaint!!.apply {  }
 
         for(p in mPaths){
             drawPaint?.let { canvas.drawRect(p.startX, p.startY, p.pointX, p.pointY, it) }
@@ -108,6 +109,29 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         isFocusable = true
         isFocusableInTouchMode = true
         setupPaint()
+    }
+
+    private fun createDialog(){
+        var position = 0
+        val itemsList = arrayOf("1p","2p","5p","10p","20p","50p","1P","2P")
+
+        val dialogBuilder = AlertDialog.Builder(context)
+        dialogBuilder.setTitle("Choose an item")
+        dialogBuilder.setSingleChoiceItems(itemsList,position) { _, i->
+            run {
+                position = i
+                Toast.makeText(context,itemsList[position], Toast.LENGTH_SHORT).show()
+            }
+        }
+        dialogBuilder.setPositiveButton("Save") { _, _ ->
+
+        }
+        dialogBuilder.setNegativeButton("Cancel"){_,_ ->
+
+        }
+        dialogBuilder.create()
+        dialogBuilder.show()
+
     }
 
 }

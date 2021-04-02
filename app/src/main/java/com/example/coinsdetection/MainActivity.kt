@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
          mainAdapter = RecycleViewAdapter(this, recentImages)
          history_images_rv.layoutManager = GridLayoutManager(this, 4)
          history_images_rv.adapter = mainAdapter
+       
     }
 
     private fun readImages(): MutableList<SavedImages> {

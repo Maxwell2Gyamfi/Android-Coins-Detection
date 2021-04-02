@@ -123,6 +123,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         var resultsDetection = ResultsDetection(selectedMny, totalItems, totalCost)
         val resultsDialog = ResultsDialog(resultsDetection)
         resultsDialog.show(supportFragmentManager, "results")
+
     }
 
     fun performDetection(view: View) {
