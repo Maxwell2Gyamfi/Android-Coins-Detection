@@ -26,6 +26,7 @@ open class ConfidenceDialog(private val pyConfidence:String): AppCompatDialogFra
         dialogBuilder.setNegativeButton("Cancel") { _, _ ->
 
         }
+
         seekBar = dialogView.findViewById(R.id.seekConfidence)
         seekVal = dialogView.findViewById(R.id.seekValue)
 
@@ -61,7 +62,6 @@ open class ConfidenceDialog(private val pyConfidence:String): AppCompatDialogFra
             )
         }
     }
-
     interface ConfidenceDialogListener {
         fun applyTexts(confidence: kotlin.String)
     }

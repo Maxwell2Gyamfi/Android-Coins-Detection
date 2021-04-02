@@ -34,12 +34,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="1"
         app:layout_constraintBottom_toTopOf="@id/autoSaveDetection"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/settingsTitle">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/teal_200"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="Enable Dark Mode"
+            android:textSize="12sp">
+
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,25 +71,51 @@
             android:id="@+id/darkModeSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
             android:layout_weight="0.2"
             android:enabled="true"
             app:thumbTint="@color/custom_blue"/>
 
-    </LinearLayout>
+        </LinearLayout>
 
+        <TextView
+            android:id="@+id/nightModeSummaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/custom_blue"
+            android:text="Dark mode is off"
+            android:layout_marginLeft="1dp"
+            android:textSize="10sp">
+
+        </TextView>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/autoSaveDetection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="1"
-        app:layout_constraintBottom_toTopOf="@id/confidenceText"
+        app:layout_constraintBottom_toTopOf="@id/confidenceSeek"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/darkMode_ll">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/teal_200"
+            android:text="Automatic image saving"
+            android:textSize="12sp">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -82,48 +126,68 @@
             android:textSize="20sp"></TextView>
 
         <Switch
+            android:id="@+id/autoSaveSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
             android:layout_weight="0.2"
             android:enabled="true"
             app:thumbTint="@color/custom_blue"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/custom_blue"
+            android:id="@+id/automaticModeSummaryText"
+            android:text="Automatic saving is off"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="10sp">
+
+        </TextView>
 
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/confidenceText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="Confidence"
-        android:textColor="@color/custom_blue"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/confidenceSeek"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/autoSaveDetection">
-
-
-    </TextView>
 
     <LinearLayout
         android:id="@+id/confidenceSeek"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/confidenceText">
+        app:layout_constraintTop_toBottomOf="@id/autoSaveDetection">
 
+        <TextView
+            android:id="@+id/confidenceText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Confidence"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="1dp"
+            android:textColor="@color/teal_200"
+            android:textSize="12sp">
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confidence"
+            android:textColor="@color/custom_blue"
+            android:textSize="20sp">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
         <SeekBar
             android:id="@+id/settingsConfidence"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_weight="0.8"
+            android:layout_weight="0.95"
             android:max="100"
             android:progress="20"
             android:splitTrack="false"
@@ -133,13 +197,14 @@
             android:id="@+id/seekSettingsValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:padding="5dp"
+            android:layout_weight="0.05"
             android:text="20"
+            android:padding="10dp"
             android:textAlignment="center"
             android:textColor="@color/custom_blue"
-            android:textSize="25sp"></TextView>
+            android:textSize="15sp"></TextView>
 
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -148,32 +213,38 @@
         android:id="@+id/linearLayoutAbout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="180dp"
-        android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintHorizontal_bias="0.526"
+        android:layout_margin="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/confidenceSeek">
 
         <TextView
             android:layout_width="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="10dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="About"
-            android:textColor="@color/custom_blue"
-            android:textSize="20sp">
-
+            android:textColor="@color/teal_200"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="About this App"
+            android:textSize="12sp">
         </TextView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Money Detection v1"
+            android:text="Money Detection"
             android:textColor="@color/custom_blue"
             android:textSize="20sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/custom_blue"
+            android:text="Version: 1.0"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="10sp"/>
 
     </LinearLayout>
 
@@ -204,6 +275,8 @@
         android:onClick="selectedPage"
         android:contentDescription="Home">
     </ImageButton>
+
+
     <ImageButton
         android:id="@+id/galleryBtn"
         android:layout_width="0dp"

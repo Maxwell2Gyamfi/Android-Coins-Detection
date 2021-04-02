@@ -1,7 +1,9 @@
 package com.example.coinsdetection
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -59,14 +61,13 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private lateinit var selectedMny:String
     private var totalItems: Int = 0
     private var totalCost:Double =0.0
-
+    private val sharedPrefFile = "settingsPref"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detection_results)
-
         selectedOption = intent.getStringExtra("selected").toString()
-
+        getYoloConfidence()
         when (selectedOption) {
             "camera" -> takePicture()
             "gallery" -> openGallery()
@@ -83,7 +84,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     @RequiresApi(Build.VERSION_CODES.N)
     fun openConfidenceOverlay(view: View) {
         val conf = getConfidence()
-        val confidenceDialog = ConfidenceDialog(conf)
+        var confidenceDialog = ConfidenceDialog(conf)
         confidenceDialog.show(supportFragmentManager, "confidence")
     }
 
@@ -97,9 +98,15 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
     private fun saveImageDB(){
-        var name: String = "Detection" + UUID.randomUUID().toString()
-        val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
-        db.insertData(imageToSave)
+
+        val sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        val autosave = sharedPreferences.getBoolean("autosave", true)
+
+        if (autosave) {
+            var name: String = "Detection" + UUID.randomUUID().toString()
+            val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
+            db.insertData(imageToSave)
+        }
     }
 
     fun showResults(view: View){
@@ -135,6 +142,16 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         val conf = pyobj.callAttr("getConfidence")
         return conf.toString()
     }
+
+    private fun getYoloConfidence(){
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(
+            sharedPrefFile,
+            Context.MODE_PRIVATE
+        )
+        val yoloValue = sharedPreferences.getInt("confidence", 20)
+        pyobj.callAttr("changeConfidence", yoloValue)
+    }
+
     private fun initInference(image: Bitmap, selectedItem: String){
         CoroutineScope(Dispatchers.Main).launch {
             progressBarDetection.visibility = View.VISIBLE

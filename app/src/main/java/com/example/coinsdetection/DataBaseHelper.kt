@@ -33,7 +33,6 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
     }
 
     fun insertData(image: SavedImages) {
-
         val database = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put(COL_NAME, image.imageName)
@@ -47,13 +46,15 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
 
         contentValues.put(COL_IMAGE, byteImage)
 
-
-        val result = database.insert(TABLENAME, null, contentValues)
-        if (result == (0).toLong()) {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(context, "Added image to recents", Toast.LENGTH_SHORT).show()
+        when (database.insert(TABLENAME, null, contentValues)) {
+            (0).toLong() -> {
+                Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                Toast.makeText(context, "Added image to recents", Toast.LENGTH_SHORT).show()
+            }
         }
+        database.close()
 
     }
 
@@ -62,48 +63,41 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         val db = this.readableDatabase
         val query = "Select * from $TABLENAME ORDER BY $COL_ID DESC"
         val result = db.rawQuery(query, null)
-        if (result.moveToFirst()) {
-            do {
-                val id = result.getString(result.getColumnIndex(COL_ID)).toInt()
-                val imagename = result.getString(result.getColumnIndex(COL_NAME))
-                val totalObjects = result.getInt(result.getColumnIndex(COL_OBJECTS))
-                val totalCost = result.getDouble(result.getColumnIndex(COL_COST))
-                var image: ByteArray = result.getBlob(result.getColumnIndex(COL_IMAGE))
-                val bitmap = BitmapFactory.decodeByteArray(image, 0, image.size)
-                val retrievedImage = SavedImages(id, imagename, totalObjects, totalCost, bitmap)
-                list.add(retrievedImage)
-            } while (result.moveToNext())
-        }
+        if (result.moveToFirst()) do {
+            val id = result.getString(result.getColumnIndex(COL_ID)).toInt()
+            val imagename = result.getString(result.getColumnIndex(COL_NAME))
+            val totalObjects = result.getInt(result.getColumnIndex(COL_OBJECTS))
+            val totalCost = result.getDouble(result.getColumnIndex(COL_COST))
+            var image: ByteArray = result.getBlob(result.getColumnIndex(COL_IMAGE))
+            val bitmap = BitmapFactory.decodeByteArray(image, 0, image.size)
+            val retrievedImage = SavedImages(id, imagename, totalObjects, totalCost, bitmap)
+            list.add(retrievedImage)
+        } while (result.moveToNext())
+        db.close()
         return list
     }
 
     fun getImage(imageID: Int): Bitmap {
         val db = this.readableDatabase
-
         val query = "Select $COL_IMAGE from $TABLENAME WHERE $COL_ID = $imageID"
         val result = db.rawQuery(query, null)
-
         result.moveToFirst()
         var image: ByteArray = result.getBlob(result.getColumnIndex(COL_IMAGE))
-
+        db.close()
         return BitmapFactory.decodeByteArray(image, 0, image.size)
     }
     fun deleteData(imageID: Int){
         val db = this.readableDatabase
-
         val query = "Delete from $TABLENAME WHERE $COL_ID = $imageID"
         val result = db.rawQuery(query, null)
-
         result.moveToFirst()
-
+        db.close()
         Toast.makeText(context, "Successfully deleted image", Toast.LENGTH_SHORT).show()
     }
     fun deleteAllData(){
         val db = this.readableDatabase
-
         val query = "Delete from $TABLENAME"
         val result = db.rawQuery(query, null)
-
         result.moveToFirst()
         db.close()
     }
