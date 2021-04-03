@@ -30,7 +30,6 @@
         android:textSize="50sp"
         ></TextView>
 
-
         <ImageButton
             android:id="@+id/deleteAll"
             android:layout_width="0dp"
@@ -42,7 +41,7 @@
             android:tint="@color/custom_blue"
             android:onClick="deleteSortAlertDialog"
             android:layout_gravity="center"
-            android:contentDescription="Delete">
+            android:contentDescription="DeleteSort">
         </ImageButton>
 
     </LinearLayout>

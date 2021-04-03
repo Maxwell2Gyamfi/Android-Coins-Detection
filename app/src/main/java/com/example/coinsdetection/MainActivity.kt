@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainAdapter:RecycleViewAdapter
     private val sharedPrefFile = "settingsPref"
     private lateinit var imagesOrder:String
+    private var recentsSize =0
     private var db = DataBaseHandler(this)
     private lateinit var recentImages: MutableList<SavedImages>
     @SuppressLint("SetTextI18n")
@@ -26,12 +27,11 @@ class MainActivity : AppCompatActivity() {
         checkDarkMode()
         imagesOrder = getDataBaseImagesOrder()!!
         recentImages = readImages()
-        val recentsSize = recentImages.size
+        recentsSize = recentImages.size
         recents.text = "Recents: $recentsSize"
          mainAdapter = RecycleViewAdapter(this, recentImages)
          history_images_rv.layoutManager = GridLayoutManager(this, 4)
          history_images_rv.adapter = mainAdapter
-       
     }
 
     private fun readImages(): MutableList<SavedImages> {
@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
                }
                startActivity(intent)
                Bungee.slideRight(this)
-
            }
            R.id.galleryBtn -> {
                val intent = Intent(applicationContext, DetectionResults::class.java).apply {
@@ -62,8 +61,6 @@ class MainActivity : AppCompatActivity() {
                }
                startActivity(intent)
                Bungee.slideRight(this)
-
-
            }
            R.id.settingsBtn -> {
                val intent = Intent(applicationContext, Settings::class.java)
@@ -80,31 +77,29 @@ class MainActivity : AppCompatActivity() {
             val dialogBuilder = AlertDialog.Builder(this,R.style.AlertDialogResults)
             dialogBuilder.setTitle("Choose a task")
             dialogBuilder.setSingleChoiceItems(itemsList,position) { _, i->
-                run {
-                    position = i
-                }
+                run { position = i }
             }
             dialogBuilder.setPositiveButton("Confirm") { _, _ ->
                 if(position == 0){
-                    val sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
-                    val editor =  sharedPreferences.edit()
-                    when (sharedPreferences.getString("databaseorder", "DESC")) {
-                        "DESC" -> editor.putString("databaseorder","ASC")
-                        else -> {
-                            editor.putString("databaseorder","DESC")
+                    if(recentsSize >0) {
+                        val sharedPreferences =
+                            this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        when (sharedPreferences.getString("databaseorder", "DESC")) {
+                            "DESC" -> editor.putString("databaseorder", "ASC")
+                            else -> editor.putString("databaseorder", "DESC")
                         }
+                        editor.apply()
+                        editor.commit()
+                        sortRecents()
                     }
-                    editor.apply()
-                    editor.commit()
-                    sortRecents()
+                    else{
+                        Toast.makeText(this,"No list to reverse",Toast.LENGTH_SHORT).show()
+                    }
                 }
-                else{
-                    deleteAll()
-                }
+                else deleteAll()
             }
-            dialogBuilder.setNegativeButton("Close"){_,_ ->
-
-            }
+            dialogBuilder.setNegativeButton("Close"){_,_ ->}
             dialogBuilder.create()
             dialogBuilder.show()
     }
@@ -122,20 +117,19 @@ class MainActivity : AppCompatActivity() {
             }
             dialogBuilder.setNegativeButton("Close") { _, _ -> }
             dialogBuilder.setMessage("Are you sure you want to delete all recent detections ?")
+            dialogBuilder.create()
             dialogBuilder.show()
         }
         else{
             Toast.makeText(this, "No images to delete", Toast.LENGTH_SHORT).show()
         }
     }
-
     private fun sortRecents(){
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
         finish()
         Bungee.zoom(this)
     }
-
     private fun checkDarkMode(){
         val sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         val sharedDarkValue = sharedPreferences.getBoolean("isdark", false)

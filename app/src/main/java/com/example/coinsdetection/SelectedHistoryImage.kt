@@ -1,6 +1,7 @@
 package com.example.coinsdetection
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
@@ -32,16 +33,35 @@ class SelectedHistoryImage : AppCompatActivity() {
         thumbnail = retrieveImage(imageID)
         selectedHistoryImage.setImageBitmap(thumbnail)
 
-        deleteBtn.tag = imageID
+        saveDeleteBtn.tag = imageID
         totalCountTv.text = "Total: £ $totalCount"
         totalObjectsTv.text = "Objects: $objectCount"
 
-        deleteBtn.setOnClickListener{
-            deleteImage(deleteBtn.tag as Int)
+        saveDeleteBtn.setOnClickListener {
+            saveDeleteDialog()
         }
-        saveButton.setOnClickListener {
-            saveImage(imageName)
+    }
+
+    private fun saveDeleteDialog(){
+        var position = 0
+        val itemsList = arrayOf("Save to Device","Delete from Recents")
+
+        val dialogBuilder = AlertDialog.Builder(this,R.style.AlertDialogResults)
+        dialogBuilder.setTitle("Choose a task")
+        dialogBuilder.setSingleChoiceItems(itemsList,position) { _, i->
+            run { position = i }
         }
+        dialogBuilder.setPositiveButton("Confirm") { _, _ ->
+            if(position == 0){
+                saveImage(imageName)
+            }
+            else{
+                deleteImage(saveDeleteBtn.tag as Int)
+            }
+        }
+        dialogBuilder.setNegativeButton("Close"){_,_ ->}
+        dialogBuilder.create()
+        dialogBuilder.show()
     }
 
     private fun retrieveImage(ID:Int):Bitmap{
