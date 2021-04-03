@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0dp"
-            />
+            android:scaleType="fitCenter"/>
 
         <com.example.coinsdetection.Drawing
             android:id="@+id/drawingPad"
@@ -142,6 +142,48 @@
             android:src="@drawable/palette_normal"
             android:tag="@color/red"/>
 
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="2dp"
+            android:layout_gravity="center"
+            android:contentDescription="color"
+            android:onClick="paintClicked"
+            android:background="@color/yolo1"
+            android:src="@drawable/palette_normal"
+            android:tag="@color/yolo1"/>
+
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="2dp"
+            android:layout_gravity="center"
+            android:contentDescription="color"
+            android:onClick="paintClicked"
+            android:background="@color/yolo2"
+            android:src="@drawable/palette_normal"
+            android:tag="@color/yolo2"/>
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="2dp"
+            android:layout_gravity="center"
+            android:contentDescription="color"
+            android:onClick="paintClicked"
+            android:background="@color/yolo3"
+            android:src="@drawable/palette_normal"
+            android:tag="@color/yolo3"/>
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="2dp"
+            android:layout_gravity="center"
+            android:contentDescription="color"
+            android:onClick="paintClicked"
+            android:background="@color/yolo4"
+            android:src="@drawable/palette_normal"
+            android:tag="@color/yolo4"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -173,7 +215,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:layout_margin="5dp"
-            android:background="@drawable/addsave_option_border"
+            android:background="@drawable/undo_option_border"
             android:text="Undo"
             android:textColor="@color/white" />
 

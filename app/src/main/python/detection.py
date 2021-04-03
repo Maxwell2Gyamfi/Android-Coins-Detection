@@ -114,37 +114,6 @@ def getConfidence():
     return str(conf)
 
 
-def drawBoxes(data, imageData, classID, width, height):
-    coords = data
-    frame = cv2.imread(inferenceObj.files_dir+'/detection.jpg')
-
-    targetSize_x = frame.shape[1]
-    targetSize_y = frame.shape[0]
-
-    y_ = int(height)
-    x_ = int(width)
-
-    scale_x = targetSize_x / x_
-    scale_y = targetSize_y / y_
-
-    for i in range(0, coords.size()):
-        temp = coords.get(i)
-        arr = temp.split(',')
-
-        x = int(np.round(float(arr[0]) * scale_x))
-        y = int(np.round(float(arr[1]) * scale_y))
-        w = int(np.round(float(arr[2]) * scale_x))
-        h = int(np.round(float(arr[3]) * scale_y))
-
-        point1 = (x, y)
-        point2 = (w, h)
-
-        cv2.rectangle(frame, point1, point2, (255, 0, 0), 4)
-
-    cv2.imwrite(inferenceObj.files_dir+'/detection.jpg', frame)
-    # inferenceObj.scaleBoxes(data, imageData, classID)
-
-
 def main(data, item):
 
     # array = cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
