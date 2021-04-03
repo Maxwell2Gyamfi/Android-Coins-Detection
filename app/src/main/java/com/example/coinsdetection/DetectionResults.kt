@@ -203,7 +203,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-            Bungee.swipeRight(this)
+            Bungee.slideRight(this)
         } catch (e: ActivityNotFoundException) {
         }
     }
@@ -211,7 +211,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private fun openGallery(){
        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
        startActivityForResult(gallery, pickImage)
-        Bungee.swipeRight(this)
+        Bungee.slideRight(this)
     }
 
     private fun applyFocus(view: AppCompatButton) {
@@ -238,29 +238,29 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
     fun drawBoundingBox(view: View){
-        if(selectedMny !== "All") {
+//        if(selectedMny !== "All") {
             val intent = Intent(this, DrawBox::class.java)
             intent.putExtra("Selected", "$selectedMny")
             intent.putExtra("Cost", totalCost)
             intent.putExtra("Objects", totalItems)
             startActivity(intent)
             Bungee.zoom(this)
-        }
-        else{
-            Toast.makeText(this, "Single a single item", Toast.LENGTH_SHORT).show()
-        }
+//        }
+//        else{
+//            Toast.makeText(this, "Single a single item", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         returnHome()
-        Bungee.swipeLeft(this)
+        Bungee.slideLeft(this)
     }
 
     private fun returnHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity((intent))
-        Bungee.swipeLeft(this)
+        Bungee.slideLeft(this)
     }
 
     private fun getPhotoFile(fileName: String): File {

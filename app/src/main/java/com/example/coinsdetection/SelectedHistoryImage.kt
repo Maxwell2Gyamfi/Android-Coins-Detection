@@ -79,6 +79,6 @@ class SelectedHistoryImage : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
-        Bungee.swipeLeft(this)
+        Bungee.slideLeft(this)
     }
 }

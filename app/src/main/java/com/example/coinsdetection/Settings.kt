@@ -103,7 +103,7 @@ class Settings : AppCompatActivity() {
         when(view.id){
             R.id.homeBtn ->{
                 finish()
-                Bungee.swipeLeft(this)
+                Bungee.slideLeft(this)
             }
             R.id.cameraBtn -> {
                 val intent = Intent(applicationContext, DetectionResults::class.java).apply {
@@ -111,14 +111,14 @@ class Settings : AppCompatActivity() {
                     putExtra("name", 1)
                 }
                 startActivity(intent)
-                Bungee.swipeLeft(this)
+                Bungee.slideLeft(this)
             }
             R.id.galleryBtn -> {
                 val intent = Intent(applicationContext, DetectionResults::class.java).apply {
                     putExtra("selected", "gallery").toString()
                 }
                 startActivity(intent)
-                Bungee.swipeLeft(this)
+                Bungee.slideLeft(this)
             }
             R.id.settingsBtn -> {
             }
@@ -127,6 +127,6 @@ class Settings : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        Bungee.swipeLeft(this)
+        Bungee.slideLeft(this)
     }
 }

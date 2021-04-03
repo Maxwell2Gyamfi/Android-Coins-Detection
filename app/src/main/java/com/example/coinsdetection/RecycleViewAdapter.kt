@@ -31,7 +31,7 @@ class RecycleViewAdapter(private val mContext: Context, private val mData: Mutab
                 putExtra("Name",mData[position].imageName)
             }
             mContext.startActivity(intent)
-            Bungee.swipeRight(mContext)
+            Bungee.slideRight(mContext)
 
         }
     }

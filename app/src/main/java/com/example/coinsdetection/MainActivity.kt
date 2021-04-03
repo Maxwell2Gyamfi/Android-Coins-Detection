@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                    putExtra("name", 1)
                }
                startActivity(intent)
-               Bungee.swipeRight(this)
+               Bungee.slideRight(this)
 
            }
            R.id.galleryBtn -> {
@@ -54,14 +54,14 @@ class MainActivity : AppCompatActivity() {
                    putExtra("selected", "gallery").toString()
                }
                startActivity(intent)
-               Bungee.swipeRight(this)
+               Bungee.slideRight(this)
 
 
            }
            R.id.settingsBtn -> {
                val intent = Intent(applicationContext, Settings::class.java)
                startActivity(intent)
-               Bungee.swipeRight(this)
+               Bungee.slideRight(this)
            }
        }
     }
