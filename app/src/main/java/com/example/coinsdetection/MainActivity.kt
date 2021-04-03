@@ -16,6 +16,7 @@ import spencerstudios.com.bungeelib.Bungee
 class MainActivity : AppCompatActivity() {
     private lateinit var mainAdapter:RecycleViewAdapter
     private val sharedPrefFile = "settingsPref"
+    private lateinit var imagesOrder:String
     private var db = DataBaseHandler(this)
     private lateinit var recentImages: MutableList<SavedImages>
     @SuppressLint("SetTextI18n")
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         checkDarkMode()
+        imagesOrder = getDataBaseImagesOrder()!!
         recentImages = readImages()
         val recentsSize = recentImages.size
         recents.text = "Recents: $recentsSize"
@@ -33,7 +35,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun readImages(): MutableList<SavedImages> {
-        return db.readData()
+        return db.readData(imagesOrder)
+    }
+
+    private fun getDataBaseImagesOrder(): String? {
+        val sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        return sharedPreferences.getString("databaseorder", "DESC")
     }
 
     fun selectedPage(view: View){
@@ -66,8 +73,43 @@ class MainActivity : AppCompatActivity() {
        }
     }
 
-    fun deleteAll(view: View){
+    fun deleteSortAlertDialog(view:View){
+            var position = 0
+            val itemsList = arrayOf("Reverse Recents","Delete Recents")
 
+            val dialogBuilder = AlertDialog.Builder(this,R.style.AlertDialogResults)
+            dialogBuilder.setTitle("Choose a task")
+            dialogBuilder.setSingleChoiceItems(itemsList,position) { _, i->
+                run {
+                    position = i
+                }
+            }
+            dialogBuilder.setPositiveButton("Confirm") { _, _ ->
+                if(position == 0){
+                    val sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+                    val editor =  sharedPreferences.edit()
+                    when (sharedPreferences.getString("databaseorder", "DESC")) {
+                        "DESC" -> editor.putString("databaseorder","ASC")
+                        else -> {
+                            editor.putString("databaseorder","DESC")
+                        }
+                    }
+                    editor.apply()
+                    editor.commit()
+                    sortRecents()
+                }
+                else{
+                    deleteAll()
+                }
+            }
+            dialogBuilder.setNegativeButton("Close"){_,_ ->
+
+            }
+            dialogBuilder.create()
+            dialogBuilder.show()
+    }
+
+    private fun deleteAll(){
         if(recentImages.size >0) {
             val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
             dialogBuilder.setTitle("Delete Everything")
@@ -79,12 +121,19 @@ class MainActivity : AppCompatActivity() {
                 Bungee.zoom(this)
             }
             dialogBuilder.setNegativeButton("Close") { _, _ -> }
-            dialogBuilder.setMessage("Are you sure you want to delete all images?")
+            dialogBuilder.setMessage("Are you sure you want to delete all recent detections ?")
             dialogBuilder.show()
         }
         else{
             Toast.makeText(this, "No images to delete", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun sortRecents(){
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+        Bungee.zoom(this)
     }
 
     private fun checkDarkMode(){

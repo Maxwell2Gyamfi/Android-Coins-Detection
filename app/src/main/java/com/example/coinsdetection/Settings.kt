@@ -25,7 +25,7 @@ class Settings : AppCompatActivity() {
         val yoloconfidence = sharedPreferences.getInt("confidence",20)
         val confidenceText = sharedPreferences.getString("confidenceText","20")
         val autoSaveImages = sharedPreferences.getBoolean("autosave",true)
-        val automaticsaveText = sharedPreferences.getString("autosavetext","Automatic saving is off")
+        val automaticsaveText = sharedPreferences.getString("autosavetext","Automatic saving is on")
         val darkmodeText = sharedPreferences.getString("darkmodetext", "Dark mode is off")
 
         darkModeSwitch.isChecked = sharedDarkValue

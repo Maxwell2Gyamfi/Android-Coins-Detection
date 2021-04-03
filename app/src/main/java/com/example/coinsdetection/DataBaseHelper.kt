@@ -27,8 +27,8 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         if (oldVersion != newVersion) {
             // Simplest implementation is to drop all old tables and recreate them
-            db?.execSQL("DROP TABLE IF EXISTS " + TABLENAME);
-            db?.execSQL("DROP TABLE IF EXISTS " + TABLENAME);
+            db?.execSQL("DROP TABLE IF EXISTS $TABLENAME");
+            db?.execSQL("DROP TABLE IF EXISTS $TABLENAME");
             onCreate(db);
         }
     }
@@ -52,17 +52,17 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
                 Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
             }
             else -> {
-                Toast.makeText(context, "Added image to recents", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Saved image to recents", Toast.LENGTH_SHORT).show()
             }
         }
         database.close()
 
     }
 
-    fun readData(): MutableList<SavedImages> {
+    fun readData(order:String): MutableList<SavedImages> {
         val list: MutableList<SavedImages> = ArrayList()
         val db = this.readableDatabase
-        val query = "Select * from $TABLENAME ORDER BY $COL_ID DESC"
+        val query = "Select * from $TABLENAME ORDER BY $COL_ID $order"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) do {
             val id = result.getString(result.getColumnIndex(COL_ID)).toInt()
