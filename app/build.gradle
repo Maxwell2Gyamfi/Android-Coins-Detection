@@ -9,7 +9,8 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.coinsdetection"
+       applicationId "com.example.coinsdetection"
+//        applicationId "com.coinsdetection.8961ca2a-a70f-4540-b3d6-f901125f2a85"
         sourceSets {
             main {
                 python.srcDirs = ["src/main/python"]
@@ -23,6 +24,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
+//              abiFilters "arm64-v8a"
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
         defaultConfig {

@@ -15,7 +15,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
     private var paintColor: Int = Color.BLACK
     lateinit var selected:String
-    private var itemToDraw = ""
+    private var itemToDraw = "1p"
     private var drawPaint: Paint? = null
     private var mCanvasPaint: Paint? = null
     private var mCanvasBitmap: Bitmap? = null
