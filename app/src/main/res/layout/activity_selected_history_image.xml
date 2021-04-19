@@ -16,6 +16,7 @@
         android:layout_weight="0.8"
         android:textColor="@color/custom_blue"
         android:textSize="50sp"
+        android:layout_marginTop="15dp"
         app:layout_constraintBottom_toTopOf="@id/selectedHistoryImage"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"

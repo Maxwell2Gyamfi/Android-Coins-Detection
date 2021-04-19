@@ -62,8 +62,8 @@ class SelectedHistoryImage : AppCompatActivity() {
             .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
             .build();
 
-        actionButton.layoutParams.height = 200
-        actionButton.layoutParams.width = 200
+        actionButton.layoutParams.height = 160
+        actionButton.layoutParams.width = 160
 
         actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
 

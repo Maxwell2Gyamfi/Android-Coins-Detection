@@ -271,8 +271,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             .setPosition(FloatingActionButton.POSITION_BOTTOM_LEFT)
             .build();
 
-        actionButton.layoutParams.height = 200
-        actionButton.layoutParams.width = 200
+        actionButton.layoutParams.height = 160
+        actionButton.layoutParams.width = 160
 
         actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
 
@@ -310,8 +310,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             .setContentView(icon)
             .build();
 
-        actionButton.layoutParams.height = 200
-        actionButton.layoutParams.width = 200
+        actionButton.layoutParams.height = 160
+        actionButton.layoutParams.width = 160
 
         actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
 
@@ -392,6 +392,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private fun returnHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity((intent))
+        finish()
 
     }
 
@@ -399,6 +400,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         var storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(fileName, ".jpg", storageDirectory)
     }
+
+
 
     private fun launchCropping(uri: Uri) =
             CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON).start(this)
@@ -461,5 +464,6 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
         }
     }
+
 
 }

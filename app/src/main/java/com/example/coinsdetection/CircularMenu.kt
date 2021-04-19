@@ -109,7 +109,7 @@ class CircularMenu(context: Context) {
     fun createColoursMenu(action: String): SubActionButton {
         val itemBuilder = SubActionButton.Builder(context as Activity?)
         val blueParams: FrameLayout.LayoutParams =
-            FrameLayout.LayoutParams(120, 120)
+            FrameLayout.LayoutParams(100, 100)
         itemBuilder.setLayoutParams(blueParams)
 
         val itemIcon = ImageView(context);
