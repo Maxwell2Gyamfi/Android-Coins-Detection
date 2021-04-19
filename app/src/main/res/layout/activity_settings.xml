@@ -7,26 +7,18 @@
     tools:context=".Settings">
 
 
-    <LinearLayout
-        android:id="@+id/settingsTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1"
-        app:layout_constraintBottom_toTopOf="@id/darkMode_ll"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/headerText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="0.75"
+            app:layout_constraintBottom_toTopOf="@id/darkMode_ll"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintTop_toTopOf="parent"
             android:text="@string/settings_text"
             android:textColor="@color/custom_blue"
             android:textSize="50sp"></TextView>
-
-    </LinearLayout>
 
 
     <LinearLayout
@@ -39,7 +31,7 @@
         app:layout_constraintBottom_toTopOf="@id/autoSaveDetection"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settingsTitle">
+        app:layout_constraintTop_toBottomOf="@id/headerText">
 
 
         <TextView
@@ -64,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
             android:text="Dark Mode"
-            android:textColor="@color/custom_blue"
+
             android:textSize="20sp"></TextView>
 
         <Switch
@@ -73,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:enabled="true"
-            app:thumbTint="@color/custom_blue"/>
+            app:thumbTint="@color/black"/>
 
         </LinearLayout>
 
@@ -122,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
             android:text="Save Detections"
-            android:textColor="@color/custom_blue"
+
             android:textSize="20sp"></TextView>
 
         <Switch
@@ -175,7 +167,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Confidence"
-            android:textColor="@color/custom_blue"
+
             android:textSize="20sp">
         </TextView>
 
@@ -234,7 +226,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Money Detection"
-            android:textColor="@color/custom_blue"
+
             android:textSize="20sp"></TextView>
 
         <TextView
@@ -248,71 +240,5 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/nav_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayoutAbout"
-        app:layout_constraintVertical_bias="0.991"
-        android:weightSum="1">
-
-    <ImageButton
-        android:id="@+id/homeBtn"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.25"
-        android:src="@drawable/home"
-        android:scaleType="fitCenter"
-        android:background="@null"
-        android:tint="@color/custom_blue"
-        android:onClick="selectedPage"
-        android:contentDescription="Home">
-    </ImageButton>
-
-
-    <ImageButton
-        android:id="@+id/galleryBtn"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/gallery"
-        android:layout_weight="0.25"
-        android:scaleType="fitCenter"
-        android:background="@null"
-        android:tint="@color/custom_blue"
-        android:onClick="selectedPage"
-        android:contentDescription="Gallery"></ImageButton>
-
-    <ImageButton
-        android:id="@+id/cameraBtn"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.25"
-        android:scaleType="fitCenter"
-        android:src="@drawable/camera"
-        android:background="@null"
-        android:tint="@color/custom_blue"
-        android:onClick="selectedPage"
-        android:contentDescription="Camera"></ImageButton>
-
-    <ImageButton
-        android:id="@+id/settingsBtn"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.25"
-        android:scaleType="fitCenter"
-        android:src="@drawable/settings"
-        android:background="@null"
-        android:tint="@color/selected_nav"
-        android:onClick="selectedPage"
-        android:contentDescription="Settings"></ImageButton>
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

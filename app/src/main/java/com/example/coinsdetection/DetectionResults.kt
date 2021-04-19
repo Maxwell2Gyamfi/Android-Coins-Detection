@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,9 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.chaquo.python.Python
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_detection_results.*
@@ -63,27 +67,29 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private var totalItems: Int = 0
     private var totalCost:Double =0.0
     private val sharedPrefFile = "settingsPref"
+    private lateinit var save:SubActionButton
 
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detection_results)
         selectedOption = intent.getStringExtra("selected").toString()
         getYoloConfidence()
         when (selectedOption) {
-            "camera" -> takePicture()
-            "gallery" -> openGallery()
+            "camera" -> {
+                takePicture()
+            }
+            "gallery" -> {
+                openGallery()
+            }
         }
-    }
-
-    fun redo(view: View) {
-        when(selectedOption){
-            "camera" -> takePicture()
-            "gallery" -> openGallery()
-        }
+        createNavigationMenu()
+        createSecondMenu()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun openConfidenceOverlay(view: View) {
+    private fun openConfidenceOverlay() {
         val conf = getConfidence()
         var confidenceDialog = ConfidenceDialog(conf)
         confidenceDialog.show(supportFragmentManager, "confidence")
@@ -98,28 +104,27 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    private fun saveImageDB(){
-
+    private fun saveImageDB(button: SubActionButton?){
         val sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         val autosave = sharedPreferences.getBoolean("autosave", true)
         var name: String = "Detection" + UUID.randomUUID().toString()
         val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
 
-        if (autosave) {
-            saveToRecents.isEnabled = false
-            db.insertData(imageToSave)
-        }
-        else{
-            saveToRecents.isEnabled = true
-            saveToRecents.setOnClickListener {
-                var name: String = "Detection" + UUID.randomUUID().toString()
-                val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
+
+            if (autosave) {
+                button!!.isEnabled = false
                 db.insertData(imageToSave)
-            }
+            } else {
+                button!!.isEnabled = true
+                button!!.setOnClickListener {
+                    var name: String = "Detection" + UUID.randomUUID().toString()
+                    val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
+                    db.insertData(imageToSave)
+                }
         }
     }
 
-    fun showResults(view: View){
+    private fun showResults(){
         var resultsDetection = ResultsDetection(selectedMny, totalItems, totalCost)
         val resultsDialog = ResultsDialog(resultsDetection)
         resultsDialog.show(supportFragmentManager, "results")
@@ -172,7 +177,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             val detectedImage = BitmapFactory.decodeFile(file.absolutePath)
             inferenceBitmap = detectedImage
             resultsImage.setImageBitmap(detectedImage)
-            saveImageDB()
+            saveImageDB(save)
         }
     }
 
@@ -203,7 +208,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-            Bungee.slideRight(this)
+
         } catch (e: ActivityNotFoundException) {
         }
     }
@@ -211,7 +216,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private fun openGallery(){
        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
        startActivityForResult(gallery, pickImage)
-        Bungee.slideRight(this)
+
+
     }
 
     private fun applyFocus(view: AppCompatButton) {
@@ -237,30 +243,156 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    fun drawBoundingBox(view: View){
-//        if(selectedMny !== "All") {
+    private fun drawBoundingBox(){
             val intent = Intent(this, DrawBox::class.java)
             intent.putExtra("Selected", "$selectedMny")
             intent.putExtra("Cost", totalCost)
             intent.putExtra("Objects", totalItems)
             startActivity(intent)
             Bungee.zoom(this)
-//        }
-//        else{
-//            Toast.makeText(this, "Single a single item", Toast.LENGTH_SHORT).show()
-//        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createSecondMenu(){
+        val x = CircularMenu(this)
+        var add = x.createButtons("Add")
+        var result = x.createButtons("Total")
+        var confidence = x.createButtons("Confidence")
+        save = x.createButtons("Save")
+
+        var icon = ImageView(this); // Create an icon
+        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+
+
+        val actionButton = FloatingActionButton.Builder(this)
+            .setContentView(icon)
+            .setPosition(FloatingActionButton.POSITION_BOTTOM_LEFT)
+            .build();
+
+        actionButton.layoutParams.height = 200
+        actionButton.layoutParams.width = 200
+
+        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+
+        add = selectedPage("Add",add)
+        result  = selectedPage("Total", result)
+        confidence = selectedPage("Confidence",confidence)
+        save = selectedPage("Save", save)
+
+        val actionMenu = FloatingActionMenu.Builder(this)
+            .addSubActionView(add)
+            .addSubActionView(result)
+            .addSubActionView(save)
+            .addSubActionView(confidence)
+            .attachTo(actionButton)
+            .setStartAngle(0)
+            .setEndAngle(-90)
+            .build()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createNavigationMenu(){
+        val x = CircularMenu(this)
+
+        var camera = x.createButtons("Camera")
+        var gallery = x.createButtons("Gallery")
+        var settings = x.createButtons("Settings")
+        var home = x.createButtons("Home")
+
+        var icon = ImageView(this); // Create an icon
+        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.cursor));
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+
+
+        val actionButton = FloatingActionButton.Builder(this)
+            .setContentView(icon)
+            .build();
+
+        actionButton.layoutParams.height = 200
+        actionButton.layoutParams.width = 200
+
+        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+
+
+        camera = selectedPage("Camera", camera)
+        gallery = selectedPage("Gallery", gallery)
+        settings = selectedPage("Settings", settings)
+        home = selectedPage("Home",home)
+
+
+        val actionMenu = FloatingActionMenu.Builder(this)
+            .addSubActionView(camera)
+            .addSubActionView(gallery)
+            .addSubActionView(settings)
+            .addSubActionView(home)
+            .attachTo(actionButton)
+            .build()
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun selectedPage(action:String, button: SubActionButton): SubActionButton {
+
+        when (action) {
+            "Home" -> button.setOnClickListener {
+                val intent = Intent(applicationContext, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            "Camera" ->
+                button.setOnClickListener {
+                    val intent = Intent(applicationContext, DetectionResults::class.java).apply {
+                        putExtra("selected", "camera").toString()
+                        putExtra("name", 1)
+                    }
+                    startActivity(intent)
+                    finish()
+            }
+            "Gallery" -> button.setOnClickListener {
+                val intent = Intent(applicationContext, DetectionResults::class.java).apply {
+                    putExtra("selected", "gallery").toString()
+                }
+                startActivity(intent)
+                finish()
+
+            }
+            "Settings" -> button.setOnClickListener {
+                val intent = Intent(applicationContext, Settings::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            "Save" -> button.setOnClickListener {
+                saveImageDB(button)
+            }
+
+            "Total" -> button.setOnClickListener {
+                showResults()
+            }
+
+            "Add" -> button.setOnClickListener {
+                drawBoundingBox()
+            }
+
+            "Confidence" -> button.setOnClickListener {
+                openConfidenceOverlay()
+            }
+        }
+
+       return button
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         returnHome()
-        Bungee.slideLeft(this)
     }
 
     private fun returnHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity((intent))
-        Bungee.slideLeft(this)
+
     }
 
     private fun getPhotoFile(fileName: String): File {
@@ -302,10 +434,11 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             }
         }
         else if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Bungee.zoom(this)
+
             val result = CropImage.getActivityResult(data)
             when {
                 resultCode === RESULT_OK -> {
+                    Bungee.zoom(this)
                     val resultUri = result.uri
                     val source = resultUri?.let { it1 -> ImageDecoder.createSource(
                             this.contentResolver,
@@ -319,13 +452,13 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                 }
                 else -> {
                     finish()
-                    Bungee.spin(this)
+
                 }
             }
         }
         else {
             finish()
-            Bungee.spin(this)
+
         }
     }
 

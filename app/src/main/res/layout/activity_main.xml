@@ -7,44 +7,19 @@
     android:theme="@style/Theme.CoinsDetection"
     tools:context=".MainActivity">
 
-
-    <LinearLayout
-        android:id="@+id/test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1"
-        app:layout_constraintBottom_toTopOf="@id/recents"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
     <TextView
         android:id="@+id/stage_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:layout_marginLeft="8dp"
         android:text="@string/stage_name"
-        android:layout_weight="0.8"
         android:textColor="@color/custom_blue"
         android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@id/recents"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         ></TextView>
 
-        <ImageButton
-            android:id="@+id/deleteAll"
-            android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_weight="0.2"
-            android:src="@drawable/menu"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:tint="@color/custom_blue"
-            android:onClick="deleteSortAlertDialog"
-            android:layout_gravity="center"
-            android:contentDescription="DeleteSort">
-        </ImageButton>
-
-    </LinearLayout>
 
     <TextView
         android:id="@+id/recents"
@@ -54,7 +29,7 @@
         android:textSize="15sp"
         android:textColor="@color/custom_blue"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/test"
+        app:layout_constraintTop_toBottomOf="@id/stage_home"
         app:layout_constraintBottom_toTopOf="@id/history_images_rv"
         android:layout_marginLeft="10dp">
     </TextView>
@@ -65,75 +40,13 @@
         android:layout_height="0dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        app:layout_constraintBottom_toTopOf="@id/nav_buttons"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recents">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <LinearLayout
-        android:id="@+id/nav_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/history_images_rv"
-        app:layout_constraintVertical_bias="0.991"
-        android:weightSum="1">
 
-        <ImageButton
-            android:id="@+id/homeBtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"
-            android:src="@drawable/home"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:tint="@color/selected_nav"
-            android:onClick="selectedPage"
-            android:contentDescription="Home">
-        </ImageButton>
-        <ImageButton
-            android:id="@+id/galleryBtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/gallery"
-            android:layout_weight="0.25"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:tint="@color/custom_blue"
-            android:onClick="selectedPage"
-            android:contentDescription="Gallery"></ImageButton>
-
-        <ImageButton
-            android:id="@+id/cameraBtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"
-            android:scaleType="fitCenter"
-            android:src="@drawable/camera"
-            android:background="@null"
-            android:tint="@color/custom_blue"
-            android:onClick="selectedPage"
-            android:contentDescription="Camera"></ImageButton>
-
-        <ImageButton
-            android:id="@+id/settingsBtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25"
-            android:scaleType="fitCenter"
-            android:src="@drawable/settings"
-            android:background="@null"
-            android:tint="@color/custom_blue"
-            android:onClick="selectedPage"
-            android:contentDescription="Settings"></ImageButton>
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,12 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
+import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
 import kotlinx.android.synthetic.main.activity_settings.*
-import spencerstudios.com.bungeelib.Bungee
 
 class Settings : AppCompatActivity() {
     private val sharedPrefFile = "settingsPref"
@@ -38,6 +41,7 @@ class Settings : AppCompatActivity() {
         darkModeListener(editor)
         settingsConfidenceListener(editor)
         autoSaveListener(editor)
+        createNavigationMenu()
 
     }
 
@@ -99,34 +103,68 @@ class Settings : AppCompatActivity() {
         }
     }
 
-    fun selectedPage(view: View){
-        when(view.id){
-            R.id.homeBtn ->{
-                finish()
-                Bungee.slideLeft(this)
-            }
-            R.id.cameraBtn -> {
-                val intent = Intent(applicationContext, DetectionResults::class.java).apply {
-                    putExtra("selected", "camera").toString()
-                    putExtra("name", 1)
-                }
-                startActivity(intent)
-                Bungee.slideLeft(this)
-            }
-            R.id.galleryBtn -> {
-                val intent = Intent(applicationContext, DetectionResults::class.java).apply {
-                    putExtra("selected", "gallery").toString()
-                }
-                startActivity(intent)
-                Bungee.slideLeft(this)
-            }
-            R.id.settingsBtn -> {
-            }
-        }
+    private fun createNavigationMenu(){
+        val x = CircularMenu(this)
+
+        var camera = x.createButtons("Camera")
+        var gallery = x.createButtons("Gallery")
+        var home = x.createButtons("Home")
+
+        var icon = ImageView(this); // Create an icon
+        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.cursor));
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+
+        val actionButton = FloatingActionButton.Builder(this)
+            .setContentView(icon)
+            .build();
+
+        actionButton.layoutParams.height = 200
+        actionButton.layoutParams.width = 200
+        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+
+
+        camera = selectedPage("Camera", camera)
+        gallery = selectedPage("Gallery", gallery)
+        home = selectedPage("Home", home)
+
+
+        val actionMenu = FloatingActionMenu.Builder(this)
+            .addSubActionView(camera)
+            .addSubActionView(gallery)
+            .addSubActionView(home)
+            .attachTo(actionButton)
+            .build()
+
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        Bungee.slideLeft(this)
+    private fun selectedPage(action:String, button: SubActionButton): SubActionButton {
+        when(action){
+            "Camera" -> {
+                button.setOnClickListener {
+                    val intent = Intent(applicationContext, DetectionResults::class.java).apply {
+                        putExtra("selected", "camera").toString()
+                        putExtra("name", 1)
+                    }
+                    startActivity(intent)
+                }
+            }
+
+            "Gallery" -> {
+                button.setOnClickListener {
+                    val intent = Intent(applicationContext, DetectionResults::class.java).apply {
+                        putExtra("selected", "gallery").toString()
+                    }
+                    startActivity(intent)
+                }
+            }
+            "Home" -> {
+                button.setOnClickListener {
+                    finish()
+                }
+            }
+        }
+        return button
     }
+
+
 }

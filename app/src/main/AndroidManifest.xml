@@ -14,8 +14,10 @@
         android:supportsRtl="true"
         android:testOnly="false"
         android:theme="@style/Theme.CoinsDetection">
-        <activity android:name=".Settings"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".DeleteBox"></activity>
+        <activity
+            android:name=".Settings"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DrawBox"
             android:screenOrientation="portrait" />
