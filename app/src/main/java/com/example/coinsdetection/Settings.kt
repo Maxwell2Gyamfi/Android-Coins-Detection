@@ -3,6 +3,7 @@ package com.example.coinsdetection
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.SeekBar
@@ -112,7 +113,7 @@ class Settings : AppCompatActivity() {
 
         var icon = ImageView(this); // Create an icon
         icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.cursor));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
 
         val actionButton = FloatingActionButton.Builder(this)
             .setContentView(icon)
@@ -120,7 +121,8 @@ class Settings : AppCompatActivity() {
 
         actionButton.layoutParams.height = 160
         actionButton.layoutParams.width = 160
-        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+        actionButton.background.setTint(Color.TRANSPARENT)
+
 
 
         camera = selectedPage("Camera", camera)

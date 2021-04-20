@@ -3,6 +3,7 @@ package com.example.coinsdetection
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
@@ -85,7 +86,7 @@ class DrawBox : AppCompatActivity() {
 
         var icon = ImageView(this); // Create an icon
         icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
 
         val actionButton = FloatingActionButton.Builder(this)
             .setContentView(icon)
@@ -95,7 +96,7 @@ class DrawBox : AppCompatActivity() {
         actionButton.layoutParams.height = 160
         actionButton.layoutParams.width = 160
 
-        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+        actionButton.background.setTint(Color.TRANSPARENT)
 
         undo.setOnClickListener {
             drawingPad.undoCoordinate()
@@ -151,7 +152,7 @@ class DrawBox : AppCompatActivity() {
 
         var icon = ImageView(this); // Create an icon
         icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.pipette));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
 
         val actionButton = FloatingActionButton.Builder(this)
             .setContentView(icon)
@@ -160,7 +161,7 @@ class DrawBox : AppCompatActivity() {
         actionButton.layoutParams.height = 160
         actionButton.layoutParams.width = 160
 
-        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+        actionButton.background.setTint(Color.TRANSPARENT)
 
         val actionMenu = FloatingActionMenu.Builder(this)
             .addSubActionView(teal)

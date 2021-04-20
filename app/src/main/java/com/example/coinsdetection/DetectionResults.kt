@@ -263,7 +263,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
         var icon = ImageView(this); // Create an icon
         icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
 
 
         val actionButton = FloatingActionButton.Builder(this)
@@ -274,7 +274,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         actionButton.layoutParams.height = 160
         actionButton.layoutParams.width = 160
 
-        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+        actionButton.background.setTint(Color.TRANSPARENT)
 
         add = selectedPage("Add",add)
         result  = selectedPage("Total", result)
@@ -303,7 +303,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
         var icon = ImageView(this); // Create an icon
         icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.cursor));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
 
 
         val actionButton = FloatingActionButton.Builder(this)
@@ -313,7 +313,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         actionButton.layoutParams.height = 160
         actionButton.layoutParams.width = 160
 
-        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+        actionButton.background.setTint(Color.TRANSPARENT)
 
 
         camera = selectedPage("Camera", camera)

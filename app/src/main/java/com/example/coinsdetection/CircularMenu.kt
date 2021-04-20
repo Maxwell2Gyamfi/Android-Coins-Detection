@@ -87,19 +87,23 @@ class CircularMenu(context: Context) {
                 )
             )
 
-            "Complete" -> itemIcon.setImageDrawable(
+            "Complete" -> {itemIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
                     R.drawable.check__1_
                 )
             )
+                button1.background.setTint(ContextCompat.getColor(context,R.color.yolo3))
+            }
 
-            "Undo" -> itemIcon.setImageDrawable(
+            "Undo" -> {itemIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
                     R.drawable.undo__1_
                 )
             )
+                button1.background.setTint(ContextCompat.getColor(context,R.color.charliePink))
+            }
         }
         itemIcon.layoutParams.height = 75
         itemIcon.layoutParams.width = 75

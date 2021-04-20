@@ -16,5 +16,7 @@
     <color name="yolo3">#00ff00</color>
     <color name="charliePink">#e31566</color>
     <color name="yolo4">#ff0000</color>
+    <color name="transparent"></color>
+
 
 </resources>

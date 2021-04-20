@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -56,7 +57,7 @@ class SelectedHistoryImage : AppCompatActivity() {
 
         var icon = ImageView(this); // Create an icon
         icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
         val actionButton = FloatingActionButton.Builder(this)
             .setContentView(icon)
             .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
@@ -65,7 +66,9 @@ class SelectedHistoryImage : AppCompatActivity() {
         actionButton.layoutParams.height = 160
         actionButton.layoutParams.width = 160
 
-        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+//        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+
+        actionButton.background.setTint(Color.TRANSPARENT)
 
         val x = CircularMenu(this)
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         var icon = ImageView(this); // Create an icon
         icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
 
         val actionButton = FloatingActionButton.Builder(this)
             .setContentView(icon)
@@ -68,7 +69,8 @@ class MainActivity : AppCompatActivity() {
         actionButton.layoutParams.height = 160
         actionButton.layoutParams.width = 160
 
-        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+//        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+        actionButton.background.setTint(Color.TRANSPARENT)
 
         sort = selectedPage("Sort",sort)
         delete  = selectedPage("Delete", delete)
@@ -91,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
         var icon = ImageView(this); // Create an icon
         icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.cursor));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.white))
+        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
 
         val actionButton = FloatingActionButton.Builder(this)
             .setContentView(icon)
@@ -99,7 +101,8 @@ class MainActivity : AppCompatActivity() {
 
         actionButton.layoutParams.height = 160
         actionButton.layoutParams.width = 160
-        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+//        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
+        actionButton.background.setTint(Color.TRANSPARENT)
 
 
         camera = selectedPage("Camera", camera)
