@@ -98,6 +98,7 @@ class DrawBox : AppCompatActivity() {
 
         actionButton.background.setTint(Color.TRANSPARENT)
 
+
         undo.setOnClickListener {
             drawingPad.undoCoordinate()
         }
@@ -179,6 +180,7 @@ class DrawBox : AppCompatActivity() {
       button.setOnClickListener {
           val colorTag = button.tag.toString()
           drawingPad.setColor(colorTag)
+          Toast.makeText(this,"Colour selected", Toast.LENGTH_SHORT).show()
       }
         return button
     }

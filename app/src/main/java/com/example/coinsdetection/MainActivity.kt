@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
         icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
 
+
         val actionButton = FloatingActionButton.Builder(this)
             .setContentView(icon)
             .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
