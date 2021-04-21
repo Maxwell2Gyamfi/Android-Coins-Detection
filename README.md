@@ -4,8 +4,10 @@ How to run:
 Clone this repo
 Open and build in Android studio
 
+Home Screen
+[![Screenshot-20210420-215458.jpg](https://i.postimg.cc/NfS5tG2M/Screenshot-20210420-215458.jpg)](https://postimg.cc/mt3bNswf)
 
-[![Screenshot-20210420-215458.jpg](Screenshot_20210420-215458.jpg)
 
+Detection Screen
 [![Screenshot-20210421-104726.jpg](https://i.postimg.cc/4xHHHHRV/Screenshot-20210421-104726.jpg)](https://postimg.cc/qN0v9RRv)
 
