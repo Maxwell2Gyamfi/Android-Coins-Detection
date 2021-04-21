@@ -4,7 +4,7 @@ How to run:
 Clone this repo, open and build in Android studio
 
 
-![image](https://drive.google.com/file/d/1a-xitw-_oWIItQR3GhT8fAcn1eT1C6Hy/view?usp=sharing)
+<img src="https://ams02pap001files.storage.live.com/y4mCxgOrhnb9NXg4hkdBgRAfmlH9v-GCd_vs4xWLrJOJZsnX3q8hzqz9aY_McohSaCsg06iU6M8cE_GPDk4SDJ4vajAnG8jVK8HHW82A8Z6pYUhcsXViHbl3yCUCLUMUi2ohcMvEp84rWkiW4TRsagPRHhoLirgmWenGCPGfFs2hIK0MaTxWQOwOlq92JwtFgTA?width=1080&height=2400&cropmode=none" width="1080" height="2400" />
 
 
 
