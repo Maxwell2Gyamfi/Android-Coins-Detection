@@ -1,22 +1,18 @@
 package com.example.coinsdetection
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class Settings : AppCompatActivity() {
     private val sharedPrefFile = "settingsPref"
+    private val floatingMenu = CircularMenu(this)
+    private val nav = Navigation(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -105,68 +101,22 @@ class Settings : AppCompatActivity() {
     }
 
     private fun createNavigationMenu(){
-        val x = CircularMenu(this)
 
-        var camera = x.createButtons("Camera")
-        var gallery = x.createButtons("Gallery")
-        var home = x.createButtons("Home")
+        val actionButton =  nav.getNavButton()
+        var camera = floatingMenu.createButtons("Camera")
+        var gallery = floatingMenu.createButtons("Gallery")
+        var home = floatingMenu.createButtons("Home")
 
-        var icon = ImageView(this); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.cursor));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
+        camera = nav.getNavSubButton("Camera",camera)
+        gallery = nav.getNavSubButton("Gallery",gallery)
+        home = nav.getNavSubButton("Home",home)
 
-        val actionButton = FloatingActionButton.Builder(this)
-            .setContentView(icon)
-            .build();
-
-        actionButton.layoutParams.height = 160
-        actionButton.layoutParams.width = 160
-        actionButton.background.setTint(Color.TRANSPARENT)
-
-
-
-        camera = selectedPage("Camera", camera)
-        gallery = selectedPage("Gallery", gallery)
-        home = selectedPage("Home", home)
-
-
-        val actionMenu = FloatingActionMenu.Builder(this)
-            .addSubActionView(camera)
-            .addSubActionView(gallery)
+        FloatingActionMenu.Builder(this)
             .addSubActionView(home)
+            .addSubActionView(gallery)
+            .addSubActionView(camera)
             .attachTo(actionButton)
             .build()
-
     }
-
-    private fun selectedPage(action:String, button: SubActionButton): SubActionButton {
-        when(action){
-            "Camera" -> {
-                button.setOnClickListener {
-                    val intent = Intent(applicationContext, DetectionResults::class.java).apply {
-                        putExtra("selected", "camera").toString()
-                        putExtra("name", 1)
-                    }
-                    startActivity(intent)
-                }
-            }
-
-            "Gallery" -> {
-                button.setOnClickListener {
-                    val intent = Intent(applicationContext, DetectionResults::class.java).apply {
-                        putExtra("selected", "gallery").toString()
-                    }
-                    startActivity(intent)
-                }
-            }
-            "Home" -> {
-                button.setOnClickListener {
-                    finish()
-                }
-            }
-        }
-        return button
-    }
-
 
 }

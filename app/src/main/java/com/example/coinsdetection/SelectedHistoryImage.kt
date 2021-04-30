@@ -4,16 +4,12 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
 import kotlinx.android.synthetic.main.activity_selected_history_image.*
@@ -30,6 +26,8 @@ class SelectedHistoryImage : AppCompatActivity() {
     private var totalCount = 0.0
     private var objectCount =0
     private var imageID = 0
+    private val floatingMenu = CircularMenu(this)
+    private val nav = Navigation(this)
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +40,7 @@ class SelectedHistoryImage : AppCompatActivity() {
         thumbnail = retrieveImage(imageID)
         selectedHistoryImage.setImageBitmap(thumbnail)
         createFAB()
+        createNavigationMenu()
     }
 
 
@@ -55,43 +54,52 @@ class SelectedHistoryImage : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun createFAB(){
 
-        var icon = ImageView(this); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
-        val actionButton = FloatingActionButton.Builder(this)
-            .setContentView(icon)
-            .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
-            .build();
+        val actionButton = nav.getPageOptionsButton(false)
+        var save = floatingMenu.createButtons("Save")
+        var delete = floatingMenu.createButtons("Delete")
+        var total = floatingMenu.createButtons("Total")
 
-        actionButton.layoutParams.height = 160
-        actionButton.layoutParams.width = 160
+        save = pageOption("Save",save)
+        delete = pageOption("Delete", delete)
+        total = pageOption("Total",total)
 
-//        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
-
-        actionButton.background.setTint(Color.TRANSPARENT)
-
-        val x = CircularMenu(this)
-
-        var save = x.createButtons("Save")
-        var delete = x.createButtons("Delete")
-        var total = x.createButtons("Total")
-
-        save = selectedAction("Save",save)
-        delete = selectedAction("Delete", delete)
-        total = selectedAction("Total",total)
-
-        val actionMenu = FloatingActionMenu.Builder(this)
+        FloatingActionMenu.Builder(this)
             .addSubActionView(save)
             .addSubActionView(delete) // ...
             .addSubActionView(total)
-            .setStartAngle(-250)
-            .setEndAngle(200)
+            .setStartAngle(-0)
+            .setEndAngle(-90)
             .attachTo(actionButton)
             .build()
     }
 
 
-    private fun selectedAction(action: String, button: SubActionButton): SubActionButton {
+    private fun createNavigationMenu(){
+
+        val actionButton = nav.getNavButton()
+
+        var camera = floatingMenu.createButtons("Camera")
+        var gallery = floatingMenu.createButtons("Gallery")
+        var settings = floatingMenu.createButtons("Settings")
+        var home = floatingMenu.createButtons("Home")
+
+        camera = nav.getNavSubButton("Camera", camera)
+        gallery = nav.getNavSubButton("Gallery", gallery)
+        settings = nav.getNavSubButton("Settings", settings)
+        home = nav.getNavSubButton("Home",home)
+
+
+        FloatingActionMenu.Builder(this)
+            .addSubActionView(settings)
+            .addSubActionView(home)
+            .addSubActionView(gallery)
+            .addSubActionView(camera)
+            .attachTo(actionButton)
+            .build()
+
+    }
+
+    private fun pageOption(action: String, button: SubActionButton): SubActionButton {
 
         when(action){
             "Save" -> button.setOnClickListener {

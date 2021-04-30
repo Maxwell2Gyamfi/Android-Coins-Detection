@@ -41,6 +41,8 @@ class DrawBox : AppCompatActivity() {
     private var currentObjects = 0
     private var action = "none"
     private var db = DataBaseHandler(this)
+    private val floatingMenu = CircularMenu(this)
+    private val nav = Navigation(this)
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,60 +81,56 @@ class DrawBox : AppCompatActivity() {
 
 
     private fun createActions(){
-        val x = CircularMenu(this)
 
-        var undo = x.createButtons("Undo")
-        var complete = x.createButtons("Complete")
+        var undo = floatingMenu.createButtons("Undo")
+        var complete = floatingMenu.createButtons("Complete")
 
-        var icon = ImageView(this); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
-
-        val actionButton = FloatingActionButton.Builder(this)
-            .setContentView(icon)
-            .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
-            .build();
-
-        actionButton.layoutParams.height = 160
-        actionButton.layoutParams.width = 160
-
-        actionButton.background.setTint(Color.TRANSPARENT)
+        undo = setPageOptions("undo", undo)
+        complete = setPageOptions("complete", complete)
 
 
-        undo.setOnClickListener {
-            drawingPad.undoCoordinate()
-        }
-        complete.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                val mBitmap = getBitmapFromFrameLayout(drawingPad_fl)
-                var name: String = "Custom" + UUID.randomUUID().toString()
-                val boxes = drawingPad.mPaths.size
-                val cost = drawingPad.calculateTotal()
-                currentCost += cost
-                currentObjects += boxes
+        val actionButton = nav.getPageOptionsButton(true)
+        FloatingActionMenu.Builder(this)
+            .addSubActionView(undo)
+            .addSubActionView(complete)
+            .setStartAngle(0)
+            .attachTo(actionButton)
+            .build()
+    }
 
-                val formatter: NumberFormat = DecimalFormat("#0.00")
-                currentCost = formatter.format(currentCost).toDouble()
-                when {
-                    boxes > 0 -> {
-                        db.insertData(
-                            SavedImages(0, name, currentObjects, currentCost, mBitmap!!)
-                        )
-                        action = "success"
-                        onBackPressed()
+
+    private fun setPageOptions(curAction:String, button: SubActionButton):SubActionButton{
+        when(curAction){
+            "undo"->  button.setOnClickListener {
+                if(drawingPad.mPaths.isEmpty()) onBackPressed()
+                else drawingPad.undoCoordinate()
+            }
+            "complete" -> button.setOnClickListener {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val mBitmap = getBitmapFromFrameLayout(drawingPad_fl)
+                    var name: String = "Custom" + UUID.randomUUID().toString()
+                    val boxes = drawingPad.mPaths.size
+                    val cost = drawingPad.calculateTotal()
+                    currentCost += cost
+                    currentObjects += boxes
+
+                    val formatter: NumberFormat = DecimalFormat("#0.00")
+                    currentCost = formatter.format(currentCost).toDouble()
+                    when {
+                        boxes > 0 -> {
+                            db.insertData(
+                                SavedImages(0, name, currentObjects, currentCost, mBitmap!!)
+                            )
+                            action = "success"
+                            onBackPressed()
+                        }
+                        else -> onBackPressed()
                     }
-                    else -> onBackPressed()
                 }
             }
         }
 
-        val actionMenu = FloatingActionMenu.Builder(this)
-            .addSubActionView(undo)
-            .addSubActionView(complete)
-            .setStartAngle(-230)
-            .setEndAngle(200)
-            .attachTo(actionButton)
-            .build()
+        return button
     }
 
     private fun createColours(){

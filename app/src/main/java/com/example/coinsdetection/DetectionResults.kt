@@ -14,7 +14,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +21,6 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.chaquo.python.Python
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
 import com.theartofdev.edmodo.cropper.CropImage
@@ -68,6 +66,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private var totalCost:Double =0.0
     private val sharedPrefFile = "settingsPref"
     private lateinit var save:SubActionButton
+    private val floatingMenu = CircularMenu(this)
+    private val nav = Navigation(this)
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -255,114 +255,58 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createSecondMenu(){
-        val x = CircularMenu(this)
-        var add = x.createButtons("Add")
-        var result = x.createButtons("Total")
-        var confidence = x.createButtons("Confidence")
-        save = x.createButtons("Save")
 
-        var icon = ImageView(this); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
+        val actionButton = nav.getPageOptionsButton(false)
+        var add = floatingMenu.createButtons("Add")
+        var result = floatingMenu.createButtons("Total")
+        var confidence = floatingMenu.createButtons("Confidence")
+        save = floatingMenu.createButtons("Save")
 
+        add = pageOptions("Add",add)
+        result  = pageOptions("Total", result)
+        confidence = pageOptions("Confidence",confidence)
+        save = pageOptions("Save", save)
 
-        val actionButton = FloatingActionButton.Builder(this)
-            .setContentView(icon)
-            .setPosition(FloatingActionButton.POSITION_BOTTOM_LEFT)
-            .build();
-
-        actionButton.layoutParams.height = 160
-        actionButton.layoutParams.width = 160
-
-        actionButton.background.setTint(Color.TRANSPARENT)
-
-        add = selectedPage("Add",add)
-        result  = selectedPage("Total", result)
-        confidence = selectedPage("Confidence",confidence)
-        save = selectedPage("Save", save)
-
-        val actionMenu = FloatingActionMenu.Builder(this)
-            .addSubActionView(add)
-            .addSubActionView(result)
+        FloatingActionMenu.Builder(this)
             .addSubActionView(save)
+            .addSubActionView(add)
             .addSubActionView(confidence)
+            .addSubActionView(result)
             .attachTo(actionButton)
-            .setStartAngle(0)
+            .setStartAngle(-0)
             .setEndAngle(-90)
             .build()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createNavigationMenu(){
-        val x = CircularMenu(this)
 
-        var camera = x.createButtons("Camera")
-        var gallery = x.createButtons("Gallery")
-        var settings = x.createButtons("Settings")
-        var home = x.createButtons("Home")
+        val actionButton = nav.getNavButton()
+        var camera = floatingMenu.createButtons("Camera")
+        var gallery = floatingMenu.createButtons("Gallery")
+        var settings = floatingMenu.createButtons("Settings")
+        var home = floatingMenu.createButtons("Home")
 
-        var icon = ImageView(this); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.cursor));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
-
-
-        val actionButton = FloatingActionButton.Builder(this)
-            .setContentView(icon)
-            .build();
-
-        actionButton.layoutParams.height = 160
-        actionButton.layoutParams.width = 160
-
-        actionButton.background.setTint(Color.TRANSPARENT)
+        camera = nav.getNavSubButton("Camera", camera)
+        gallery = nav.getNavSubButton("Gallery", gallery)
+        settings = nav.getNavSubButton("Settings", settings)
+        home = nav.getNavSubButton("Home",home)
 
 
-        camera = selectedPage("Camera", camera)
-        gallery = selectedPage("Gallery", gallery)
-        settings = selectedPage("Settings", settings)
-        home = selectedPage("Home",home)
-
-
-        val actionMenu = FloatingActionMenu.Builder(this)
-            .addSubActionView(camera)
-            .addSubActionView(gallery)
+        FloatingActionMenu.Builder(this)
             .addSubActionView(settings)
             .addSubActionView(home)
+            .addSubActionView(gallery)
+            .addSubActionView(camera)
             .attachTo(actionButton)
             .build()
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun selectedPage(action:String, button: SubActionButton): SubActionButton {
+    private fun pageOptions(action:String, button: SubActionButton): SubActionButton {
 
         when (action) {
-            "Home" -> button.setOnClickListener {
-                val intent = Intent(applicationContext, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            "Camera" ->
-                button.setOnClickListener {
-                    val intent = Intent(applicationContext, DetectionResults::class.java).apply {
-                        putExtra("selected", "camera").toString()
-                        putExtra("name", 1)
-                    }
-                    startActivity(intent)
-                    finish()
-            }
-            "Gallery" -> button.setOnClickListener {
-                val intent = Intent(applicationContext, DetectionResults::class.java).apply {
-                    putExtra("selected", "gallery").toString()
-                }
-                startActivity(intent)
-                finish()
-
-            }
-            "Settings" -> button.setOnClickListener {
-                val intent = Intent(applicationContext, Settings::class.java)
-                startActivity(intent)
-                finish()
-            }
 
             "Save" -> button.setOnClickListener {
                 saveImageDB(button)

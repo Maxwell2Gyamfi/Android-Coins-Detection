@@ -21,6 +21,7 @@ class CircularMenu(context: Context) {
         button1.background.setTint(ContextCompat.getColor(context,R.color.custom_blue))
         itemIcon.setColorFilter(ContextCompat.getColor(context,R.color.white))
 
+
         when (action) {
             "Delete" -> itemIcon.setImageDrawable(
                 ContextCompat.getDrawable(
@@ -39,7 +40,7 @@ class CircularMenu(context: Context) {
             "Save" -> itemIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.download__2_
+                    R.drawable.download__6_
                 )
             )
 
@@ -76,7 +77,7 @@ class CircularMenu(context: Context) {
             "Confidence" -> itemIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.options_list
+                    R.drawable.computer_slider_tool
                 )
             )
 
@@ -93,7 +94,7 @@ class CircularMenu(context: Context) {
                     R.drawable.check__1_
                 )
             )
-                button1.background.setTint(ContextCompat.getColor(context,R.color.yolo3))
+                button1.background.setTint(ContextCompat.getColor(context,R.color.custom_blue))
             }
 
             "Undo" -> {itemIcon.setImageDrawable(
@@ -161,4 +162,5 @@ class CircularMenu(context: Context) {
 
         return button1
     }
+
 }

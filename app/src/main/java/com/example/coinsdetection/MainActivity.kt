@@ -4,15 +4,11 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private var recentsSize =0
     private var db = DataBaseHandler(this)
     private lateinit var recentImages: MutableList<SavedImages>
+    private val floatingMenu = CircularMenu(this)
+    private val nav = Navigation(this)
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,113 +51,53 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun createSecondMenu(){
-        val x = CircularMenu(this)
-        var sort = x.createButtons("Sort")
-        var delete = x.createButtons("Delete")
 
-        var icon = ImageView(this); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.menu));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
+        val actionButton = nav.getPageOptionsButton(false)
+        var sort = floatingMenu.createButtons("Sort")
+        var delete = floatingMenu.createButtons("Delete")
+        sort = pageOptions("Sort",sort)
+        delete  = pageOptions("Delete", delete)
 
-
-        val actionButton = FloatingActionButton.Builder(this)
-            .setContentView(icon)
-            .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
-            .build();
-
-        actionButton.layoutParams.height = 160
-        actionButton.layoutParams.width = 160
-
-//        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
-        actionButton.background.setTint(Color.TRANSPARENT)
-
-        sort = selectedPage("Sort",sort)
-        delete  = selectedPage("Delete", delete)
-
-        val actionMenu = FloatingActionMenu.Builder(this)
+        FloatingActionMenu.Builder(this)
             .addSubActionView(delete)
             .addSubActionView(sort)
             .attachTo(actionButton)
-            .setStartAngle(-230)
-            .setEndAngle(200)
+            .setStartAngle(0)
             .build()
     }
 
     private fun createNavigationMenu(){
-        val x = CircularMenu(this)
 
-        var camera = x.createButtons("Camera")
-        var gallery = x.createButtons("Gallery")
-        var settings = x.createButtons("Settings")
+        val actionButton =  nav.getNavButton()
+        var camera = floatingMenu.createButtons("Camera")
+        var gallery = floatingMenu.createButtons("Gallery")
+        var settings = floatingMenu.createButtons("Settings")
 
-        var icon = ImageView(this); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.cursor));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
+        camera = nav.getNavSubButton("Camera",camera)
+        gallery = nav.getNavSubButton("Gallery",gallery)
+        settings = nav.getNavSubButton("Settings",settings)
 
-        val actionButton = FloatingActionButton.Builder(this)
-            .setContentView(icon)
-            .build();
-
-        actionButton.layoutParams.height = 160
-        actionButton.layoutParams.width = 160
-//        actionButton.background.setTint(ContextCompat.getColor(this,R.color.custom_blue))
-        actionButton.background.setTint(Color.TRANSPARENT)
-
-
-        camera = selectedPage("Camera", camera)
-        gallery = selectedPage("Gallery", gallery)
-        settings = selectedPage("Settings", settings)
-
-
-        val actionMenu = FloatingActionMenu.Builder(this)
-            .addSubActionView(camera)
-            .addSubActionView(gallery)
+        FloatingActionMenu.Builder(this)
             .addSubActionView(settings)
+            .addSubActionView(gallery)
+            .addSubActionView(camera)
             .attachTo(actionButton)
             .build()
-
     }
 
-    private fun selectedPage(action:String, button: SubActionButton): SubActionButton {
-       when(action){
-
-           "Camera" -> {
-               button.setOnClickListener {
-                   val intent = Intent(applicationContext, DetectionResults::class.java).apply {
-                       putExtra("selected", "camera").toString()
-                       putExtra("name", 1)
-                   }
-                   startActivity(intent)
-               }
-           }
-
-           "Gallery" -> {
-               button.setOnClickListener {
-                   val intent = Intent(applicationContext, DetectionResults::class.java).apply {
-                       putExtra("selected", "gallery").toString()
-                   }
-                   startActivity(intent)
-               }
-           }
-           "Settings" -> {
-               button.setOnClickListener {
-                   val intent = Intent(applicationContext, Settings::class.java)
-                   startActivity(intent)
-               }
-           }
-
-           "Sort" ->{
-               button.setOnClickListener {
-                   sortImages()
-               }
-           }
-
-           "Delete" -> {
-               button.setOnClickListener {
-                   deleteAll()
-               }
-           }
-       }
+    private fun pageOptions(action:String, button: SubActionButton): SubActionButton{
+        when(action){
+            "Sort" ->{
+                button.setOnClickListener {
+                    sortImages()
+                }
+            }
+            "Delete" -> {
+                button.setOnClickListener {
+                    deleteAll()
+                }
+            }
+        }
         return button
     }
 
