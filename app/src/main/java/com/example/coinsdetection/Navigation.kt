@@ -38,8 +38,8 @@ class Navigation(context: Context) {
             "Settings" -> {
                 button.setOnClickListener {
                     val intent = Intent(context, Settings::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     context.startActivity(intent)
-                    (context as Activity).finish()
                     Bungee.zoom(context)
                 }
             }

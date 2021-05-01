@@ -1,6 +1,7 @@
 package com.example.coinsdetection
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.SeekBar
@@ -101,6 +102,18 @@ class Settings : AppCompatActivity() {
             editor.apply()
             editor.commit()
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        returnHome()
+    }
+
+    private fun returnHome() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+        finish()
     }
 
     private fun createNavigationMenu() {
