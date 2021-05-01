@@ -26,7 +26,7 @@ class CircularMenu(context: Context) {
             "Delete" -> itemIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.delete
+                    R.drawable.trash
                 )
             )
 
@@ -47,7 +47,7 @@ class CircularMenu(context: Context) {
             "SaveToDevice" -> itemIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.floppy_disk__1_
+                    R.drawable.download__4_
                 )
             )
 
