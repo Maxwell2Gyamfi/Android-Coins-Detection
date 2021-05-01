@@ -21,13 +21,14 @@ import java.util.*
 
 class SelectedHistoryImage : AppCompatActivity() {
     private var db = DataBaseHandler(this)
-    private lateinit var thumbnail:Bitmap
-    private lateinit var imageName:String
+    private lateinit var thumbnail: Bitmap
+    private lateinit var imageName: String
     private var totalCount = 0.0
-    private var objectCount =0
+    private var objectCount = 0
     private var imageID = 0
     private val floatingMenu = CircularMenu(this)
     private val nav = Navigation(this)
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,24 +45,23 @@ class SelectedHistoryImage : AppCompatActivity() {
     }
 
 
-
-    private fun showResults(){
+    private fun showResults() {
         var resultsDetection = ResultsDetection("All", objectCount, totalCount)
         val resultsDialog = ResultsDialog(resultsDetection)
         resultsDialog.show(supportFragmentManager, "results")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun createFAB(){
+    private fun createFAB() {
 
         val actionButton = nav.getPageOptionsButton(false)
         var save = floatingMenu.createButtons("SaveToDevice")
         var delete = floatingMenu.createButtons("Delete")
         var total = floatingMenu.createButtons("Total")
 
-        save = pageOption("Save",save)
+        save = pageOption("Save", save)
         delete = pageOption("Delete", delete)
-        total = pageOption("Total",total)
+        total = pageOption("Total", total)
 
         FloatingActionMenu.Builder(this)
             .addSubActionView(save)
@@ -73,8 +73,7 @@ class SelectedHistoryImage : AppCompatActivity() {
             .build()
     }
 
-
-    private fun createNavigationMenu(){
+    private fun createNavigationMenu() {
 
         val actionButton = nav.getNavButton()
 
@@ -86,7 +85,7 @@ class SelectedHistoryImage : AppCompatActivity() {
         camera = nav.getNavSubButton("Camera", camera)
         gallery = nav.getNavSubButton("Gallery", gallery)
         settings = nav.getNavSubButton("Settings", settings)
-        home = nav.getNavSubButton("Home",home)
+        home = nav.getNavSubButton("Home", home)
 
 
         FloatingActionMenu.Builder(this)
@@ -101,34 +100,35 @@ class SelectedHistoryImage : AppCompatActivity() {
 
     private fun pageOption(action: String, button: SubActionButton): SubActionButton {
 
-        when(action){
+        when (action) {
             "Save" -> button.setOnClickListener {
                 saveImage(imageName)
             }
             "Total" -> button.setOnClickListener {
                 showResults()
             }
-            "Delete" -> button.setOnClickListener{
+            "Delete" -> button.setOnClickListener {
                 deleteImage(imageID)
             }
         }
         return button
     }
 
-    private fun retrieveImage(ID: Int):Bitmap{
+    private fun retrieveImage(ID: Int): Bitmap {
         return db.getImage(ID)
     }
-    private fun deleteImage(ID: Int){
+
+    private fun deleteImage(ID: Int) {
         db.deleteData(ID)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         Bungee.zoom(this)
-
     }
-    private fun saveImage(fileName: String){
+
+    private fun saveImage(fileName: String) {
         val stream: OutputStream
-        try{
-            if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.Q){
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val resolver = contentResolver
                 val contentValues = ContentValues()
                 contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$fileName.jpg")
@@ -146,8 +146,7 @@ class SelectedHistoryImage : AppCompatActivity() {
                 Objects.requireNonNull<OutputStream?>(stream)
                 Toast.makeText(this, "Image Saved to Gallery", Toast.LENGTH_SHORT).show()
             }
-        }
-        catch (e: java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             print(e.stackTrace)
             Toast.makeText(this, "Error Saving Image", Toast.LENGTH_SHORT).show()
         }

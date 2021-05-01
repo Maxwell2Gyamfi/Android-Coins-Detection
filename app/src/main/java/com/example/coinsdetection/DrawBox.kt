@@ -36,8 +36,8 @@ class DrawBox : AppCompatActivity() {
     private var py = Python.getInstance()
     private var pyobj = py.getModule("detection")
     private lateinit var addBoxImage: Bitmap
-    private lateinit var selected:String
-    private var currentCost =0.0
+    private lateinit var selected: String
+    private var currentCost = 0.0
     private var currentObjects = 0
     private var action = "none"
     private var db = DataBaseHandler(this)
@@ -80,7 +80,7 @@ class DrawBox : AppCompatActivity() {
     }
 
 
-    private fun createActions(){
+    private fun createActions() {
 
         var undo = floatingMenu.createButtons("Undo")
         var complete = floatingMenu.createButtons("Complete")
@@ -99,10 +99,10 @@ class DrawBox : AppCompatActivity() {
     }
 
 
-    private fun setPageOptions(curAction:String, button: SubActionButton):SubActionButton{
-        when(curAction){
-            "undo"->  button.setOnClickListener {
-                if(drawingPad.mPaths.isEmpty()) onBackPressed()
+    private fun setPageOptions(curAction: String, button: SubActionButton): SubActionButton {
+        when (curAction) {
+            "undo" -> button.setOnClickListener {
+                if (drawingPad.mPaths.isEmpty()) onBackPressed()
                 else drawingPad.undoCoordinate()
             }
             "complete" -> button.setOnClickListener {
@@ -133,7 +133,7 @@ class DrawBox : AppCompatActivity() {
         return button
     }
 
-    private fun createColours(){
+    private fun createColours() {
 
         var teal = floatingMenu.createColoursMenu("Teal")
         var yellow = floatingMenu.createColoursMenu("Yellow")
@@ -150,8 +150,8 @@ class DrawBox : AppCompatActivity() {
         charlie = colourClicked(charlie)
 
         var icon = ImageView(this); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.pipette));
-        icon.setColorFilter(ContextCompat.getColor(this,R.color.custom_blue))
+        icon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.pipette));
+        icon.setColorFilter(ContextCompat.getColor(this, R.color.custom_blue))
 
         val actionButton = FloatingActionButton.Builder(this)
             .setContentView(icon)
@@ -175,15 +175,15 @@ class DrawBox : AppCompatActivity() {
     }
 
     private fun colourClicked(button: SubActionButton): SubActionButton {
-      button.setOnClickListener {
-          val colorTag = button.tag.toString()
-          drawingPad.setColor(colorTag)
-          Toast.makeText(this,"Colour selected", Toast.LENGTH_SHORT).show()
-      }
+        button.setOnClickListener {
+            val colorTag = button.tag.toString()
+            drawingPad.setColor(colorTag)
+            Toast.makeText(this, "Colour selected", Toast.LENGTH_SHORT).show()
+        }
         return button
     }
 
-    override fun onBackPressed() = when(action){
+    override fun onBackPressed() = when (action) {
         "success" -> {
             super.onBackPressed()
             Bungee.zoom(this)

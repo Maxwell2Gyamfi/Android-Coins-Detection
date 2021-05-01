@@ -17,15 +17,18 @@ class Settings : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile,
-            Context.MODE_PRIVATE)
-        val editor:SharedPreferences.Editor =  sharedPreferences.edit()
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(
+            sharedPrefFile,
+            Context.MODE_PRIVATE
+        )
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
-        val sharedDarkValue = sharedPreferences.getBoolean("isdark",false)
-        val yoloconfidence = sharedPreferences.getInt("confidence",20)
-        val confidenceText = sharedPreferences.getString("confidenceText","20")
-        val autoSaveImages = sharedPreferences.getBoolean("autosave",true)
-        val automaticsaveText = sharedPreferences.getString("autosavetext","Automatic saving is on")
+        val sharedDarkValue = sharedPreferences.getBoolean("isdark", false)
+        val yoloconfidence = sharedPreferences.getInt("confidence", 20)
+        val confidenceText = sharedPreferences.getString("confidenceText", "20")
+        val autoSaveImages = sharedPreferences.getBoolean("autosave", true)
+        val automaticsaveText =
+            sharedPreferences.getString("autosavetext", "Automatic saving is on")
         val darkmodeText = sharedPreferences.getString("darkmodetext", "Dark mode is off")
 
         darkModeSwitch.isChecked = sharedDarkValue
@@ -42,18 +45,18 @@ class Settings : AppCompatActivity() {
 
     }
 
-    private fun darkModeListener(editor: SharedPreferences.Editor){
+    private fun darkModeListener(editor: SharedPreferences.Editor) {
         darkModeSwitch.setOnCheckedChangeListener { _, _ ->
             when {
                 darkModeSwitch.isChecked -> {
-                    editor.putBoolean("isdark",true)
-                    editor.putString("darkmodetext","Dark mode is on")
+                    editor.putBoolean("isdark", true)
+                    editor.putString("darkmodetext", "Dark mode is on")
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
                 }
                 else -> {
-                    editor.putBoolean("isdark",false)
-                    editor.putString("darkmodetext","Dark mode is off")
+                    editor.putBoolean("isdark", false)
+                    editor.putString("darkmodetext", "Dark mode is off")
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
                 }
@@ -63,12 +66,12 @@ class Settings : AppCompatActivity() {
         }
     }
 
-    private fun settingsConfidenceListener(editor:SharedPreferences.Editor){
+    private fun settingsConfidenceListener(editor: SharedPreferences.Editor) {
         settingsConfidence.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 seekSettingsValue.text = progress.toString()
-                editor.putInt("confidence",progress)
-                editor.putString("confidenceText",progress.toString())
+                editor.putInt("confidence", progress)
+                editor.putString("confidenceText", progress.toString())
                 editor.apply()
                 editor.commit()
             }
@@ -83,16 +86,16 @@ class Settings : AppCompatActivity() {
         })
     }
 
-    private fun autoSaveListener(editor: SharedPreferences.Editor){
+    private fun autoSaveListener(editor: SharedPreferences.Editor) {
         autoSaveSwitch.setOnCheckedChangeListener { _, _ ->
             if (autoSaveSwitch.isChecked) {
-                editor.putBoolean("autosave",true)
-                editor.putString("autosavetext","Automatic saving is on")
+                editor.putBoolean("autosave", true)
+                editor.putString("autosavetext", "Automatic saving is on")
                 automaticModeSummaryText.text = "Automatic saving is on"
 
             } else {
-                editor.putBoolean("autosave",false)
-                editor.putString("autosavetext","Automatic saving is off")
+                editor.putBoolean("autosave", false)
+                editor.putString("autosavetext", "Automatic saving is off")
                 automaticModeSummaryText.text = "Automatic saving is off"
             }
             editor.apply()
@@ -100,16 +103,16 @@ class Settings : AppCompatActivity() {
         }
     }
 
-    private fun createNavigationMenu(){
+    private fun createNavigationMenu() {
 
-        val actionButton =  nav.getNavButton()
+        val actionButton = nav.getNavButton()
         var camera = floatingMenu.createButtons("Camera")
         var gallery = floatingMenu.createButtons("Gallery")
         var home = floatingMenu.createButtons("Home")
 
-        camera = nav.getNavSubButton("Camera",camera)
-        gallery = nav.getNavSubButton("Gallery",gallery)
-        home = nav.getNavSubButton("Home",home)
+        camera = nav.getNavSubButton("Camera", camera)
+        gallery = nav.getNavSubButton("Gallery", gallery)
+        home = nav.getNavSubButton("Home", home)
 
         FloatingActionMenu.Builder(this)
             .addSubActionView(home)

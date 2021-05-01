@@ -52,6 +52,7 @@ data class SavedImages(
     val totalCost: Double,
     val imageToSave: Bitmap
 )
+
 data class ResultsDetection(val itemName: String, val totalObjects: Int, val totalCost: Double)
 
 class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogListener {
@@ -61,11 +62,11 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private var py = Python.getInstance()
     private var db = DataBaseHandler(this)
     private var pyobj = py.getModule("detection")
-    private lateinit var selectedMny:String
+    private lateinit var selectedMny: String
     private var totalItems: Int = 0
-    private var totalCost:Double =0.0
+    private var totalCost: Double = 0.0
     private val sharedPrefFile = "settingsPref"
-    private lateinit var save:SubActionButton
+    private lateinit var save: SubActionButton
     private val floatingMenu = CircularMenu(this)
     private val nav = Navigation(this)
 
@@ -96,35 +97,34 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
     override fun applyTexts(confidence: String) {
-        if(this::inferenceBitmap.isInitialized) {
+        if (this::inferenceBitmap.isInitialized) {
             setConfidence(confidence)
-        }
-        else{
+        } else {
             Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun saveImageDB(button: SubActionButton?){
+    private fun saveImageDB(button: SubActionButton?) {
         val sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         val autosave = sharedPreferences.getBoolean("autosave", true)
         var name: String = "Detection" + UUID.randomUUID().toString()
         val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
 
 
-            if (autosave) {
-                button!!.isEnabled = false
+        if (autosave) {
+            button!!.isEnabled = false
+            db.insertData(imageToSave)
+        } else {
+            button!!.isEnabled = true
+            button!!.setOnClickListener {
+                var name: String = "Detection" + UUID.randomUUID().toString()
+                val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
                 db.insertData(imageToSave)
-            } else {
-                button!!.isEnabled = true
-                button!!.setOnClickListener {
-                    var name: String = "Detection" + UUID.randomUUID().toString()
-                    val imageToSave = SavedImages(0, name, totalItems, totalCost, inferenceBitmap)
-                    db.insertData(imageToSave)
-                }
+            }
         }
     }
 
-    private fun showResults(){
+    private fun showResults() {
         var resultsDetection = ResultsDetection(selectedMny, totalItems, totalCost)
         val resultsDialog = ResultsDialog(resultsDetection)
         resultsDialog.show(supportFragmentManager, "results")
@@ -143,13 +143,13 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    private fun pyResults(pyString: String){
+    private fun pyResults(pyString: String) {
         var str = pyString.split("-").toTypedArray()
         totalCost = str[0].toDouble()
         totalItems = str[1].toInt()
     }
 
-    private fun setConfidence(confidence: String){
+    private fun setConfidence(confidence: String) {
         pyobj.callAttr("changeConfidence", confidence)
         initInference(selectedBitmap, selectedMny)
     }
@@ -159,7 +159,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         return conf.toString()
     }
 
-    private fun getYoloConfidence(){
+    private fun getYoloConfidence() {
         val sharedPreferences: SharedPreferences = this.getSharedPreferences(
             sharedPrefFile,
             Context.MODE_PRIVATE
@@ -168,7 +168,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         pyobj.callAttr("changeConfidence", yoloValue)
     }
 
-    private fun initInference(image: Bitmap, selectedItem: String){
+    private fun initInference(image: Bitmap, selectedItem: String) {
         CoroutineScope(Dispatchers.Main).launch {
             progressBarDetection.visibility = View.VISIBLE
             runInference(image, selectedItem)
@@ -182,7 +182,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun runInference(image: Bitmap, selectedItem: String){
+    private suspend fun runInference(image: Bitmap, selectedItem: String) {
         return withContext(Dispatchers.Default) {
             val stream = ByteArrayOutputStream()
             val nh = (image.height * (1200.0 / image.width)).toInt()
@@ -213,9 +213,9 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    private fun openGallery(){
-       val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-       startActivityForResult(gallery, pickImage)
+    private fun openGallery() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(gallery, pickImage)
     }
 
     private fun applyFocus(view: AppCompatButton) {
@@ -241,18 +241,18 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         }
     }
 
-    private fun drawBoundingBox(){
-            val intent = Intent(this, DrawBox::class.java)
-            intent.putExtra("Selected", "$selectedMny")
-            intent.putExtra("Cost", totalCost)
-            intent.putExtra("Objects", totalItems)
-            startActivity(intent)
-            Bungee.zoom(this)
+    private fun drawBoundingBox() {
+        val intent = Intent(this, DrawBox::class.java)
+        intent.putExtra("Selected", "$selectedMny")
+        intent.putExtra("Cost", totalCost)
+        intent.putExtra("Objects", totalItems)
+        startActivity(intent)
+        Bungee.zoom(this)
     }
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createSecondMenu(){
+    private fun createSecondMenu() {
 
         val actionButton = nav.getPageOptionsButton(false)
         var add = floatingMenu.createButtons("Add")
@@ -260,9 +260,9 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         var confidence = floatingMenu.createButtons("Confidence")
         save = floatingMenu.createButtons("SaveToRecents")
 
-        add = pageOptions("Add",add)
-        result  = pageOptions("Total", result)
-        confidence = pageOptions("Confidence",confidence)
+        add = pageOptions("Add", add)
+        result = pageOptions("Total", result)
+        confidence = pageOptions("Confidence", confidence)
         save = pageOptions("Save", save)
 
         FloatingActionMenu.Builder(this)
@@ -277,7 +277,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createNavigationMenu(){
+    private fun createNavigationMenu() {
 
         val actionButton = nav.getNavButton()
         var camera = floatingMenu.createButtons("Camera")
@@ -288,7 +288,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         camera = nav.getNavSubButton("Camera", camera)
         gallery = nav.getNavSubButton("Gallery", gallery)
         settings = nav.getNavSubButton("Settings", settings)
-        home = nav.getNavSubButton("Home",home)
+        home = nav.getNavSubButton("Home", home)
 
 
         FloatingActionMenu.Builder(this)
@@ -302,7 +302,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun pageOptions(action:String, button: SubActionButton): SubActionButton {
+    private fun pageOptions(action: String, button: SubActionButton): SubActionButton {
 
         when (action) {
 
@@ -323,7 +323,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             }
         }
 
-       return button
+        return button
     }
 
     override fun onBackPressed() {
@@ -345,9 +345,8 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
 
-
     private fun launchCropping(uri: Uri) =
-            CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON).start(this)
+        CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON).start(this)
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -378,18 +377,19 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
-        else if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        } else if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
             val result = CropImage.getActivityResult(data)
             when {
                 resultCode === RESULT_OK -> {
                     Bungee.zoom(this)
                     val resultUri = result.uri
-                    val source = resultUri?.let { it1 -> ImageDecoder.createSource(
+                    val source = resultUri?.let { it1 ->
+                        ImageDecoder.createSource(
                             this.contentResolver,
                             it1
-                    ) }
+                        )
+                    }
                     val bitmap = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }
                     resultsImage.setImageBitmap(bitmap)
                     selectedBitmap = bitmap!!
@@ -401,8 +401,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
                 }
             }
-        }
-        else {
+        } else {
             finish()
 
         }

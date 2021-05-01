@@ -5,19 +5,18 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialogFragment
 
-class ResultsDialog(private val resultsDetection: ResultsDetection): AppCompatDialogFragment() {
-    private lateinit var numItems:TextView
-    private lateinit var cost:TextView
-    private lateinit var itemName:TextView
+class ResultsDialog(private val resultsDetection: ResultsDetection) : AppCompatDialogFragment() {
+    private lateinit var numItems: TextView
+    private lateinit var cost: TextView
+    private lateinit var itemName: TextView
 
     @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val dialogBuilder = AlertDialog.Builder(context,R.style.AlertDialogResults)
+        val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialogResults)
         val inflater: LayoutInflater = activity!!.layoutInflater
         val dialogView = inflater.inflate(R.layout.results_dialog, null)
         dialogBuilder.setView(dialogView)

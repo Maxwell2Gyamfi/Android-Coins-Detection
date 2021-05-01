@@ -9,10 +9,10 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialogFragment
 
-open class ConfidenceDialog(private val pyConfidence:String): AppCompatDialogFragment(){
+open class ConfidenceDialog(private val pyConfidence: String) : AppCompatDialogFragment() {
     private lateinit var listener: ConfidenceDialogListener
-    private lateinit var seekBar:SeekBar
-    private lateinit var seekVal:TextView
+    private lateinit var seekBar: SeekBar
+    private lateinit var seekVal: TextView
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialogCustom)
@@ -62,6 +62,7 @@ open class ConfidenceDialog(private val pyConfidence:String): AppCompatDialogFra
             )
         }
     }
+
     interface ConfidenceDialogListener {
         fun applyTexts(confidence: kotlin.String)
     }

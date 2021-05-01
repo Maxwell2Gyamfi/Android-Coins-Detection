@@ -17,10 +17,13 @@ const val COL_COST = "totalCost"
 const val COL_IMAGE = "imageToSave"
 const val COL_ID = "id"
 
-class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, null,
-        1) {
+class DataBaseHandler(var context: Context) : SQLiteOpenHelper(
+    context, DATABASENAME, null,
+    1
+) {
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTable = "CREATE TABLE $TABLENAME ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COL_NAME VARCHAR(256), $COL_OBJECTS INTEGER, $COL_COST REAL, $COL_IMAGE BLOB)"
+        val createTable =
+            "CREATE TABLE $TABLENAME ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COL_NAME VARCHAR(256), $COL_OBJECTS INTEGER, $COL_COST REAL, $COL_IMAGE BLOB)"
         db?.execSQL(createTable)
     }
 
@@ -59,7 +62,7 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
 
     }
 
-    fun readData(order:String): MutableList<SavedImages> {
+    fun readData(order: String): MutableList<SavedImages> {
         val list: MutableList<SavedImages> = ArrayList()
         val db = this.readableDatabase
         val query = "Select * from $TABLENAME ORDER BY $COL_ID $order"
@@ -87,7 +90,8 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         db.close()
         return BitmapFactory.decodeByteArray(image, 0, image.size)
     }
-    fun deleteData(imageID: Int){
+
+    fun deleteData(imageID: Int) {
         val db = this.readableDatabase
         val query = "Delete from $TABLENAME WHERE $COL_ID = $imageID"
         val result = db.rawQuery(query, null)
@@ -95,7 +99,8 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         db.close()
         Toast.makeText(context, "Successfully deleted image", Toast.LENGTH_SHORT).show()
     }
-    fun deleteAllData(){
+
+    fun deleteAllData() {
         val db = this.readableDatabase
         val query = "Delete from $TABLENAME"
         val result = db.rawQuery(query, null)

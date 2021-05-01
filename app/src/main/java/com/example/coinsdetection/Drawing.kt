@@ -9,20 +9,27 @@ import android.view.MotionEvent
 import android.view.View
 
 
-data class Coordinates(val startX: Float, val startY: Float, val pointX: Float, val pointY: Float, val color :Int, val text:String)
+data class Coordinates(
+    val startX: Float,
+    val startY: Float,
+    val pointX: Float,
+    val pointY: Float,
+    val color: Int,
+    val text: String
+)
 
 class Drawing(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
     private var paintColor: Int = Color.BLACK
-    lateinit var selected:String
+    lateinit var selected: String
     private var itemToDraw = "1p"
     private var drawPaint: Paint? = null
     private var mCanvasPaint: Paint? = null
     private var mCanvasBitmap: Bitmap? = null
-    private var drawtext:Paint?=null
+    private var drawtext: Paint? = null
     val mPaths = ArrayList<Coordinates>() // ArrayList for Paths
     private val itemsValueslist = ArrayList<Double>()
-    var boxes:Int =0
+    var boxes: Int = 0
     var pointX = 0f
     var pointY = 0f
     var startX = 0f
@@ -45,7 +52,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         drawtext!!.strokeCap = Paint.Cap.ROUND
         drawtext!!.textSize = resources.getDimension(R.dimen.myFontSize)
         drawtext!!.textAlign
-        drawtext!!.typeface = Typeface.create("Arial",Typeface.BOLD);
+        drawtext!!.typeface = Typeface.create("Arial", Typeface.BOLD);
 
     }
 
@@ -70,18 +77,18 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         return true
     }
 
-    private fun stallBoxAdding(){
-        if(selected == "All"){
+    private fun stallBoxAdding() {
+        if (selected == "All") {
             createDialog()
-        }
-        else{
+        } else {
             itemToDraw = selected
             saveCoordinates()
         }
     }
 
-    private fun saveCoordinates(){
-        val saveCoordinates = Coordinates(startX, startY, pointX, pointY,paintColor,
+    private fun saveCoordinates() {
+        val saveCoordinates = Coordinates(
+            startX, startY, pointX, pointY, paintColor,
             "$itemToDraw 1.00"
         )
         mPaths.add(saveCoordinates)
@@ -89,7 +96,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         resetPosition()
     }
 
-    private fun resetPosition(){
+    private fun resetPosition() {
         boxes += 1
         startX = 0F
         startY = 0F
@@ -98,8 +105,8 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         invalidate()
     }
 
-    fun undoCoordinate(){
-        if(mPaths.size >0){
+    fun undoCoordinate() {
+        if (mPaths.size > 0) {
             mPaths.removeLast()
             itemsValueslist.removeLast()
             invalidate()
@@ -126,19 +133,19 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
 
     override fun onDraw(canvas: Canvas) {
 
-        for(p in mPaths){
+        for (p in mPaths) {
             drawPaint?.color = p.color
             drawtext?.color = p.color
             drawPaint?.let { canvas.drawRect(p.startX, p.startY, p.pointX, p.pointY, it) }
-            drawtext?.let { canvas.drawText(p.text, p.startX, p.startY -20, it) }
+            drawtext?.let { canvas.drawText(p.text, p.startX, p.startY - 20, it) }
         }
-        if(startX >0.0 && startY>0.0) {
-           drawPaint?.color = paintColor
-           drawPaint?.let { canvas.drawRect(startX, startY, pointX, pointY, it) }
+        if (startX > 0.0 && startY > 0.0) {
+            drawPaint?.color = paintColor
+            drawPaint?.let { canvas.drawRect(startX, startY, pointX, pointY, it) }
         }
     }
 
-    fun setColor(newColor: String){
+    fun setColor(newColor: String) {
         paintColor = Color.parseColor(newColor)
         drawPaint!!.color = paintColor
         drawtext!!.color = paintColor
@@ -150,13 +157,13 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         setupPaint()
     }
 
-    private fun createDialog(){
+    private fun createDialog() {
         var position = 0
-        val itemsList = arrayOf("1p","2p","5p","10p","20p","50p","1P","2P")
+        val itemsList = arrayOf("1p", "2p", "5p", "10p", "20p", "50p", "1P", "2P")
 
-        val dialogBuilder = AlertDialog.Builder(context,R.style.AlertDialogResults)
+        val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialogResults)
         dialogBuilder.setTitle("Choose an item")
-        dialogBuilder.setSingleChoiceItems(itemsList,position) { _, i->
+        dialogBuilder.setSingleChoiceItems(itemsList, position) { _, i ->
             run {
                 position = i
                 itemToDraw = itemsList[position]
@@ -165,7 +172,7 @@ class Drawing(context: Context?, attrs: AttributeSet?) :
         dialogBuilder.setPositiveButton("Save") { _, _ ->
             saveCoordinates()
         }
-        dialogBuilder.setNegativeButton("Cancel"){_,_ ->
+        dialogBuilder.setNegativeButton("Cancel") { _, _ ->
             resetPosition()
         }
         dialogBuilder.create()

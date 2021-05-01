@@ -18,8 +18,8 @@ class CircularMenu(context: Context) {
 
         val itemIcon = ImageView(context);
         var button1: SubActionButton = itemBuilder.setContentView(itemIcon).build();
-        button1.background.setTint(ContextCompat.getColor(context,R.color.custom_blue))
-        itemIcon.setColorFilter(ContextCompat.getColor(context,R.color.white))
+        button1.background.setTint(ContextCompat.getColor(context, R.color.custom_blue))
+        itemIcon.setColorFilter(ContextCompat.getColor(context, R.color.white))
 
 
         when (action) {
@@ -95,22 +95,24 @@ class CircularMenu(context: Context) {
                 )
             )
 
-            "Complete" -> {itemIcon.setImageDrawable(
-                ContextCompat.getDrawable(
-                    context,
-                    R.drawable.check__1_
+            "Complete" -> {
+                itemIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.check__1_
+                    )
                 )
-            )
-                button1.background.setTint(ContextCompat.getColor(context,R.color.custom_blue))
+                button1.background.setTint(ContextCompat.getColor(context, R.color.custom_blue))
             }
 
-            "Undo" -> {itemIcon.setImageDrawable(
-                ContextCompat.getDrawable(
-                    context,
-                    R.drawable.undo__1_
+            "Undo" -> {
+                itemIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.undo__1_
+                    )
                 )
-            )
-                button1.background.setTint(ContextCompat.getColor(context,R.color.charliePink))
+                button1.background.setTint(ContextCompat.getColor(context, R.color.charliePink))
             }
         }
         itemIcon.layoutParams.height = 75

@@ -16,14 +16,15 @@ import spencerstudios.com.bungeelib.Bungee
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mainAdapter:RecycleViewAdapter
+    private lateinit var mainAdapter: RecycleViewAdapter
     private val sharedPrefFile = "settingsPref"
-    private lateinit var imagesOrder:String
-    private var recentsSize =0
+    private lateinit var imagesOrder: String
+    private var recentsSize = 0
     private var db = DataBaseHandler(this)
     private lateinit var recentImages: MutableList<SavedImages>
     private val floatingMenu = CircularMenu(this)
     private val nav = Navigation(this)
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +34,9 @@ class MainActivity : AppCompatActivity() {
         recentImages = readImages()
         recentsSize = recentImages.size
         recents.text = "Recents: $recentsSize"
-         mainAdapter = RecycleViewAdapter(this, recentImages)
-         history_images_rv.layoutManager = GridLayoutManager(this, 4)
-         history_images_rv.adapter = mainAdapter
+        mainAdapter = RecycleViewAdapter(this, recentImages)
+        history_images_rv.layoutManager = GridLayoutManager(this, 4)
+        history_images_rv.adapter = mainAdapter
         createNavigationMenu()
         createSecondMenu()
     }
@@ -49,14 +50,13 @@ class MainActivity : AppCompatActivity() {
         return sharedPreferences.getString("databaseorder", "DESC")
     }
 
-
-    private fun createSecondMenu(){
+    private fun createSecondMenu() {
 
         val actionButton = nav.getPageOptionsButton(false)
         var sort = floatingMenu.createButtons("Sort")
         var delete = floatingMenu.createButtons("Delete")
-        sort = pageOptions("Sort",sort)
-        delete  = pageOptions("Delete", delete)
+        sort = pageOptions("Sort", sort)
+        delete = pageOptions("Delete", delete)
 
         FloatingActionMenu.Builder(this)
             .addSubActionView(delete)
@@ -66,16 +66,16 @@ class MainActivity : AppCompatActivity() {
             .build()
     }
 
-    private fun createNavigationMenu(){
+    private fun createNavigationMenu() {
 
-        val actionButton =  nav.getNavButton()
+        val actionButton = nav.getNavButton()
         var camera = floatingMenu.createButtons("Camera")
         var gallery = floatingMenu.createButtons("Gallery")
         var settings = floatingMenu.createButtons("Settings")
 
-        camera = nav.getNavSubButton("Camera",camera)
-        gallery = nav.getNavSubButton("Gallery",gallery)
-        settings = nav.getNavSubButton("Settings",settings)
+        camera = nav.getNavSubButton("Camera", camera)
+        gallery = nav.getNavSubButton("Gallery", gallery)
+        settings = nav.getNavSubButton("Settings", settings)
 
         FloatingActionMenu.Builder(this)
             .addSubActionView(settings)
@@ -85,9 +85,9 @@ class MainActivity : AppCompatActivity() {
             .build()
     }
 
-    private fun pageOptions(action:String, button: SubActionButton): SubActionButton{
-        when(action){
-            "Sort" ->{
+    private fun pageOptions(action: String, button: SubActionButton): SubActionButton {
+        when (action) {
+            "Sort" -> {
                 button.setOnClickListener {
                     sortImages()
                 }
@@ -101,8 +101,8 @@ class MainActivity : AppCompatActivity() {
         return button
     }
 
-    private fun sortImages(){
-        if(recentsSize >0) {
+    private fun sortImages() {
+        if (recentsSize > 0) {
             val sharedPreferences =
                 this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
@@ -113,14 +113,13 @@ class MainActivity : AppCompatActivity() {
             editor.apply()
             editor.commit()
             sortRecents()
-        }
-        else{
+        } else {
             Toast.makeText(this, "No list to reverse", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun deleteAll(){
-        if(recentImages.size >0) {
+    private fun deleteAll() {
+        if (recentImages.size > 0) {
             val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
             dialogBuilder.setTitle("Delete Everything")
             dialogBuilder.setPositiveButton("Confirm") { _, _ ->
@@ -134,21 +133,22 @@ class MainActivity : AppCompatActivity() {
             dialogBuilder.setMessage("Are you sure you want to delete all recent detections ?")
             dialogBuilder.create()
             dialogBuilder.show()
-        }
-        else{
+        } else {
             Toast.makeText(this, "No images to delete", Toast.LENGTH_SHORT).show()
         }
     }
-    private fun sortRecents(){
+
+    private fun sortRecents() {
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
         finish()
 
     }
-    private fun checkDarkMode(){
+
+    private fun checkDarkMode() {
         val sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         val sharedDarkValue = sharedPreferences.getBoolean("isdark", false)
-        if(sharedDarkValue) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        if (sharedDarkValue) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 

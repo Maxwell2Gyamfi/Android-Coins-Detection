@@ -57,8 +57,8 @@ class Navigation(context: Context) {
 
     fun getNavButton(): FloatingActionButton? {
         var icon = ImageView(context); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.cursor));
-        icon.setColorFilter(ContextCompat.getColor(context,R.color.custom_blue))
+        icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.cursor));
+        icon.setColorFilter(ContextCompat.getColor(context, R.color.custom_blue))
 
         val actionButton = FloatingActionButton.Builder(context as Activity?)
             .setContentView(icon)
@@ -71,11 +71,11 @@ class Navigation(context: Context) {
         return actionButton
     }
 
-    fun getPageOptionsButton(draw:Boolean):FloatingActionButton?{
+    fun getPageOptionsButton(draw: Boolean): FloatingActionButton? {
         var icon = ImageView(context); // Create an icon
-        if(draw) icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.exit))
+        if (draw) icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.exit))
         else icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.menu))
-        icon.setColorFilter(ContextCompat.getColor(context,R.color.custom_blue))
+        icon.setColorFilter(ContextCompat.getColor(context, R.color.custom_blue))
 
         val actionButton = FloatingActionButton.Builder(context as Activity?)
             .setContentView(icon)
