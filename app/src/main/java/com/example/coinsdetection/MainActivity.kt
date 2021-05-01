@@ -142,6 +142,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
         finish()
+        Bungee.zoom(this)
 
     }
 
