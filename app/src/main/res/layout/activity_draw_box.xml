@@ -19,7 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/drawingPad_fl"
         android:layout_marginHorizontal="10dp"
-        android:textColor="@color/custom_blue"
         android:textSize="50sp"></TextView>
 
 

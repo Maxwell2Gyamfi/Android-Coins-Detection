@@ -134,13 +134,13 @@ class DrawBox : AppCompatActivity() {
     }
 
     private fun createColours(){
-        val x = CircularMenu(this)
-        var teal = x.createColoursMenu("Teal")
-        var yellow = x.createColoursMenu("Yellow")
-        var green = x.createColoursMenu("Green")
-        var red = x.createColoursMenu("Red")
-        var blue = x.createColoursMenu("Blue")
-        var charlie = x.createColoursMenu("Black")
+
+        var teal = floatingMenu.createColoursMenu("Teal")
+        var yellow = floatingMenu.createColoursMenu("Yellow")
+        var green = floatingMenu.createColoursMenu("Green")
+        var red = floatingMenu.createColoursMenu("Red")
+        var blue = floatingMenu.createColoursMenu("Blue")
+        var charlie = floatingMenu.createColoursMenu("Black")
 
         teal = colourClicked(teal)
         yellow = colourClicked(yellow)

@@ -55,7 +55,7 @@ class SelectedHistoryImage : AppCompatActivity() {
     private fun createFAB(){
 
         val actionButton = nav.getPageOptionsButton(false)
-        var save = floatingMenu.createButtons("Save")
+        var save = floatingMenu.createButtons("SaveToDevice")
         var delete = floatingMenu.createButtons("Delete")
         var total = floatingMenu.createButtons("Total")
 

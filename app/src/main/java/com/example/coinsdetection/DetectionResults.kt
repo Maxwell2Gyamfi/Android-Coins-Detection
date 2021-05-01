@@ -216,8 +216,6 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private fun openGallery(){
        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
        startActivityForResult(gallery, pickImage)
-
-
     }
 
     private fun applyFocus(view: AppCompatButton) {
@@ -260,7 +258,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         var add = floatingMenu.createButtons("Add")
         var result = floatingMenu.createButtons("Total")
         var confidence = floatingMenu.createButtons("Confidence")
-        save = floatingMenu.createButtons("Save")
+        save = floatingMenu.createButtons("SaveToRecents")
 
         add = pageOptions("Add",add)
         result  = pageOptions("Total", result)
@@ -334,8 +332,9 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
     private fun returnHome() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity((intent))
+        //val intent = Intent(this, MainActivity::class.java)
+////        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//        startActivity(intent)
         finish()
 
     }

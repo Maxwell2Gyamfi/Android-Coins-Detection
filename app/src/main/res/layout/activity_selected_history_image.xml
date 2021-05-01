@@ -14,7 +14,6 @@
         android:layout_marginLeft="8dp"
         android:text="@string/recents_text"
         android:layout_weight="0.8"
-        android:textColor="@color/custom_blue"
         android:textSize="50sp"
         android:layout_marginTop="4dp"
         app:layout_constraintBottom_toTopOf="@id/selectedHistoryImage"

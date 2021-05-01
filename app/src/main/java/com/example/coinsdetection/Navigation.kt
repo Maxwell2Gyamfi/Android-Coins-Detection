@@ -8,6 +8,7 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
+import spencerstudios.com.bungeelib.Bungee
 
 class Navigation(context: Context) {
     private var context = context
@@ -21,6 +22,7 @@ class Navigation(context: Context) {
                         putExtra("name", 1)
                     }
                     context.startActivity(intent)
+                    Bungee.zoom(context)
                 }
             }
 
@@ -30,19 +32,23 @@ class Navigation(context: Context) {
                         putExtra("selected", "gallery").toString()
                     }
                     context.startActivity(intent)
+                    Bungee.zoom(context)
                 }
             }
             "Settings" -> {
                 button.setOnClickListener {
                     val intent = Intent(context, Settings::class.java)
                     context.startActivity(intent)
+                    Bungee.zoom(context)
                 }
             }
 
             "Home" -> {
                 button.setOnClickListener {
                     val intent = Intent(context, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     context.startActivity(intent)
+                    Bungee.zoom(context)
                 }
             }
         }

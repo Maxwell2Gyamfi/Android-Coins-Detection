@@ -17,7 +17,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/buttonsHv"
             android:layout_marginHorizontal="10dp"
-            android:textColor="@color/custom_blue"
             android:textSize="50sp"></TextView>
 
     <HorizontalScrollView
@@ -35,6 +34,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:weightSum="1"
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatButton
@@ -49,7 +49,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/onePenny"
                 android:onClick="performDetection"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.11"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/default_option_border"
@@ -58,7 +59,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/twoPence"
                 android:onClick="performDetection"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.11"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/default_option_border"
@@ -67,7 +69,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/fivePence"
                 android:onClick="performDetection"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.11"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/default_option_border"
@@ -76,7 +79,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/tenPence"
                 android:onClick="performDetection"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.11"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/default_option_border"
@@ -85,7 +89,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/twentyPence"
                 android:onClick="performDetection"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.11"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/default_option_border"
@@ -94,7 +99,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/fiftyPence"
                 android:onClick="performDetection"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.11"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/default_option_border"
@@ -103,7 +109,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/onePound"
                 android:onClick="performDetection"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.11"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/default_option_border"
@@ -112,7 +119,8 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/twoPound"
                 android:onClick="performDetection"
-                android:layout_width="70dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.11"
                 android:layout_height="match_parent"
                 android:background="@drawable/default_option_border"
                 android:textColor="@color/custom_blue"

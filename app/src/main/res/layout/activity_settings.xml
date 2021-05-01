@@ -17,7 +17,6 @@
             android:layout_marginHorizontal="10dp"
             app:layout_constraintTop_toTopOf="parent"
             android:text="@string/settings_text"
-            android:textColor="@color/custom_blue"
             android:textSize="50sp"></TextView>
 
 
@@ -73,7 +72,6 @@
             android:id="@+id/nightModeSummaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/custom_blue"
             android:text="Dark mode is off"
             android:layout_marginLeft="1dp"
             android:textSize="10sp">
@@ -129,7 +127,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/custom_blue"
             android:id="@+id/automaticModeSummaryText"
             android:text="Automatic saving is off"
             android:layout_marginLeft="1dp"
@@ -193,7 +190,6 @@
             android:text="20"
             android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="@color/custom_blue"
             android:textSize="15sp"></TextView>
 
         </LinearLayout>
@@ -226,13 +222,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Money Detection"
-
             android:textSize="20sp"></TextView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/custom_blue"
             android:text="Version: 1.0"
             android:layout_marginLeft="1dp"
             android:layout_marginBottom="10dp"

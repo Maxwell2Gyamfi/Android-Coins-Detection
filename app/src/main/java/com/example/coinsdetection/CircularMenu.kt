@@ -37,10 +37,17 @@ class CircularMenu(context: Context) {
                 )
             )
 
-            "Save" -> itemIcon.setImageDrawable(
+            "SaveToRecents" -> itemIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
-                    R.drawable.download__6_
+                    R.drawable.download__7_
+                )
+            )
+
+            "SaveToDevice" -> itemIcon.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.floppy_disk__1_
                 )
             )
 
