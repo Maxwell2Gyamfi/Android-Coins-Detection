@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import com.example.coinsdetection.R.drawable
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
 
 class CircularMenu(context: Context) {
@@ -95,72 +96,72 @@ class CircularMenu(context: Context) {
                 "Delete" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.delete__1_
+                        drawable.delete__3_
                     )
                 )
     
                 "Total" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.pound
+                        drawable.pound
                     )
                 )
     
                 "SaveToRecents" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.download__7_
+                        drawable.download__7_
                     )
                 )
     
                 "SaveToDevice" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.download__4_
+                        drawable.download__9_
                     )
                 )
     
-                "Home" -> itemIcon.setImageDrawable(ContextCompat.getDrawable(circularMenu.context, R.drawable.home))
+                "Home" -> itemIcon.setImageDrawable(ContextCompat.getDrawable(circularMenu.context, drawable.house))
     
                 "Settings" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.settings
+                        drawable.settings__2_
                     )
                 )
     
                 "Camera" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.camera
+                        drawable.photo_camera
                     )
                 )
     
                 "Gallery" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.gallery
+                        drawable.image_gallery__2_
                     )
                 )
     
                 "Sort" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.sort_down__1_
+                        drawable.sort
                     )
                 )
     
                 "Confidence" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.computer_slider_tool
+                        drawable.computer_slider_tool
                     )
                 )
     
                 "Add" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.pencil
+                        drawable.pencil
                     )
                 )
     
@@ -168,7 +169,7 @@ class CircularMenu(context: Context) {
                     itemIcon.setImageDrawable(
                         ContextCompat.getDrawable(
                             circularMenu.context,
-                            R.drawable.check__1_
+                            drawable.check__1_
                         )
                     )
                 }
@@ -177,7 +178,7 @@ class CircularMenu(context: Context) {
                     itemIcon.setImageDrawable(
                         ContextCompat.getDrawable(
                             circularMenu.context,
-                            R.drawable.undo__1_
+                            drawable.undo__1_
                         )
                     )
                 }
@@ -186,7 +187,7 @@ class CircularMenu(context: Context) {
                     itemIcon.setImageDrawable(
                         ContextCompat.getDrawable(
                             circularMenu.context,
-                            R.drawable.pipette
+                            drawable.pipette
                         )
                     )
                 }
