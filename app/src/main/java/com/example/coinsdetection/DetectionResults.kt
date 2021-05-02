@@ -70,7 +70,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private lateinit var save: SubActionButton
     private val floatingMenu = CircularMenu(this)
     private val nav = Navigation(this)
-
+    private var firstAccess:Boolean?=null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +78,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         setContentView(R.layout.activity_detection_results)
         selectedOption = intent.getStringExtra("selected").toString()
         getYoloConfidence()
+        firstAccess = true
         setDefault()
         when (selectedOption) {
             "camera" -> {
@@ -250,6 +251,11 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                 for (option in options) {
                     option.background = ContextCompat.getDrawable(this, R.drawable.darkmode_border)
                     option.setTextColor(Color.WHITE)
+                }
+                if(firstAccess === true){
+                    all.background = ContextCompat.getDrawable(this, R.drawable.selected_border_darkmode)
+                    all.setTextColor(Color.BLACK)
+                    firstAccess = false
                 }
             }
             else -> for (option in options) {
