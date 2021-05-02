@@ -55,9 +55,9 @@ class SelectedHistoryImage : AppCompatActivity() {
     private fun createFAB() {
 
         val actionButton = nav.getPageOptionsButton(false)
-        var save = floatingMenu.createButtons("SaveToDevice")
-        var delete = floatingMenu.createButtons("Delete")
-        var total = floatingMenu.createButtons("Total")
+        var save = CircularMenu.createButtons(floatingMenu, "SaveToDevice")
+        var delete = CircularMenu.createButtons(floatingMenu, "Delete")
+        var total = CircularMenu.createButtons(floatingMenu, "Total")
 
         save = pageOption("Save", save)
         delete = pageOption("Delete", delete)
@@ -77,10 +77,10 @@ class SelectedHistoryImage : AppCompatActivity() {
 
         val actionButton = nav.getNavButton()
 
-        var camera = floatingMenu.createButtons("Camera")
-        var gallery = floatingMenu.createButtons("Gallery")
-        var settings = floatingMenu.createButtons("Settings")
-        var home = floatingMenu.createButtons("Home")
+        var camera = CircularMenu.createButtons(floatingMenu, "Camera")
+        var gallery = CircularMenu.createButtons(floatingMenu, "Gallery")
+        var settings = CircularMenu.createButtons(floatingMenu, "Settings")
+        var home = CircularMenu.createButtons(floatingMenu, "Home")
 
         camera = nav.getNavSubButton("Camera", camera)
         gallery = nav.getNavSubButton("Gallery", gallery)

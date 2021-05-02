@@ -111,7 +111,6 @@ class Settings : AppCompatActivity() {
 
     private fun returnHome() {
         val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()
     }
@@ -119,9 +118,9 @@ class Settings : AppCompatActivity() {
     private fun createNavigationMenu() {
 
         val actionButton = nav.getNavButton()
-        var camera = floatingMenu.createButtons("Camera")
-        var gallery = floatingMenu.createButtons("Gallery")
-        var home = floatingMenu.createButtons("Home")
+        var camera = CircularMenu.createButtons(floatingMenu, "Camera")
+        var gallery = CircularMenu.createButtons(floatingMenu, "Gallery")
+        var home = CircularMenu.createButtons(floatingMenu, "Home")
 
         camera = nav.getNavSubButton("Camera", camera)
         gallery = nav.getNavSubButton("Gallery", gallery)

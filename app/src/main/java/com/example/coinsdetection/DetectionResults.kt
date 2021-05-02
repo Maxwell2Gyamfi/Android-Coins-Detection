@@ -66,6 +66,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private var totalItems: Int = 0
     private var totalCost: Double = 0.0
     private val sharedPrefFile = "settingsPref"
+    private var sharedDarkValue:Boolean? = null
     private lateinit var save: SubActionButton
     private val floatingMenu = CircularMenu(this)
     private val nav = Navigation(this)
@@ -77,6 +78,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         setContentView(R.layout.activity_detection_results)
         selectedOption = intent.getStringExtra("selected").toString()
         getYoloConfidence()
+        setDefault()
         when (selectedOption) {
             "camera" -> {
                 takePicture()
@@ -219,8 +221,15 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     }
 
     private fun applyFocus(view: AppCompatButton) {
-        view.background = ContextCompat.getDrawable(this, R.drawable.selected_option_border)
-        view.setTextColor(Color.parseColor("#ffffff"))
+
+        if(sharedDarkValue === true){
+            view.background = ContextCompat.getDrawable(this, R.drawable.selected_border_darkmode)
+            view.setTextColor(Color.BLACK)
+        }
+        else {
+            view.background = ContextCompat.getDrawable(this, R.drawable.selected_option_border)
+            view.setTextColor(Color.parseColor("#ffffff"))
+        }
     }
 
     private fun setDefault() {
@@ -235,11 +244,27 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         options.add(onePound)
         options.add(twoPound)
 
-        for (option in options) {
-            option.background = ContextCompat.getDrawable(this, R.drawable.default_option_border)
-            option.setTextColor(Color.parseColor("#1665B2"))
+        getDarkMode()
+        when {
+            sharedDarkValue === true -> {
+                for (option in options) {
+                    option.background = ContextCompat.getDrawable(this, R.drawable.darkmode_border)
+                    option.setTextColor(Color.WHITE)
+                }
+            }
+            else -> for (option in options) {
+                option.background =
+                    ContextCompat.getDrawable(this, R.drawable.default_option_border)
+                option.setTextColor(Color.parseColor("#1665B2"))
+            }
         }
     }
+
+    private fun getDarkMode(){
+        val sharedPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        sharedDarkValue = sharedPreferences.getBoolean("isdark", false)
+    }
+
 
     private fun drawBoundingBox() {
         val intent = Intent(this, DrawBox::class.java)
@@ -255,10 +280,10 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private fun createSecondMenu() {
 
         val actionButton = nav.getPageOptionsButton(false)
-        var add = floatingMenu.createButtons("Add")
-        var result = floatingMenu.createButtons("Total")
-        var confidence = floatingMenu.createButtons("Confidence")
-        save = floatingMenu.createButtons("SaveToRecents")
+        var add = CircularMenu.createButtons(floatingMenu, "Add")
+        var result = CircularMenu.createButtons(floatingMenu, "Total")
+        var confidence = CircularMenu.createButtons(floatingMenu, "Confidence")
+        save = CircularMenu.createButtons(floatingMenu, "SaveToRecents")
 
         add = pageOptions("Add", add)
         result = pageOptions("Total", result)
@@ -280,10 +305,10 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
     private fun createNavigationMenu() {
 
         val actionButton = nav.getNavButton()
-        var camera = floatingMenu.createButtons("Camera")
-        var gallery = floatingMenu.createButtons("Gallery")
-        var settings = floatingMenu.createButtons("Settings")
-        var home = floatingMenu.createButtons("Home")
+        var camera = CircularMenu.createButtons(floatingMenu, "Camera")
+        var gallery = CircularMenu.createButtons(floatingMenu, "Gallery")
+        var settings = CircularMenu.createButtons(floatingMenu, "Settings")
+        var home = CircularMenu.createButtons(floatingMenu, "Home")
 
         camera = nav.getNavSubButton("Camera", camera)
         gallery = nav.getNavSubButton("Gallery", gallery)
@@ -333,7 +358,6 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
 
     private fun returnHome() {
         val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()
 

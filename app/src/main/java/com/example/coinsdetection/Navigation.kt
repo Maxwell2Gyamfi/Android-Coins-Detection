@@ -12,7 +12,8 @@ import spencerstudios.com.bungeelib.Bungee
 
 class Navigation(context: Context) {
     private var context = context
-
+    private val sharedPrefFile = "settingsPref"
+    private var sharedDarkValue:Boolean? = null
     fun getNavSubButton(action: String, button: SubActionButton): SubActionButton {
         when (action) {
             "Camera" -> {
@@ -23,6 +24,7 @@ class Navigation(context: Context) {
                     }
                     context.startActivity(intent)
                     Bungee.zoom(context)
+                    (context as Activity).finish()
                 }
             }
 
@@ -33,33 +35,74 @@ class Navigation(context: Context) {
                     }
                     context.startActivity(intent)
                     Bungee.zoom(context)
+                    (context as Activity).finish()
                 }
             }
             "Settings" -> {
                 button.setOnClickListener {
                     val intent = Intent(context, Settings::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     context.startActivity(intent)
                     Bungee.zoom(context)
+                    (context as Activity).finish()
                 }
             }
 
             "Home" -> {
                 button.setOnClickListener {
                     val intent = Intent(context, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     context.startActivity(intent)
                     Bungee.zoom(context)
+                    (context as Activity).finish()
                 }
             }
         }
         return button
     }
 
+    private fun getDarkMode(){
+        val sharedPreferences = context.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        sharedDarkValue = sharedPreferences.getBoolean("isdark", false)
+    }
+
+
+    fun getColoursNavButton(): FloatingActionButton?{
+        var icon = ImageView(context); // Create an icon
+        icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pipette));
+        getDarkMode()
+
+        when {
+            !sharedDarkValue!! -> {
+                icon.setColorFilter(ContextCompat.getColor(context, R.color.custom_blue))
+            }
+            else -> {
+                icon.setColorFilter(ContextCompat.getColor(context, R.color.white))
+            }
+        }
+
+        val actionButton = FloatingActionButton.Builder(context as Activity?)
+            .setContentView(icon)
+            .build();
+
+        actionButton.layoutParams.height = 160
+        actionButton.layoutParams.width = 160
+        actionButton.background.setTint(Color.TRANSPARENT)
+
+        return actionButton
+    }
+
     fun getNavButton(): FloatingActionButton? {
         var icon = ImageView(context); // Create an icon
         icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.cursor));
-        icon.setColorFilter(ContextCompat.getColor(context, R.color.custom_blue))
+        getDarkMode()
+
+        when {
+            !sharedDarkValue!! -> {
+                icon.setColorFilter(ContextCompat.getColor(context, R.color.custom_blue))
+            }
+            else -> {
+                icon.setColorFilter(ContextCompat.getColor(context, R.color.white))
+            }
+        }
 
         val actionButton = FloatingActionButton.Builder(context as Activity?)
             .setContentView(icon)
@@ -76,7 +119,17 @@ class Navigation(context: Context) {
         var icon = ImageView(context); // Create an icon
         if (draw) icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.exit))
         else icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.menu))
-        icon.setColorFilter(ContextCompat.getColor(context, R.color.custom_blue))
+
+        getDarkMode()
+
+        when {
+            !sharedDarkValue!! -> {
+                icon.setColorFilter(ContextCompat.getColor(context, R.color.custom_blue))
+            }
+            else -> {
+                icon.setColorFilter(ContextCompat.getColor(context, R.color.white))
+            }
+        }
 
         val actionButton = FloatingActionButton.Builder(context as Activity?)
             .setContentView(icon)

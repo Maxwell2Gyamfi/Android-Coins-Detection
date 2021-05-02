@@ -1,13 +1,14 @@
 package com.example.coinsdetection
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
@@ -25,11 +26,15 @@ class MainActivity : AppCompatActivity() {
     private val floatingMenu = CircularMenu(this)
     private val nav = Navigation(this)
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         checkDarkMode()
+        swiperefresh.setColorSchemeColors(ContextCompat.getColor(this,R.color.custom_blue))
+        swiperefresh.setOnRefreshListener {
+            sortImages()
+            swiperefresh.isRefreshing = false
+        }
         imagesOrder = getDataBaseImagesOrder()!!
         recentImages = readImages()
         recentsSize = recentImages.size
@@ -53,8 +58,8 @@ class MainActivity : AppCompatActivity() {
     private fun createSecondMenu() {
 
         val actionButton = nav.getPageOptionsButton(false)
-        var sort = floatingMenu.createButtons("Sort")
-        var delete = floatingMenu.createButtons("Delete")
+        var sort = CircularMenu.createButtons(floatingMenu, "Sort")
+        var delete = CircularMenu.createButtons(floatingMenu, "Delete")
         sort = pageOptions("Sort", sort)
         delete = pageOptions("Delete", delete)
 
@@ -69,9 +74,9 @@ class MainActivity : AppCompatActivity() {
     private fun createNavigationMenu() {
 
         val actionButton = nav.getNavButton()
-        var camera = floatingMenu.createButtons("Camera")
-        var gallery = floatingMenu.createButtons("Gallery")
-        var settings = floatingMenu.createButtons("Settings")
+        var camera = CircularMenu.createButtons(floatingMenu, "Camera")
+        var gallery = CircularMenu.createButtons(floatingMenu, "Gallery")
+        var settings = CircularMenu.createButtons(floatingMenu, "Settings")
 
         camera = nav.getNavSubButton("Camera", camera)
         gallery = nav.getNavSubButton("Gallery", gallery)
@@ -101,21 +106,21 @@ class MainActivity : AppCompatActivity() {
         return button
     }
 
-    private fun sortImages() {
-        if (recentsSize > 0) {
-            val sharedPreferences =
-                this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            when (sharedPreferences.getString("databaseorder", "DESC")) {
-                "DESC" -> editor.putString("databaseorder", "ASC")
-                else -> editor.putString("databaseorder", "DESC")
-            }
-            editor.apply()
-            editor.commit()
-            sortRecents()
-        } else {
-            Toast.makeText(this, "No list to reverse", Toast.LENGTH_SHORT).show()
+    private fun sortImages() = if (recentsSize > 0) {
+        val sharedPreferences =
+            this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        when (sharedPreferences.getString("databaseorder", "DESC")) {
+            "DESC" -> {editor.putString("databaseorder", "ASC")
+                      makeText(this, "Sorted images by oldest",Toast.LENGTH_SHORT).show()}
+            else -> {editor.putString("databaseorder", "DESC")
+                makeText(this, "Sorted images by recents",Toast.LENGTH_SHORT).show()}
         }
+        editor.apply()
+        editor.commit()
+        sortRecents()
+    } else {
+        makeText(this, "No list to reverse", Toast.LENGTH_SHORT).show()
     }
 
     private fun deleteAll() {
@@ -134,7 +139,7 @@ class MainActivity : AppCompatActivity() {
             dialogBuilder.create()
             dialogBuilder.show()
         } else {
-            Toast.makeText(this, "No images to delete", Toast.LENGTH_SHORT).show()
+            makeText(this, "No images to delete", Toast.LENGTH_SHORT).show()
         }
     }
 

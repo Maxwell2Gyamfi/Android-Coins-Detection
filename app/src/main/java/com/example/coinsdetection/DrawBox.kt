@@ -3,19 +3,15 @@ package com.example.coinsdetection
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton
 import kotlinx.android.synthetic.main.activity_draw_box.*
@@ -53,12 +49,11 @@ class DrawBox : AppCompatActivity() {
 
         setContentView(R.layout.activity_draw_box)
         val file = File(filesDir, "detection.jpg")
-
         addBoxImage = BitmapFactory.decodeFile(file.absolutePath)
         drawBoxImage.setImageBitmap(addBoxImage)
 
         drawingPad.selected = selected
-        createColours()
+        Companion.createColours(this)
         createActions()
     }
 
@@ -82,11 +77,11 @@ class DrawBox : AppCompatActivity() {
 
     private fun createActions() {
 
-        var undo = floatingMenu.createButtons("Undo")
-        var complete = floatingMenu.createButtons("Complete")
+        var undo = CircularMenu.createButtons(floatingMenu, "Undo")
+        var complete = CircularMenu.createButtons(floatingMenu, "Complete")
 
-        undo = setPageOptions("undo", undo)
-        complete = setPageOptions("complete", complete)
+        undo = Companion.setPageOptions(this, "undo", undo)
+        complete = Companion.setPageOptions(this, "complete", complete)
 
 
         val actionButton = nav.getPageOptionsButton(true)
@@ -98,81 +93,6 @@ class DrawBox : AppCompatActivity() {
             .build()
     }
 
-
-    private fun setPageOptions(curAction: String, button: SubActionButton): SubActionButton {
-        when (curAction) {
-            "undo" -> button.setOnClickListener {
-                if (drawingPad.mPaths.isEmpty()) onBackPressed()
-                else drawingPad.undoCoordinate()
-            }
-            "complete" -> button.setOnClickListener {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val mBitmap = getBitmapFromFrameLayout(drawingPad_fl)
-                    var name: String = "Custom" + UUID.randomUUID().toString()
-                    val boxes = drawingPad.mPaths.size
-                    val cost = drawingPad.calculateTotal()
-                    currentCost += cost
-                    currentObjects += boxes
-
-                    val formatter: NumberFormat = DecimalFormat("#0.00")
-                    currentCost = formatter.format(currentCost).toDouble()
-                    when {
-                        boxes > 0 -> {
-                            db.insertData(
-                                SavedImages(0, name, currentObjects, currentCost, mBitmap!!)
-                            )
-                            action = "success"
-                            onBackPressed()
-                        }
-                        else -> onBackPressed()
-                    }
-                }
-            }
-        }
-
-        return button
-    }
-
-    private fun createColours() {
-
-        var teal = floatingMenu.createColoursMenu("Teal")
-        var yellow = floatingMenu.createColoursMenu("Yellow")
-        var green = floatingMenu.createColoursMenu("Green")
-        var red = floatingMenu.createColoursMenu("Red")
-        var blue = floatingMenu.createColoursMenu("Blue")
-        var charlie = floatingMenu.createColoursMenu("Black")
-
-        teal = colourClicked(teal)
-        yellow = colourClicked(yellow)
-        green = colourClicked(green)
-        red = colourClicked(red)
-        blue = colourClicked(blue)
-        charlie = colourClicked(charlie)
-
-        var icon = ImageView(this); // Create an icon
-        icon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.pipette));
-        icon.setColorFilter(ContextCompat.getColor(this, R.color.custom_blue))
-
-        val actionButton = FloatingActionButton.Builder(this)
-            .setContentView(icon)
-            .build();
-
-        actionButton.layoutParams.height = 160
-        actionButton.layoutParams.width = 160
-
-        actionButton.background.setTint(Color.TRANSPARENT)
-
-        val actionMenu = FloatingActionMenu.Builder(this)
-            .addSubActionView(teal)
-            .addSubActionView(yellow)
-            .addSubActionView(green)
-            .addSubActionView(red)
-            .addSubActionView(charlie)
-            .addSubActionView(blue)
-            .attachTo(actionButton)
-            .build()
-
-    }
 
     private fun colourClicked(button: SubActionButton): SubActionButton {
         button.setOnClickListener {
@@ -194,6 +114,72 @@ class DrawBox : AppCompatActivity() {
             Bungee.spin(this)
         }
 
+    }
+
+    companion object {
+        private fun setPageOptions(drawBox: DrawBox, curAction: String, button: SubActionButton): SubActionButton {
+            when (curAction) {
+                "undo" -> button.setOnClickListener {
+                    if (drawBox.drawingPad.mPaths.isEmpty()) drawBox.onBackPressed()
+                    else drawBox.drawingPad.undoCoordinate()
+                }
+                "complete" -> button.setOnClickListener {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val mBitmap = drawBox.getBitmapFromFrameLayout(drawBox.drawingPad_fl)
+                        var name: String = "Custom" + UUID.randomUUID().toString()
+                        val boxes = drawBox.drawingPad.mPaths.size
+                        val cost = drawBox.drawingPad.calculateTotal()
+                        drawBox.currentCost += cost
+                        drawBox.currentObjects += boxes
+
+                        val formatter: NumberFormat = DecimalFormat("#0.00")
+                        drawBox.currentCost = formatter.format(drawBox.currentCost).toDouble()
+                        when {
+                            boxes > 0 -> {
+                                drawBox.db.insertData(
+                                    SavedImages(0, name,
+                                        drawBox.currentObjects,
+                                        drawBox.currentCost, mBitmap!!)
+                                )
+                                drawBox.action = "success"
+                                drawBox.onBackPressed()
+                            }
+                            else -> drawBox.onBackPressed()
+                        }
+                    }
+                }
+            }
+
+            return button
+        }
+
+        private fun createColours(drawBox: DrawBox) {
+    
+            var teal = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Teal")
+            var yellow = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Yellow")
+            var green = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Green")
+            var red = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Red")
+//            var blue = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Blue")
+//            var charlie = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Black")
+    
+            teal = drawBox.colourClicked(teal)
+            yellow = drawBox.colourClicked(yellow)
+            green = drawBox.colourClicked(green)
+            red = drawBox.colourClicked(red)
+
+            var icon = CircularMenu.createButtons(drawBox.floatingMenu, "SelectColours")
+    
+            val actionButton = drawBox.nav.getColoursNavButton()
+    
+            FloatingActionMenu.Builder(drawBox)
+                .addSubActionView(teal)
+                .addSubActionView(yellow)
+                .addSubActionView(green)
+                .addSubActionView(red)
+                .attachTo(actionButton)
+                .build()
+    
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import android.graphics.Paint.Style.FILL
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
 
 
 data class Coordinates(
@@ -20,7 +21,7 @@ data class Coordinates(
 
 class Drawing(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {
-    private var paintColor: Int = Color.BLACK
+    private var paintColor: Int = ContextCompat.getColor(context!!,R.color.yolo1)
     lateinit var selected: String
     private var itemToDraw = "1p"
     private var drawPaint: Paint? = null
