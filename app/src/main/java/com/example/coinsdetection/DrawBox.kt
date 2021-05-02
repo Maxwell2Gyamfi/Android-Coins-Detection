@@ -159,13 +159,14 @@ class DrawBox : AppCompatActivity() {
             var yellow = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Yellow")
             var green = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Green")
             var red = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Red")
-//            var blue = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Blue")
+            var blue = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Blue")
 //            var charlie = CircularMenu.createColoursMenu(drawBox.floatingMenu, "Black")
     
             teal = drawBox.colourClicked(teal)
             yellow = drawBox.colourClicked(yellow)
             green = drawBox.colourClicked(green)
             red = drawBox.colourClicked(red)
+            blue = drawBox.colourClicked(blue)
 
             var icon = CircularMenu.createButtons(drawBox.floatingMenu, "SelectColours")
     
@@ -176,6 +177,7 @@ class DrawBox : AppCompatActivity() {
                 .addSubActionView(yellow)
                 .addSubActionView(green)
                 .addSubActionView(red)
+                .addSubActionView(blue)
                 .attachTo(actionButton)
                 .build()
     

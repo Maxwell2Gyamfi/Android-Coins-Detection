@@ -2,6 +2,7 @@ package com.example.coinsdetection
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -22,7 +23,7 @@ class CircularMenu(context: Context) {
         fun createColoursMenu(circularMenu: CircularMenu, action: String): SubActionButton {
             val itemBuilder = SubActionButton.Builder(circularMenu.context as Activity?)
             val blueParams: FrameLayout.LayoutParams =
-                FrameLayout.LayoutParams(160, 160)
+                FrameLayout.LayoutParams(120, 120)
             itemBuilder.setLayoutParams(blueParams)
 
             val itemIcon = ImageView(circularMenu.context);
@@ -80,11 +81,12 @@ class CircularMenu(context: Context) {
     
             when {
                 !circularMenu.sharedDarkValue!! -> {
-                    button1.background.setTint(ContextCompat.getColor(circularMenu.context, R.color.custom_blue))
-                    itemIcon.setColorFilter(ContextCompat.getColor(circularMenu.context, R.color.white))
+                    button1.background.setTint(Color.TRANSPARENT)
+//                    button1.background.setTint(ContextCompat.getColor(circularMenu.context, R.color.custom_blue))
+                    itemIcon.setColorFilter(ContextCompat.getColor(circularMenu.context, R.color.custom_blue))
                 }
                 else -> {
-                    button1.background.setTint(ContextCompat.getColor(circularMenu.context, R.color.black))
+                    button1.background.setTint(Color.TRANSPARENT)
                     itemIcon.setColorFilter(ContextCompat.getColor(circularMenu.context, R.color.white))
                 }
             }
@@ -93,7 +95,7 @@ class CircularMenu(context: Context) {
                 "Delete" -> itemIcon.setImageDrawable(
                     ContextCompat.getDrawable(
                         circularMenu.context,
-                        R.drawable.trash
+                        R.drawable.delete__1_
                     )
                 )
     
@@ -178,7 +180,6 @@ class CircularMenu(context: Context) {
                             R.drawable.undo__1_
                         )
                     )
-                    button1.background.setTint(ContextCompat.getColor(circularMenu.context, R.color.charliePink))
                 }
                 
                 "SelectColours" ->{
