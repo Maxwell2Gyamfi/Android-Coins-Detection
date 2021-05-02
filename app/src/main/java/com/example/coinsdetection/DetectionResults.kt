@@ -432,7 +432,7 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                 }
             }
         } else {
-            finish()
+            returnHome()
 
         }
     }
