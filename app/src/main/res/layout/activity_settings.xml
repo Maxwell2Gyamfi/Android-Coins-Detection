@@ -180,7 +180,7 @@
             android:max="100"
             android:progress="20"
             android:splitTrack="false"
-            android:thumb="@drawable/custom_thumb_settings"></SeekBar>
+            android:thumb="@drawable/custome_thumb"></SeekBar>
 
         <TextView
             android:id="@+id/seekSettingsValue"
