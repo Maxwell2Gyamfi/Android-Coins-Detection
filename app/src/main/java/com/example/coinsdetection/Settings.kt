@@ -122,9 +122,9 @@ class Settings : AppCompatActivity() {
         var gallery = CircularMenu.createButtons(floatingMenu, "Gallery")
         var home = CircularMenu.createButtons(floatingMenu, "Home")
 
-        camera = nav.getNavSubButton("Camera", camera)
-        gallery = nav.getNavSubButton("Gallery", gallery)
-        home = nav.getNavSubButton("Home", home)
+        camera = Navigation.getNavSubButton(nav, "Camera", camera)
+        gallery = Navigation.getNavSubButton(nav, "Gallery", gallery)
+        home = Navigation.getNavSubButton(nav, "Home", home)
 
         FloatingActionMenu.Builder(this)
             .addSubActionView(home)

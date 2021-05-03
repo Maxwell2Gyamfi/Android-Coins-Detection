@@ -258,10 +258,19 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
                     firstAccess = false
                 }
             }
-            else -> for (option in options) {
-                option.background =
-                    ContextCompat.getDrawable(this, R.drawable.default_option_border)
-                option.setTextColor(Color.parseColor("#1665B2"))
+            else ->
+            {
+                for (option in options) {
+                    option.background =
+                        ContextCompat.getDrawable(this, R.drawable.default_option_border)
+                    option.setTextColor(ContextCompat.getColor(this,R.color.custom_blue))
+                }
+                if(firstAccess === true) {
+                    all.background =
+                        ContextCompat.getDrawable(this, R.drawable.selected_option_border)
+                    all.setTextColor(Color.WHITE)
+                    firstAccess = false
+                }
             }
         }
     }
@@ -316,10 +325,10 @@ class DetectionResults : AppCompatActivity(), ConfidenceDialog.ConfidenceDialogL
         var settings = CircularMenu.createButtons(floatingMenu, "Settings")
         var home = CircularMenu.createButtons(floatingMenu, "Home")
 
-        camera = nav.getNavSubButton("Camera", camera)
-        gallery = nav.getNavSubButton("Gallery", gallery)
-        settings = nav.getNavSubButton("Settings", settings)
-        home = nav.getNavSubButton("Home", home)
+        camera = Navigation.getNavSubButton(nav, "Camera", camera)
+        gallery = Navigation.getNavSubButton(nav, "Gallery", gallery)
+        settings = Navigation.getNavSubButton(nav, "Settings", settings)
+        home = Navigation.getNavSubButton(nav, "Home", home)
 
 
         FloatingActionMenu.Builder(this)

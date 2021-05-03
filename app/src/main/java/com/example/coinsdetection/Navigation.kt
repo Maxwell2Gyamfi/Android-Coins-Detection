@@ -14,50 +14,6 @@ class Navigation(context: Context) {
     private var context = context
     private val sharedPrefFile = "settingsPref"
     private var sharedDarkValue:Boolean? = null
-    fun getNavSubButton(action: String, button: SubActionButton): SubActionButton {
-        when (action) {
-            "Camera" -> {
-                button.setOnClickListener {
-                    val intent = Intent(context, DetectionResults::class.java).apply {
-                        putExtra("selected", "camera").toString()
-                        putExtra("name", 1)
-                    }
-                    context.startActivity(intent)
-                    Bungee.zoom(context)
-                    (context as Activity).finish()
-                }
-            }
-
-            "Gallery" -> {
-                button.setOnClickListener {
-                    val intent = Intent(context, DetectionResults::class.java).apply {
-                        putExtra("selected", "gallery").toString()
-                    }
-                    context.startActivity(intent)
-                    Bungee.zoom(context)
-                    (context as Activity).finish()
-                }
-            }
-            "Settings" -> {
-                button.setOnClickListener {
-                    val intent = Intent(context, Settings::class.java)
-                    context.startActivity(intent)
-                    Bungee.zoom(context)
-                    (context as Activity).finish()
-                }
-            }
-
-            "Home" -> {
-                button.setOnClickListener {
-                    val intent = Intent(context, MainActivity::class.java)
-                    context.startActivity(intent)
-                    Bungee.zoom(context)
-                    (context as Activity).finish()
-                }
-            }
-        }
-        return button
-    }
 
     private fun getDarkMode(){
         val sharedPreferences = context.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
@@ -117,7 +73,7 @@ class Navigation(context: Context) {
 
     fun getPageOptionsButton(draw: Boolean): FloatingActionButton? {
         var icon = ImageView(context); // Create an icon
-        if (draw) icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.exit))
+        if (draw) icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.exit__1_))
         else icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.menu))
 
         getDarkMode()
@@ -141,5 +97,52 @@ class Navigation(context: Context) {
         actionButton.background.setTint(Color.TRANSPARENT)
 
         return actionButton
+    }
+
+    companion object {
+        fun getNavSubButton(navigation: Navigation, action: String, button: SubActionButton): SubActionButton {
+            when (action) {
+                "Camera" -> {
+                    button.setOnClickListener {
+                        val intent = Intent(navigation.context, DetectionResults::class.java).apply {
+                            putExtra("selected", "camera").toString()
+                            putExtra("name", 1)
+                        }
+                        navigation.context.startActivity(intent)
+                        Bungee.zoom(navigation.context)
+                        (navigation.context as Activity).finish()
+                    }
+                }
+    
+                "Gallery" -> {
+                    button.setOnClickListener {
+                        val intent = Intent(navigation.context, DetectionResults::class.java).apply {
+                            putExtra("selected", "gallery").toString()
+                        }
+                        navigation.context.startActivity(intent)
+                        Bungee.zoom(navigation.context)
+                        (navigation.context as Activity).finish()
+                    }
+                }
+                "Settings" -> {
+                    button.setOnClickListener {
+                        val intent = Intent(navigation.context, Settings::class.java)
+                        navigation.context.startActivity(intent)
+                        Bungee.zoom(navigation.context)
+                        (navigation.context as Activity).finish()
+                    }
+                }
+    
+                "Home" -> {
+                    button.setOnClickListener {
+                        val intent = Intent(navigation.context, MainActivity::class.java)
+                        navigation.context.startActivity(intent)
+                        Bungee.zoom(navigation.context)
+                        (navigation.context as Activity).finish()
+                    }
+                }
+            }
+            return button
+        }
     }
 }

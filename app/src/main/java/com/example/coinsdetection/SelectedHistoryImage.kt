@@ -82,10 +82,10 @@ class SelectedHistoryImage : AppCompatActivity() {
         var settings = CircularMenu.createButtons(floatingMenu, "Settings")
         var home = CircularMenu.createButtons(floatingMenu, "Home")
 
-        camera = nav.getNavSubButton("Camera", camera)
-        gallery = nav.getNavSubButton("Gallery", gallery)
-        settings = nav.getNavSubButton("Settings", settings)
-        home = nav.getNavSubButton("Home", home)
+        camera = Navigation.getNavSubButton(nav, "Camera", camera)
+        gallery = Navigation.getNavSubButton(nav, "Gallery", gallery)
+        settings = Navigation.getNavSubButton(nav, "Settings", settings)
+        home = Navigation.getNavSubButton(nav, "Home", home)
 
 
         FloatingActionMenu.Builder(this)
