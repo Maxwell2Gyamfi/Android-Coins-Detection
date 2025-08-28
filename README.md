@@ -9,11 +9,6 @@ Open in Android studio
 Build
 ```
 # Screenshots of Main Activity (light mode) and Results Activity (dark mode activated)
-
-<img src="https://ams02pap001files.storage.live.com/y4mx0gobHclK8Pnx5FNOLrpDWUjVrgl0Y92CtFupP4J5bQraoQspraviCLaBwRnKkFl0tpkDujfssAAEgAwNgPOKKGlk2CRTB-vGhGF95c3-nSPTEscDclNDJdKr3ZW-FvzjZUlbDYBL_GN5GtK-hYsIcDRWacKVnT_ImogfTqx2jsWaJ-xEMHF2paZoffJFFSM?width=1080&height=2400&cropmode=none" width="400"/> <img src="https://ams02pap001files.storage.live.com/y4m7j-SE5ABa3Hhj55UYB44lSm0tEMETlcDTU42DhM_DSUqqrYXUxIgaRc45ywPqhL8x2WKGRZ6YzORfqHOXjgU3cDpDAk0EXlggDrkslX95B_lEMY3O--gURLO5Zqhp-6Tj1eKhkVAY6KB9eVM_pFxlr_WuT9VDf8Oc8A3iszxlVFNfynAZ9NJWWxfQR7K_T8N?width=1080&height=2293&cropmode=none" width="400"/>
-
-
-
-
+<img src="https://github.com/user-attachments/assets/1351f36a-57e9-450a-a3ed-4f9a9b940833" width="300" />  <img src="https://github.com/user-attachments/assets/39bebbc9-ff5b-475d-87fa-429994427ae7" width="300" />
 
 
